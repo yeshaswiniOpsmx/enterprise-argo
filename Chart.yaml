@@ -1,0 +1,39 @@
+apiVersion: v2
+name: isdargo
+version: 1.0.0
+description: "ISD-ARGO"
+icon: https://raw.githubusercontent.com/OpsMx/enterprise-spinnaker/master/img/opsmx.png
+maintainers:
+- email: saiteja.katabhatina@opsmx.io
+  name: saiteaopsmx
+keywords:
+  - OpsMx
+  - Argo
+  - Autopilot
+dependencies:
+  - name: argo-cd
+    version: 4.10.5
+    condition: installArgoCD
+  - name: argo-rollouts
+    version: 2.18.0
+  - name: argo-workflows
+    version: 0.16.8
+  - name: argo-events
+    version: 2.0.3
+  - name: argocd-image-updater
+    version: 0.8.0
+  - name: openldap
+    version: 1.2.3
+    condition: global.installOpenLdap
+  - name: elasticsearch
+    version: 7.5.0
+    condition: enableCentralLogging
+  - name: kibana
+    version: 7.5.0
+    condition: enableCentralLogging
+  - name: fluent-bit
+    version: 2.8.2
+    condition: enableCentralLogging
+  - name: prometheus
+    version: 11.16.2
+    condition: global.enableCentralMonitoring

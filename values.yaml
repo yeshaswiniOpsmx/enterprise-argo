@@ -1,0 +1,227 @@
+#argo-cd:
+
+installArgoCD: true
+
+global:
+  # Custom Images registry where all the OSS and customized images used in the helm chart are stored
+  # Only update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  customImages:
+    registry: quay.io/opsmxpublic
+  # when this flag is set to false; UI will be accessible over http instead of https
+  ssl:
+    enabled: false
+
+  # If cert-manager is installed, TLS secrets will created automatically, as an 'Issuer' will be created
+  # Else, the TLS secrets will need to created manually
+  certManager:
+    installed: false
+ 
+  argocd:
+    protocol: http
+    host: argo-cd.sai.argo.opsmx.net
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      tls:
+        secretName: argocd-tls-certificate
+
+  createIngress: true
+
+  ## Node Selection rules for all the OES components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...) 
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  enableCentralMonitoring: false
+
+  ###############################################################################
+  # A trial LDAP is installed by default, with users: admin, user1,2,3 with user1password, user2pa...
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: false
+
+  ## ldap configuration used for authentication and authorization
+  ldap:
+    enabled: false
+    url: ldap://{{ .Release.Name }}-openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org
+
+#####################################################
+# AP integrates with OPA and installs an OPA server
+# Leave it as true, even if not using OPA
+
+opa:
+  enabled: false  
+  image:
+    repository: openpolicyagent/opa
+    tag: latest
+    pullPolicy: IfNotPresent
+
+###############################################################
+## Name of the secret for pulling images from container registry.
+## Use it when the images are stored under private registry.
+## Create this secret before installing the chart
+imagePullSecret: ""
+
+
+####################################################
+# AP installs a trial LDAP for POCs and testing purposes
+# OpenLDAP custom configuration; will override default configuration of openldap helm chart
+openldap:
+  # Password for the admin user; by default it is set to admin
+  adminPassword: opsmxadmin123
+  configPassword: opsmxconfig123
+  omitClusterIP: true
+  affinity: {}
+  tolerations: []
+
+  persistence:
+    enabled: false
+  env:
+    LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+
+  customLdifFiles:
+    01-memberof.ldif: |-
+      dn: cn=module,cn=config
+      cn: module
+      objectClass: olcModuleList
+      olcModuleLoad: memberof.la
+      olcModulePath: /usr/lib/ldap
+      dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
+      objectClass: olcConfig
+      objectClass: olcMemberOf
+      objectClass: olcOverlayConfig
+      objectClass: top
+      olcOverlay: memberof
+      olcMemberOfDangling: ignore
+      olcMemberOfRefInt: TRUE
+      olcMemberOfGroupOC: groupOfNames
+      olcMemberOfMemberAD: member
+      olcMemberOfMemberOfAD: memberOf
+    02-refint1.ldif: |-
+      dn: cn=module{1},cn=config
+      changetype: modify
+      add: olcmoduleload
+      olcmoduleload: refint.la
+    03-refint2.ldif: |-
+      dn: olcOverlay={1}refint,olcDatabase={1}hdb,cn=config
+      objectClass: olcConfig
+      objectClass: olcOverlayConfig
+      objectClass: olcRefintConfig
+      objectClass: top
+      olcOverlay: {1}refint
+      olcRefintAttribute: memberof member manager owner
+    04-add_ou.ldif: |-
+      dn: ou=groups,dc=example,dc=org
+      objectClass: organizationalUnit
+      ou: Groups
+    05-admin.ldif: |-
+      dn: cn=admin,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: admin
+      description: read write and execute group
+      member: cn=admin,dc=example,dc=org
+    06-developer.ldif: |-
+      dn: cn=developers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: developers
+      description: read only users
+      member: cn=admin,dc=example,dc=org
+      member: cn=developer,dc=example,dc=org
+    07-qa.ldif: |-
+      dn: cn=QA,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: QA
+      description: read only users
+      member: cn=admin,dc=example,dc=org
+      member: cn=qa,dc=example,dc=org
+    08-manager.ldif: |-
+      dn: cn=managers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: managers
+      description: read and execute group
+      member: cn=admin,dc=example,dc=org
+      member: cn=manager,dc=example,dc=org
+    09-IT-manager.ldif: |-
+      dn: cn=ITManagers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: ITManagers
+      description: read and execute group
+      member: cn=admin,dc=example,dc=org
+      member: cn=ITManager,dc=example,dc=org
+    10-users.ldif: |-
+      dn: cn=user1,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user1
+      userpassword: {SSHA}Y9L4AsYL16WLK10qDZ62pTScFnaWb0nz
+      dn: cn=user2,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user2
+      userpassword: {SSHA}DasTBI0eut1F83Bh1F1HXmDT8juJj3pY
+      dn: cn=user3,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user3
+      userpassword: {SSHA}Qu1FW7BdLMndwM/Gf+zc3a8VIMAymbuv
+      dn: cn=developers,ou=groups,dc=example,dc=org
+      changetype: modify
+      add: member
+      member: cn=user1,dc=example,dc=org
+      member: cn=user3,dc=example,dc=org
+      dn: cn=QA,ou=groups,dc=example,dc=org
+      changetype: modify
+      add: member
+      member: cn=user2,dc=example,dc=org
+      member: cn=user3,dc=example,dc=org
+#####################################################
+# Centralized Logging Configuration
+####################################################
+# Set to true to install Elastic and Kibana
+enableCentralLogging: false
+
+elasticsearch:
+  replicas: 1
+  minimumMasterNodes: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "1Gi"
+
+kibana:
+  service:
+    type: LoadBalancer
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "250Mi"
+  lifecycle:
+    postStart:
+      exec:
+        command:
+          - bash
+          - -c
+          - >
+            until curl localhost:5601; do echo "Waiting for Kibana to be available..."; sleep 5; done;
+            until curl elasticsearch-master:9200; do echo "Waiting for Elasticsearch to be available..."; sleep 5; done;
+            sleep 60;
+            curl https://raw.githubusercontent.com/OpsMx/enterprise-spinnaker/master/scripts/kibana/kibana_objects.ndjson > /tmp/kibana_objects.ndjson;
+            curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
+
+#argo-events:
+
+#argo-rollouts:
+
+#argo-workflows:
+
+#argocd-image-updater:
