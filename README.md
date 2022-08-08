@@ -1,1 +1,1 @@
-# -enterprise-argo
+# enterprise-argo
