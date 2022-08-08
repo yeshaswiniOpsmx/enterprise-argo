@@ -18,7 +18,7 @@ global:
  
   argocd:
     protocol: http
-    host: argo-cd.sai.argo.opsmx.net
+    host: argo-cd.argo.opsmx.net
 
     ingress:
       annotations:
