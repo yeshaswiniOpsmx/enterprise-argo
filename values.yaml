@@ -9,6 +9,7 @@ installArgoCD: true
 
 argo-cd:
   server:
+    ### To use LDAP enable config 
     configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
     config: 
@@ -22,8 +23,8 @@ argo-cd:
           name: openldap
           id: ldap
           config:
-            # Ldap server address
-            host: "{{ .Release.Name }}-openldap:389"
+            # Ldap server address, if it is openldap provide RELEASENAME
+            host: "RELEASENAME-openldap:389"
             insecureNoSSL: true
             insecureSkipVerify: true
             # Variable name stores ldap bindDN in argocd-secret
