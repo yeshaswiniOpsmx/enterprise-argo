@@ -3,6 +3,70 @@
 installArgoCD: true
 
 
+#####################################################
+# Global Configuration
+######################
+
+global:
+  # Custom Images registry where all the OSS and customized images used in the helm chart are stored
+  # Only update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  customImages:
+    registry: quay.io/opsmxpublic
+  # when this flag is set to false; UI will be accessible over http instead of https
+  ssl:
+    enabled: true
+
+  # If cert-manager is installed, TLS secrets will created automatically, as an 'Issuer' will be created
+  # Else, the TLS secrets will need to created manually
+  certManager:
+    installed: true
+
+  createIngress: true
+
+  argocd:
+    #specify the argo-cd url
+    host: ""
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      tls:
+        secretName: argocd-tls-certificate
+
+  argoworkflows:
+    #specify the argoworkflows url
+    host: ""
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argocd-workflow-tls-certificate
+
+  ## Node Selection rules for all the OEA components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...)
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  enableCentralMonitoring: false
+
+  ###############################################################################
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: true
+
+  ## ldap configuration used for authentication and authorization
+  ldap:
+    enabled: false
+    url: ldap://openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org
+
 ###################################################
 # argo-cd configuration
 #######################
@@ -14,7 +78,7 @@ argo-cd:
     ########   ldap argc-cm configmap configuration     #######
     config: 
       # Argo CD's externally facing base URL (optional). Required when configuring SSO
-      url: ""                #https://argocd-ldap.ninja-test.opsmx.net"
+      url: "" #https://argocd-ldap.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
       dex.config: |-
@@ -23,7 +87,6 @@ argo-cd:
           name: openldap
           id: ldap
           config:
-            # Ldap server address, if it is openldap provide RELEASENAME
             host: "openldap:389"
             insecureNoSSL: true
             insecureSkipVerify: true
@@ -47,87 +110,27 @@ argo-cd:
               userAttr: cn
               groupAttr: cn
               nameAttr: cn
-    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
-    # -- Argo CD rbac config ([Argo CD RBAC policy])
-    rbacConfig:
-      {}
-      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
-      # Policy rules are in the form:
-      #   p, subject, resource, action, object, effect
-      # Role definitions and bindings are in the form:
-      #   g, subject, inherited-subject
-#####################################################
-# Global Configuration
-######################
 
-global:
-  # Custom Images registry where all the OSS and customized images used in the helm chart are stored
-  # Only update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
-  customImages:
-    registry: quay.io/opsmxpublic
-  # when this flag is set to false; UI will be accessible over http instead of https
-  ssl:
-    enabled: false
+###################################################
+# argo-events configuration
+#######################
 
-  # If cert-manager is installed, TLS secrets will created automatically, as an 'Issuer' will be created
-  # Else, the TLS secrets will need to created manually
-  certManager:
-    installed: false
-   
-  createIngress: true
-  
-  argocd:
-    protocol: http
-    #specify the argo-cd url
-    host: ""
+argo-events:
+  crds:
+    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+    install: false
 
-    ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      tls:
-        secretName: argocd-tls-certificate
-        
-  argoworkflows:
-    protocol: http
-    #specify the argoworkflows url
-    host: ""
-    ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-      tls:
-        secretName: argocd-workflow-tls-certificate
+###################################################
+# argo-rollouts configuration
+#######################
 
+argo-rollouts:
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
+  #Set to false if crds to be deleted as part of helm uninstall
+  keepCRDs: true
 
-  ## Node Selection rules for all the OES components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...) 
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-
-  enableCentralMonitoring: false
-
-  ###############################################################################
-  # A trial LDAP is installed by default, with users: admin, user1,2,3 with user1password, user2pa...
-  # Set it to false if own LDAP is to be configured
-  installOpenLdap: false
-
-  ## ldap configuration used for authentication and authorization
-  ldap:
-    enabled: false
-    url: ldap://openldap:389
-    managerDn: cn=admin,dc=example,dc=org
-    managerPassword: opsmxadmin123
-    groupSearchBase: ou=groups,dc=example,dc=org
-    groupSearchFilter: member={0}
-    groupRoleAttributes: cn
-    userDnPattern: cn={0},dc=example,dc=org
-
-#####################################################
-# AP integrates with OPA and installs an OPA server
-# Leave it as true, even if not using OPA
-
+######################################################################
 opa:
   enabled: false  
   image:
@@ -141,7 +144,6 @@ opa:
 ## Create this secret before installing the chart
 imagePullSecret: ""
 
-
 ####################################################
 # AP installs a trial LDAP for POCs and testing purposes
 # OpenLDAP custom configuration; will override default configuration of openldap helm chart
@@ -154,7 +156,7 @@ openldap:
   tolerations: []
 
   persistence:
-    enabled: false
+    enabled: true
   env:
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
 
