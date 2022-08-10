@@ -4,10 +4,7 @@ kind: Ingress
 metadata:
   annotations:
 {{- if .Values.global.certManager.installed }}
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    cert-manager.io/issue-temporary-certificate: "true"
-    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}
-    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-{{ .Release.Namespace }}-argocd
 {{- end }}
 {{- if .Values.global.argocd.ingress.annotations }}
 {{ tpl (toYaml .Values.global.argocd.ingress.annotations) . | indent 4 }}
@@ -22,7 +19,7 @@ spec:
           service:
             name: {{ .Release.Name }}-argocd-server
             port:
-              number: 443
+              name: https
         path: /
         pathType: ImplementationSpecific
 {{- if .Values.global.ssl.enabled }}
@@ -32,4 +29,3 @@ spec:
 {{ toYaml .Values.global.argocd.ingress.tls | indent 4 }}
 {{- end }}
 {{- end -}}
-

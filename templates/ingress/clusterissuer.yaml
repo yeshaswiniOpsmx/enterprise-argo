@@ -1,8 +1,8 @@
 {{- if .Values.global.certManager.installed }}
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
-  name: letsencrypt-{{ .Release.Namespace }}-spin
+  name: letsencrypt-{{ .Release.Namespace }}-argocd
 spec:
   acme:
     email: srinivas@opsmx.io

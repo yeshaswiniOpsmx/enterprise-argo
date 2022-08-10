@@ -1,6 +1,64 @@
-#argo-cd:
-
+####################################################
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: true
+
+
+###################################################
+# argo-cd configuration
+#######################
+
+argo-cd:
+  server:
+    ### To use LDAP enable config 
+    configEnabled: true
+    ########   ldap argc-cm configmap configuration     #######
+    config: 
+      # Argo CD's externally facing base URL (optional). Required when configuring SSO
+      url: ""                #https://argocd-ldap.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      admin.enabled: "false"
+      dex.config: |-
+        connectors:
+        - type: ldap
+          name: openldap
+          id: ldap
+          config:
+            # Ldap server address, if it is openldap provide RELEASENAME
+            host: "RELEASENAME-openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+            # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbacConfig:
+      {}
+      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
+      # Policy rules are in the form:
+      #   p, subject, resource, action, object, effect
+      # Role definitions and bindings are in the form:
+      #   g, subject, inherited-subject
+#####################################################
+# Global Configuration
+######################
 
 global:
   # Custom Images registry where all the OSS and customized images used in the helm chart are stored
@@ -18,11 +76,11 @@ global:
  
   argocd:
     protocol: http
-    host: argo-cd.argo.opsmx.net
+    #specify the argo-cd url
+    host: ""
 
     ingress:
       annotations:
-        ingress.kubernetes.io/ssl-redirect: "true"
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/backend-protocol: HTTPS
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -184,6 +242,7 @@ openldap:
       add: member
       member: cn=user2,dc=example,dc=org
       member: cn=user3,dc=example,dc=org
+
 #####################################################
 # Centralized Logging Configuration
 ####################################################
@@ -217,11 +276,3 @@ kibana:
             sleep 60;
             curl https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/scripts/kibana/kibana_objects.ndjson > /tmp/kibana_objects.ndjson;
             curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
-
-#argo-events:
-
-#argo-rollouts:
-
-#argo-workflows:
-
-#argocd-image-updater:
