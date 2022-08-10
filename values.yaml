@@ -23,7 +23,7 @@ argo-cd:
           id: ldap
           config:
             # Ldap server address
-            host: {{ .Release.Name }}-cd-openldap:389
+            host: "{{ .Release.Name }}-openldap:389"
             insecureNoSSL: true
             insecureSkipVerify: true
             # Variable name stores ldap bindDN in argocd-secret
