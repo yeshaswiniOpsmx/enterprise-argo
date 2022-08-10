@@ -24,7 +24,7 @@ argo-cd:
           id: ldap
           config:
             # Ldap server address, if it is openldap provide RELEASENAME
-            host: "RELEASENAME-openldap:389"
+            host: "openldap:389"
             insecureNoSSL: true
             insecureSkipVerify: true
             # Variable name stores ldap bindDN in argocd-secret
@@ -105,7 +105,7 @@ global:
   ## ldap configuration used for authentication and authorization
   ldap:
     enabled: false
-    url: ldap://{{ .Release.Name }}-openldap:389
+    url: ldap://openldap:389
     managerDn: cn=admin,dc=example,dc=org
     managerPassword: opsmxadmin123
     groupSearchBase: ou=groups,dc=example,dc=org
