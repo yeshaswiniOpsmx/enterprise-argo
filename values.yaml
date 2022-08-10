@@ -24,7 +24,7 @@ argo-cd:
           id: ldap
           config:
             # Ldap server address, if it is openldap provide RELEASENAME
-            host: "RELEASENAME-openldap:389"
+            host: "openldap:389"
             insecureNoSSL: true
             insecureSkipVerify: true
             # Variable name stores ldap bindDN in argocd-secret
@@ -73,7 +73,9 @@ global:
   # Else, the TLS secrets will need to created manually
   certManager:
     installed: false
- 
+   
+  createIngress: true
+  
   argocd:
     protocol: http
     #specify the argo-cd url
@@ -87,8 +89,17 @@ global:
         nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       tls:
         secretName: argocd-tls-certificate
+        
+  argoworkflows:
+    protocol: http
+    #specify the argoworkflows url
+    host: ""
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argocd-workflow-tls-certificate
 
-  createIngress: true
 
   ## Node Selection rules for all the OES components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...) 
   nodeSelector: {}
@@ -105,7 +116,7 @@ global:
   ## ldap configuration used for authentication and authorization
   ldap:
     enabled: false
-    url: ldap://{{ .Release.Name }}-openldap:389
+    url: ldap://openldap:389
     managerDn: cn=admin,dc=example,dc=org
     managerPassword: opsmxadmin123
     groupSearchBase: ou=groups,dc=example,dc=org
