@@ -72,6 +72,13 @@ global:
 #######################
 
 argo-cd:
+  dex:
+    env:
+      - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argo-workflows-sso
+            key: client-secret
   server:
     ### To use LDAP enable config 
     configEnabled: true
@@ -82,6 +89,12 @@ argo-cd:
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
       dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://argoworkflows.ops.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworktest-sai.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
           name: openldap
@@ -111,6 +124,36 @@ argo-cd:
               groupAttr: cn
               nameAttr: cn
 
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbacConfig:
+      {}
+      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
+      # Policy rules are in the form:
+      #   p, subject, resource, action, object, effect
+      # Role definitions and bindings are in the form:
+      #   g, subject, inherited-subject
+
+###################################################
+# argo-workflows configuration
+#######################
+
+argo-workflows:
+  server:
+    extraArgs:
+      - --auth-mode=sso
+    sso:
+      issuer: https://argcd.ops.net/api/dex   # ArgoCd url Example: https://argoworkflows-ldap.ninja-test.opsmx.net/api/dex
+      # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+      sessionExpiry: 240h
+      clientId:
+        name: argo-workflows-sso
+        key: client-id
+      clientSecret:
+        name: argo-workflows-sso
+        key: client-secret
+      redirectUrl: https://argoworktest.ops.net/oauth2/callback  ##Argoworkflows url Example: https://argocd-ldap.ninja-test.opsmx.net/oauth2/callback
+
 ###################################################
 # argo-events configuration
 #######################
@@ -118,7 +161,7 @@ argo-cd:
 argo-events:
   crds:
     # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-    install: false
+    install: true
 
 ###################################################
 # argo-rollouts configuration
