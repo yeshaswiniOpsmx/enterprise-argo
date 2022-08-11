@@ -21,3 +21,6 @@ Please updated values.yaml with `argo-rollouts.installCRDs: false` and perform h
 While installing if u face this error Unable to continue with install: CustomResourceDefinition  "eventsources.argoproj.io"
 
 Please updated values.yaml with `argo-events.crds.install: false` and perform helm install.
+
+
+We need to explictly give list view permissions to serviceaccounts for argo-workflows-server ClusterRole
