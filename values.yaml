@@ -2,7 +2,6 @@
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: true
 
-
 #####################################################
 # Global Configuration
 ######################
@@ -24,7 +23,7 @@ global:
   createIngress: true
 
   argocd:
-    #specify the argo-cd url
+    #specify the argo-cd url argocd.ninja-test.opsmx.net
     host: ""
 
     ingress:
@@ -37,7 +36,7 @@ global:
         secretName: argocd-tls-certificate
 
   argoworkflows:
-    #specify the argoworkflows url
+    #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
     host: ""
     ingress:
       annotations:
@@ -84,8 +83,8 @@ argo-cd:
     configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
     config: 
-      # Argo CD's externally facing base URL (optional). Required when configuring SSO
-      url: "" #https://argocd-ldap.ninja-test.opsmx.net"
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
       dex.config: |-
@@ -93,7 +92,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - https://argoworkflows.ops.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworktest-sai.ninja-test.opsmx.net/oauth2/callback
+            - https://argoworkflows.ops.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
@@ -135,11 +134,11 @@ argo-cd:
       #   g, subject, inherited-subject
   notifications:
     enabled: true
-    argocdUrl: ""  # ArgoCd Url
+    argocdUrl: ""  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
     secret:
       items:
-       email-password:
-       email-username:
+       email-password:    ## Provide Plain password emailpassword
+       email-username:    ## Provide plain email email.example.com
        #jenkins-password:
        #jenkins-username:
        #jira-password:
@@ -439,7 +438,7 @@ argo-workflows:
     extraArgs:
       - --auth-mode=sso
     sso:
-      issuer: https://argcd.ops.net/api/dex   # ArgoCd url Example: https://argoworkflows-ldap.ninja-test.opsmx.net/api/dex
+      issuer: https://argcd.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
       # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
       sessionExpiry: 240h
       clientId:
@@ -448,7 +447,7 @@ argo-workflows:
       clientSecret:
         name: argo-workflows-sso
         key: client-secret
-      redirectUrl: https://argoworktest.ops.net/oauth2/callback  ##Argoworkflows url Example: https://argocd-ldap.ninja-test.opsmx.net/oauth2/callback
+      redirectUrl: https://argoworkflow.ops.net/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
 
 ###################################################
 # argo-events configuration
