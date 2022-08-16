@@ -25,7 +25,7 @@ global:
   argocd:
     #specify the argo-cd url argocd.ninja-test.opsmx.net
     protocol: http
-    host: "cd.ryzon7-argo22.opsmx.org"
+    host: "argocdtesthelm.ninja-test.opsmx.net"
 
     ingress:
       annotations:
@@ -35,7 +35,7 @@ global:
 
   argoworkflows:
     #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
-    host: "workflow.ryzon7-argo22.opsmx.org"
+    host: "argoworktesthelm.ninja-test.opsmx.net"
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
@@ -84,7 +84,7 @@ argo-cd:
     ########   ldap argc-cm configmap configuration     #######
     config: 
       # Argo CD's externally facing base URL. Required when configuring SSO
-      url: "http://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      url: "http://argocdtesthelm.ninja-test.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
       dex.config: |-
@@ -92,7 +92,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - http://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+            - http://argoworktesthelm.ninja-test.opsmx.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
@@ -170,7 +170,7 @@ argo-cd:
       #   g, subject, inherited-subject
   notifications:
     enabled: true
-    argocdUrl: "cd.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+    argocdUrl: "argocdtesthelm.ninja-test.opsmx.net"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
     secret:
       items:
        email-password: nopass    ## Provide Plain password emailpassword
@@ -475,7 +475,7 @@ argo-workflows:
       - --auth-mode=sso
     sso:
      #issuerAlias: http://cd.ryzon7-argo22.opsmx.org/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
-      issuer: http://cd.ryzon7-argo22.opsmx.org/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: http://argocdtesthelm.ninja-test.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
       # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
       sessionExpiry: 240h
       clientId:
@@ -484,7 +484,7 @@ argo-workflows:
       clientSecret:
         name: argo-workflows-sso
         key: client-secret
-      redirectUrl: http://workflow.ryzon7-argo22.opsmx.org/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      redirectUrl: http://argoworktesthelm.ninja-test.opsmx.net/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
 
 ###################################################
 # argo-events configuration
@@ -506,7 +506,43 @@ argo-rollouts:
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
   keepCRDs: false
+  notifications:
+    secret:
+      # -- Whether to create notifications secret
+      create: true
+      # -- Generic key:value pairs to be inserted into the notifications secret
+      items: {}
+        # slack-token:
+  
+    # -- Configures notification services
+    notifiers: {}
+      # service.slack: |
+      #   token: $slack-token
+  
+    # -- Notification templates
+    templates: {}
+      # template.my-purple-template: |
+      #   message: |
+      #     Rollout {{.rollout.metadata.name}} has purple image
+      #   slack:
+      #       attachments: |
+      #           [{
+      #             "title": "{{ .rollout.metadata.name}}",
+      #             "color": "#800080"
+      #           }]
+  
+    # -- The trigger defines the condition when the notification should be sent
+    triggers: {}
+      # trigger.on-purple: |
+      #   - send: [my-purple-template]
+      #     when: rollout.spec.template.spec.containers[0].image == 'argoproj/rollouts-demo:purple'
 
+  dashboard:
+   # -- Deploy dashboard server
+   enabled: true
+   # -- Value of label `app.kubernetes.io/component`
+   component: rollouts-dashboard
+  
 ######################################################################
 opa:
   enabled: false  
