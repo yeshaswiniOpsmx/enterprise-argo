@@ -198,13 +198,13 @@ spec:
                             query:
                               type: string
                           type: object
-                         influxdb:
-                          properties:
-                            profile:
-                              type: string
-                            query:
-                              type: string
-                          type: object
+                        influxdb:
+                         properties:
+                           profile:
+                             type: string
+                           query:
+                             type: string
+                         type: object
                         isd:
                           properties:
                             application:
@@ -2609,7 +2609,7 @@ spec:
                                               maxSkew:
                                                 format: int32
                                                 type: integer
-                                               minDomains:
+                                              minDomains:
                                                 format: int32
                                                 type: integer
                                               topologyKey:
