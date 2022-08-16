@@ -6,6 +6,13 @@ metadata:
 {{- if .Values.global.certManager.installed }}
     cert-manager.io/cluster-issuer: letsencrypt-{{ .Release.Namespace }}-argocd
 {{- end }}
+{{- if .Values.global.ssl.enabled }}
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+{{- else }}
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+{{- end }}
 {{- if .Values.global.argocd.ingress.annotations }}
 {{ tpl (toYaml .Values.global.argocd.ingress.annotations) . | indent 4 }}
 {{- end }}
@@ -19,7 +26,7 @@ spec:
           service:
             name: {{ .Release.Name }}-argocd-server
             port:
-              name: https
+              name: {{ .Values.global.argocd.protocol }}
         path: /
         pathType: ImplementationSpecific
 {{- if .Values.global.ssl.enabled }}
