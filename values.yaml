@@ -40,7 +40,16 @@ global:
       annotations:
         kubernetes.io/ingress.class: nginx
       tls:
-        secretName: argocd-workflow-tls-certificate
+        secretName: argoworkflow-tls-certificate
+
+  argorollouts:
+    #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
+    host: "argorollouts.ninja-test.opsmx.net"
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argorollouts-tls-certificate
 
   ## Node Selection rules for all the OEA components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...)
   nodeSelector: {}
@@ -493,7 +502,7 @@ argo-workflows:
 argo-events:
   crds:
     # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-    install: true
+    install: false
     # -- Keep CRDs on chart uninstall
     keep: false
 
@@ -506,6 +515,16 @@ argo-rollouts:
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
   keepCRDs: false
+  #Override the image for the deployment
+  controller:
+    image:
+      # -- Registry to use
+      registry: quay.io
+      # -- Repository to use
+      repository: ashmitaopsmx/argo-isd
+      # -- Overrides the image tag (default is the chart appVersion)
+      tag: "v10"
+
   notifications:
     secret:
       # -- Whether to create notifications secret

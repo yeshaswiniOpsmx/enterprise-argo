@@ -839,6 +839,7 @@ spec:
                                 type: string
                               trafficSplitName:
                                 type: string
+                            type: object
                           traefik:
                             properties:
                               weightedTraefikServiceName:
