@@ -510,7 +510,7 @@ argo-workflows:
 argo-events:
   crds:
     # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-    install: false
+    install: true
     # -- Keep CRDs on chart uninstall
     keep: false
 
