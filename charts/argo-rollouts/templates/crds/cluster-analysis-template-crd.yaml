@@ -235,7 +235,7 @@ spec:
                           - application
                           - gate_url
                           - threshold
-                        type: object
+                          type: object
                         job:
                           properties:
                             metadata:
