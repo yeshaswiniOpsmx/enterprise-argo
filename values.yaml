@@ -519,11 +519,11 @@ argo-rollouts:
   controller:
     image:
       # -- Registry to use
-      registry: quay.io
+      registry: ashmitaopsmx
       # -- Repository to use
-      repository: ashmitaopsmx/argo-isd
+      repository: argo-isd
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v10"
+      tag: "v12"
 
   notifications:
     secret:
