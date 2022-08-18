@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+spec:
+  destination:
+    name: in-cluster
+    namespace: {{ .Release.Namespace }}
+    server: ''
+  source:
+    path: app-of-apps
+    repoURL: 'https://github.com/Opsmx/argo-sample-apps.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
