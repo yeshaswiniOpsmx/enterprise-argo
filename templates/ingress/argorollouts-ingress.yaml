@@ -9,7 +9,7 @@ metadata:
 {{- if .Values.global.argorollouts.ingress.annotations }}
 {{ tpl (toYaml .Values.global.argorollouts.ingress.annotations) . | indent 4 }}
 {{- end }}
-  name: argo-workflows-ingress
+  name: argo-rollouts-ingress
 spec:
   rules:
   - host: {{ .Values.global.argorollouts.host }}
