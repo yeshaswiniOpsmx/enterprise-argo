@@ -479,9 +479,9 @@ argo-cd:
         url: https://github.com/OpsMx/argo-sample-apps.git
         name: git-private-repo
         type: git
-        # Uncomment if the repo is private and pass credentials
-    #   password: my-password   # Git Username
-    #   username: my-username   # Git Token
+        # if the repo is private and pass credentials
+        password: gituser   # Git Username
+        username: randamtoken   # Git Token
 ###################################################
 # argo-workflows configuration
 #######################
