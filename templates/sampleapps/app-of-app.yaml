@@ -5,7 +5,7 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: maheshsai4
+    namespace: {{ .Release.Namespace }}
     server: ''
   source:
     path: app-of-apps
