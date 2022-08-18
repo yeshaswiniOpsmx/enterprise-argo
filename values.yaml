@@ -25,7 +25,7 @@ global:
   argocd:
     #specify the argo-cd url argocd.ninja-test.opsmx.net
     protocol: http
-    host: "argocdtesthelm.ninja-test.opsmx.net"
+    host: "cd.ryzon7-argo22.opsmx.org"
 
     ingress:
       annotations:
@@ -35,7 +35,7 @@ global:
 
   argoworkflows:
     #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
-    host: "argoworktesthelm.ninja-test.opsmx.net"
+    host: "workflow.ryzon7-argo22.opsmx.org"
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
@@ -93,7 +93,7 @@ argo-cd:
     ########   ldap argc-cm configmap configuration     #######
     config: 
       # Argo CD's externally facing base URL. Required when configuring SSO
-      url: "http://argocdtesthelm.ninja-test.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      url: "http://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
       dex.config: |-
@@ -101,7 +101,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - http://argoworktesthelm.ninja-test.opsmx.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+            - http://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
@@ -179,7 +179,7 @@ argo-cd:
       #   g, subject, inherited-subject
   notifications:
     enabled: true
-    argocdUrl: "argocdtesthelm.ninja-test.opsmx.net"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+    argocdUrl: "cd.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
     secret:
       items:
        email-password: nopass    ## Provide Plain password emailpassword
@@ -474,7 +474,7 @@ argo-cd:
             }]
 
   configs:
-    repositories: {}
+    repositories:
       private-repo:
         url: https://github.com/OpsMx/argo-sample-apps.git
         name: git-private-repo
@@ -492,7 +492,7 @@ argo-workflows:
       - --auth-mode=sso
     sso:
      #issuerAlias: http://cd.ryzon7-argo22.opsmx.org/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
-      issuer: http://argocdtesthelm.ninja-test.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: http://cd.ryzon7-argo22.opsmx.org/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
       # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
       sessionExpiry: 240h
       clientId:
@@ -501,7 +501,7 @@ argo-workflows:
       clientSecret:
         name: argo-workflows-sso
         key: client-secret
-      redirectUrl: http://argoworktesthelm.ninja-test.opsmx.net/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      redirectUrl: http://workflow.ryzon7-argo22.opsmx.org/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
 
 ###################################################
 # argo-events configuration
