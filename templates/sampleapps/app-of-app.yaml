@@ -9,7 +9,7 @@ spec:
     server: ''
   source:
     path: app-of-apps
-    repoURL: 'git@github.com:OpsMx/enterprise-argo.git'
+    repoURL: 'git@github.com:OpsMx/argo-sample-apps.git'
     targetRevision: HEAD
   project: default
   syncPolicy:
