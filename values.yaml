@@ -500,7 +500,11 @@ argo-workflows:
         name: argo-workflows-sso
         key: client-secret
       redirectUrl: https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
-
+      scopes:
+        - groups
+        - email
+      rbac:
+        enabled: false
 ###################################################
 # argo-events configuration
 #######################
