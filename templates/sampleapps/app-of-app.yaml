@@ -5,11 +5,11 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: {{ .Release.Namespace }}
+    namespace: opsmx-argo #{{ .Release.Namespace }}
     server: ''
   source:
     path: app-of-apps
-    repoURL: 'https://github.com/Opsmx/argo-sample-apps.git'
+    repoURL: 'git@github.com:OpsMx/enterprise-argo.git'
     targetRevision: HEAD
   project: default
   syncPolicy:
