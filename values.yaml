@@ -475,7 +475,7 @@ argo-cd:
             }]
 
   configs:
-    #### -- Repositories list to be used by applications
+    #### -- Repositories list to be used by applications, It can be private or public repository
     repositories: {}
       #private-repo:
       #  url: https://github.com/OpsMx/argo-sample-apps.git
