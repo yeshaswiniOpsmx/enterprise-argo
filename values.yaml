@@ -3,7 +3,7 @@
 installArgoCD: true
 
 # install ingress-nginx if not installed in the cluster
-ingress-nginx: false
+ingressnginx: false
 
 #####################################################
 # Global Configuration
