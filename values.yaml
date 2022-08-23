@@ -83,10 +83,15 @@ argo-cd:
           secretKeyRef:
             name: argo-workflows-sso
             key: client-secret
+  controller:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8082"
+      prometheus.io/scrape: "true"
   server:
     podAnnotations:
       prometheus.io/path: /metrics
-      prometheus.io/port: "8083" # 8082 for application controller
+      prometheus.io/port: "8083"
       prometheus.io/scrape: "true"
     extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
       - --insecure
