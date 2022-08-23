@@ -2,6 +2,9 @@
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: true
 
+# install ingress-nginx if not installed in the cluster
+ingressnginx: false
+
 #####################################################
 # Global Configuration
 ######################
@@ -208,8 +211,8 @@ argo-cd:
     argocdUrl: "cd.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
     secret:
       items:
-       email-password: nopass    ## Provide Plain password emailpassword
        email-username: bogus   ## Provide plain email email.example.com
+       email-password: nopass    ## Provide Plain password emailpassword
        #jenkins-password:
        #jenkins-username:
        #jira-password:
@@ -500,14 +503,27 @@ argo-cd:
             }]
 
   configs:
-    repositories:
-      private-repo:
-        url: https://github.com/OpsMx/argo-sample-apps.git
-        name: git-private-repo
-        type: git
-        # if the repo is private and pass credentials
-        password: gituser   # Git Username
-        username: randamtoken   # Git Token
+    #### -- Repositories list to be used by applications, It can be private or public repository
+    repositories: {}
+      #private-repo:
+      #  url: https://github.com/OpsMx/argo-sample-apps.git
+      #  name: git-private-repo
+      #  type: git
+      #  # if the repo is private and pass credentials
+      #  password: gituser   # Git Username
+      #  username: randamtoken   # Git Token
+
+    #### -- Provide one or multiple [external cluster credentials]
+    clusterCredentials: []
+      #- name: myexternalcluster
+      #  server: https://xx.xx.xx.xx
+      #  labels: {}
+      #  annotations: {}
+      #  config:
+      #    bearerToken: "<base64 authentication token>"
+      #    tlsClientConfig:
+      #      insecure: false
+      #      caData: "<base64 encoded certificate>"
 
 ###################################################
 # argo-workflows configuration
