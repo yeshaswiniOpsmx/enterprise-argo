@@ -77,12 +77,26 @@ global:
 
 argo-cd:
   dex:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "5558"
+      prometheus.io/scrape: "true"
     env:
       - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         valueFrom:
           secretKeyRef:
             name: argo-workflows-sso
             key: client-secret
+  applicationSet:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8080"
+      prometheus.io/scrape: "true"
+  repoServer:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8084"
+      prometheus.io/scrape: "true"
   controller:
     podAnnotations:
       prometheus.io/path: /metrics
@@ -186,6 +200,11 @@ argo-cd:
       #   g, subject, inherited-subject
   notifications:
     enabled: true
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "9001"
+      prometheus.io/scrape: "true"
+   
     argocdUrl: "cd.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
     secret:
       items:
