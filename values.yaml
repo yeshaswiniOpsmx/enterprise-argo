@@ -84,6 +84,10 @@ argo-cd:
             name: argo-workflows-sso
             key: client-secret
   server:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8083" # 8082 for application controller
+      prometheus.io/scrape: "true"
     extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
       - --insecure
     ### To use LDAP enable config 
@@ -480,6 +484,7 @@ argo-cd:
         # if the repo is private and pass credentials
         password: gituser   # Git Username
         username: randamtoken   # Git Token
+
 ###################################################
 # argo-workflows configuration
 #######################
