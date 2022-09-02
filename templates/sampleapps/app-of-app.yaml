@@ -5,7 +5,7 @@ metadata:
 spec:
   destination:
     name: in-cluster
-    namespace: opsmx-argo #{{ .Release.Namespace }}
+    namespace: {{ .Release.Namespace }}
     server: ''
   source:
     path: app-of-apps
@@ -16,5 +16,3 @@ spec:
     automated:
       prune: false
       selfHeal: false
-    syncOptions:
-    - CreateNamespace=true
