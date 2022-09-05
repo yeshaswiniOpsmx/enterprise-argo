@@ -597,7 +597,7 @@ argo-rollouts:
       # -- Repository to use
       repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v2"
+      tag: "v4"
 
     readinessProbe:
       httpGet:
