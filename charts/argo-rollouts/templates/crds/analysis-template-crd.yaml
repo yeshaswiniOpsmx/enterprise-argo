@@ -2731,17 +2731,17 @@ spec:
                                     type: string
                                   canaryMetricScope:
                                     type: string
-                                  gatename:
+                                  gateName:
                                     type: string
                                   logScopeVariables:
                                     type: string
                                   metricScopeVariables:
                                     type: string
-                                  servicename:
+                                  serviceName:
                                     type: string
                                 required:
-                                - gatename
-                                - servicename
+                                - gateName
+                                - serviceName
                                 type: object
                               type: array
                             threshold:
