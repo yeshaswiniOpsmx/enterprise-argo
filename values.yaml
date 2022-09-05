@@ -5,6 +5,18 @@ installArgoCD: true
 # install ingress-nginx if not installed in the cluster
 ingressnginx: false
 
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+
+# installArgoWorkflows enable true will install argo-workflows
+installArgoWorkflows: true
+
+# installArgoEvents enable true will install argo-events
+installArgoEvents: true
+
+# installArgoImageupdater enable true will install argocd-image-updater
+installArgoImageupdater: true
+
 #####################################################
 # Global Configuration
 ######################
@@ -574,15 +586,29 @@ argo-rollouts:
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
   keepCRDs: false
+
+  imagePullSecrets:
+  - name: opsmx11-secret
   #Override the image for the deployment
   controller:
     image:
       # -- Registry to use
-      registry: ashmitaopsmx
+      registry: opsmx11
       # -- Repository to use
-      repository: argo-isd
+      repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v12"
+      tag: "v4"
+
+    readinessProbe:
+      httpGet:
+        path: /metrics
+        port: metrics
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+      timeoutSeconds: 4
+
 
   notifications:
     secret:
