@@ -86,11 +86,43 @@ global:
     groupRoleAttributes: cn
     userDnPattern: cn={0},dc=example,dc=org
 
+  secretmanagement:
+    vault: false
+    roleid: a301e631-94fa-6ace-66bd-36c210c25327
+    secretid: 1336f7d2-8358-f674-5eb9-25aedb1648a2
+    vaultaddress: https://vault.argo.opsmx.net
+
 ###################################################
 # argo-cd configuration
 #######################
 
 argo-cd:
+  repoServer:
+    volumeMounts:
+    - mountPath: /usr/local/bin/argocd-vault-plugin
+      name: custom-tools
+      subPath: argocd-vault-plugin
+    volumes:
+    - emptyDir: {}
+      name: custom-tools
+    clusterAdminAccess:
+      # -- Enable RBAC for local cluster deployments
+      enabled: true
+    initContainers:
+    - args:
+      - |-
+        wget -O argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v1.12.0/argocd-vault-plugin_1.12.0_linux_amd64
+        chmod +x argocd-vault-plugin && mv argocd-vault-plugin /custom-tools/
+      command: [sh, -c]
+      image: alpine:3.8
+      name: download-tools
+      volumeMounts:
+      - mountPath: /custom-tools
+        name: custom-tools
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8084"
+      prometheus.io/scrape: "true"
   dex:
     podAnnotations:
       prometheus.io/path: /metrics
@@ -106,11 +138,6 @@ argo-cd:
     podAnnotations:
       prometheus.io/path: /metrics
       prometheus.io/port: "8080"
-      prometheus.io/scrape: "true"
-  repoServer:
-    podAnnotations:
-      prometheus.io/path: /metrics
-      prometheus.io/port: "8084"
       prometheus.io/scrape: "true"
   controller:
     podAnnotations:
@@ -132,6 +159,12 @@ argo-cd:
       url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
+
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "argocd-vault-plugin-credentials", "./"]
       dex.config: |-
         staticClients:
         - id: argo-workflows-sso
