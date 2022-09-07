@@ -88,8 +88,8 @@ global:
 
   secretmanagement:
     vault: false
-    roleid: a301e631-94fa-6ace-66bd-36c210c25327
-    secretid: 1336f7d2-8358-f674-5eb9-25aedb1648a2
+    roleid: a301eddddddddddddddddddd0c25327
+    secretid: 1ddddddddddddddddddd5aedb1648a2
     vaultaddress: https://vault.argo.opsmx.net
 
 ###################################################
