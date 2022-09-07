@@ -88,8 +88,8 @@ global:
 
   secretmanagement:
     vault: false
-    roleid: a301e631-94fa-6ace-66bd-36c210c25327
-    secretid: 1336f7d2-8358-f674-5eb9-25aedb1648a2
+    roleid: a301e-XXX-XXX-5327
+    secretid: 13XXXX-25aedb1648a2
     vaultaddress: https://vault.argo.opsmx.net
 
 ###################################################
@@ -164,7 +164,7 @@ argo-cd:
         - name: argocd-vault-plugin
           generate:
             command: ["argocd-vault-plugin"]
-            args: ["generate", "-s", "argocd-vault-plugin-credentials", "./"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}argocd-vault-plugin-credentials", "./"]
       dex.config: |-
         staticClients:
         - id: argo-workflows-sso
