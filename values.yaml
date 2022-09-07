@@ -159,7 +159,6 @@ argo-cd:
       url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "false"
-
       configManagementPlugins: |-
         - name: argocd-vault-plugin
           generate:
