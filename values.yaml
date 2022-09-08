@@ -163,7 +163,7 @@ argo-cd:
         - name: argocd-vault-plugin
           generate:
             command: ["argocd-vault-plugin"]
-            args: ["generate", "-s", "{{ .Release.Namespace }}argocd-vault-plugin-credentials", "./"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
       dex.config: |-
         staticClients:
         - id: argo-workflows-sso
