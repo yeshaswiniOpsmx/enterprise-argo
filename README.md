@@ -1,18 +1,16 @@
 # enterprise-argo
 
 
-For installing the Argo CD below are the mandatory paramerts to be updated in values.yaml
+For installing the Argo CD Please follow the below document
 
-1. Host value for ArgoCD host value in below path ` `global.argocd.host`
-
-2. Host value for ArgoWorkflows `global.argworkflows.host`
-
-3. Update the ArgoCD host value in below path `argo-cd.server.config.url`
+https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/edit#
 
 
 
 
-Troubleshooting
+
+
+**Troubleshooting**
 
 While installing if u face this error Unable to continue with install: CustomResourceDefinition "analysisruns.argoproj.io"
 
@@ -23,4 +21,3 @@ While installing if u face this error Unable to continue with install: CustomRes
 Please updated values.yaml with `argo-events.crds.install: false` and perform helm install.
 
 
-We need to explictly give list view permissions to serviceaccounts for argo-workflows-server ClusterRole
