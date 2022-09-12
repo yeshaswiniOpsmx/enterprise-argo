@@ -145,6 +145,17 @@ Return the proper Autopilot image name
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
+{{/*
+Return the proper Autopilot image name
+*/}}
+{{- define "carina.image" -}}
+{{- $registryName := .Values.imageCredentials.registry -}}
+{{- $repositoryName := .Values.carina.image.repository -}}
+{{- $tag := .Values.carina.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value that contains template.

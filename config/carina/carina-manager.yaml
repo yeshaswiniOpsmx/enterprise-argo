@@ -1,0 +1,14 @@
+httpListenPort: 8090
+controller:
+  url: 'http://opsmx-controller-controller1:9002'
+  caPath: /app/secrets/controller-ca.crt
+  certificatePath: /app/secrets/controller-control/tls.crt
+  keyPath: /app/secrets/controller-control/tls.key
+  updateFrequencySeconds: 30
+databases:
+  audit:
+    type: postgresql
+    connectString: host=oes-db  user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=auditdb
+  platform:
+    type: postgresql
+    connectString: host=oes-db user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=platformdb
