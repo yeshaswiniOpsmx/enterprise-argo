@@ -129,6 +129,9 @@ argo-cd:
       prometheus.io/path: /metrics
       prometheus.io/port: "8084"
       prometheus.io/scrape: "true"
+    envFrom:
+      - configMapRef:
+          name: argocd-cmd-params-cm
   dex:
     podAnnotations:
       prometheus.io/path: /metrics
@@ -140,21 +143,33 @@ argo-cd:
           secretKeyRef:
             name: argo-workflows-sso
             key: client-secret
+    envFrom:
+      - configMapRef:
+          name: argocd-cmd-params-cm
   applicationSet:
     podAnnotations:
       prometheus.io/path: /metrics
       prometheus.io/port: "8080"
       prometheus.io/scrape: "true"
+    extraEnvFrom:
+      - configMapRef:
+          name: argocd-cmd-params-cm
   controller:
     podAnnotations:
       prometheus.io/path: /metrics
       prometheus.io/port: "8082"
       prometheus.io/scrape: "true"
+    envFrom:
+      - configMapRef:
+          name: argocd-cmd-params-cm
   server:
     podAnnotations:
       prometheus.io/path: /metrics
       prometheus.io/port: "8083"
       prometheus.io/scrape: "true"
+    envFrom:
+      - configMapRef:
+          name: argocd-cmd-params-cm
     extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
       - --insecure
     ### To use LDAP enable config 
