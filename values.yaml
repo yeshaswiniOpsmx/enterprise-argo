@@ -17,6 +17,12 @@ installArgoEvents: true
 # installArgoImageupdater enable true will install argocd-image-updater
 installArgoImageupdater: true
 
+## Info related to registry where OEA images are stored
+imageCredentials:
+  repoUrl: https://quay.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: quay.io/opsmxpublic
+
 #####################################################
 # Global Configuration
 ######################
@@ -149,6 +155,17 @@ argo-cd:
       prometheus.io/path: /metrics
       prometheus.io/port: "8083"
       prometheus.io/scrape: "true"
+    env:
+      - name: ARGOCD_SERVER_CONTENT_SECURITY_POLICY
+        valueFrom:
+          configMapKeyRef:
+            key: server.content.security.policy
+            name: argocd-cmd-params-cm
+      - name: ARGOCD_SERVER_X_FRAME_OPTIONS
+        valueFrom:
+          configMapKeyRef:
+            key: server.x.frame.options
+            name: argocd-cmd-params-cm
     extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
       - --insecure
     ### To use LDAP enable config 
@@ -838,3 +855,27 @@ kibana:
             sleep 60;
             curl https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/scripts/kibana/kibana_objects.ndjson > /tmp/kibana_objects.ndjson;
             curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
+
+##################################################################################################################
+#
+carina:
+  ## Image specific details
+  ##
+  image:
+    repository: carina-manager
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+  config: {}
+
+#######################################################################################################################
+db:
+  ## Change the default configuration when above option is set to false
+  ## Below url and credentials are used by Autopilot & Sapor
+  username: postgres
+  password: networks123

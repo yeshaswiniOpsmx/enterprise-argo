@@ -1,0 +1,12 @@
+apiVersion: v1
+stringData:
+  carina-manager.yaml: |
+    {{- tpl (.Files.Get "config/carina/carina-manager.yaml") . | nindent 4 }}
+kind: Secret
+metadata:
+  labels:
+    app: oea
+    component: carina
+{{ include "oea.standard-labels" . | indent 4 }}
+  name: oea-carina-config
+
