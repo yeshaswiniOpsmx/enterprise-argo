@@ -1,0 +1,24 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oea
+    component: auditservice
+{{ include "oea.standard-labels" . | indent 4 }}
+{{- if .Values.audit.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.audit.serviceAnnotations | indent 4 }}
+{{- end }}
+  name: oea-audit-service
+spec:
+  ports:
+  - name: auditservice
+    port: 8097
+    protocol: TCP
+    targetPort: 8097
+  selector:
+    app: oea
+    component: auditservice
+  type: ClusterIP
+{{- end -}}

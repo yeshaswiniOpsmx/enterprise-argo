@@ -1,0 +1,23 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oea
+    component: sapor
+{{ include "oea.standard-labels" . | indent 4 }}
+{{- if .Values.sapor.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.sapor.serviceAnnotations | indent 4 }}
+{{- end }}
+  name: oea-sapor
+spec:
+  type: ClusterIP
+  ports:
+  - name: "sapor"
+    port: 8085
+    targetPort: 8085
+  selector:
+    app: oea
+    component: sapor
+{{- end -}}

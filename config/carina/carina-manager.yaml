@@ -8,7 +8,7 @@ controller:
 databases:
   audit:
     type: postgresql
-    connectString: host=oes-db  user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=auditdb
+    connectString: host=oea-db  user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=auditdb
   platform:
     type: postgresql
-    connectString: host=oes-db user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=platformdb
+    connectString: host=oea-db user='{{ .Values.db.username }}' password='{{ .Values.db.password }}' database=platformdb

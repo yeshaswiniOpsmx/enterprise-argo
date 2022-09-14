@@ -5,7 +5,7 @@ metadata:
     app: oea
     component: carina
 {{ include "oea.standard-labels" . | indent 4 }}
-  name: oes-carina
+  name: oea-carina
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -60,7 +60,7 @@ spec:
       - name: db-check
         image: {{ .Values.global.customImages.registry }}/postgres:9.6.5
         imagePullPolicy: IfNotPresent
-        command: ['/bin/bash', '-c', "sleep 30;echo Waiting for oes-db to be up and running; pg_isready -h oes-db -p 5432 && echo PostgreSQL DB is ready to receive connections"]
+        command: ['/bin/bash', '-c', "sleep 30;echo Waiting for oea-db to be up and running; pg_isready -h oea-db -p 5432 && echo PostgreSQL DB is ready to receive connections"]
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
@@ -77,10 +77,9 @@ spec:
         secret:
           defaultMode: 420
           secretName: ca-secret
-      - configMap:
-          defaultMode: 420
+      - secret:
           items:
           - key: carina-manager.yaml
             path: carina-manager.yaml
-          name: oea-carina-config
+          secretName: oea-carina-config
         name: carina-volume
