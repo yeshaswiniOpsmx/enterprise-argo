@@ -185,7 +185,7 @@ global:
 
   ## ldap configuration used for authentication and authorization
   ldap:
-    enabled: false
+    enabled: true
     url: ldap://openldap:389
     managerDn: cn=admin,dc=example,dc=org
     managerPassword: opsmxadmin123

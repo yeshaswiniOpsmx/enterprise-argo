@@ -119,6 +119,11 @@ services:
     port: 8083
     baseUrl: http://spin-orca:8083
     enabled: true
+  redis:
+    host: 0.0.0.0
+    port: {{ .Values.redis.port }}
+    baseUrl: {{ template "oea.redisBaseURL" . }}
+    enabled: true
   rosco:
     host: 0.0.0.0
     port: 8087
@@ -135,7 +140,7 @@ cors:
 ldap:
 {{- if .Values.global.installOpenLdap }}
   enabled: true
-  url: ldap://{{ .Release.Name }}-openldap:389
+  url: ldap://openldap:389
   managerDn: cn=admin,dc=example,dc=org
   managerPassword: opsmxadmin123
   groupSearchBase: ou=groups,dc=example,dc=org
@@ -189,17 +194,18 @@ server:
 gate:
   installation:
     {{- if .Values.global.commonGate.enabled }}
-    mode: common    #Allowed values are --> oea,common
+    mode: common    #Allowed values are --> oes,common
     {{- else }}
     mode: oes
     {{- end }}
 rbac:
   feature:
     application:
-      enabled: {{ .Values.global.commonGate.spinnakerRBAC }}
+      enabled: false
 
 security:
   contentSecurityPolicy: "object-src 'none'; script-src 'unsafe-eval' 'unsafe-inline' https: http:;"
+
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:
   extensibility:
