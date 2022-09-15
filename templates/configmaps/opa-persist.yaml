@@ -1,3 +1,4 @@
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.opa.enabled) -}}
 apiVersion: v1
 data:
   opa-persist.sh: |
@@ -5,8 +6,8 @@ data:
     while true
     do
     kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
-    SAPOR=$(grep oes-sapor /tmp/inst.status | awk '{print $2}')
-    PLATFORM=$(grep oes-platform /tmp/inst.status | awk '{print $2}')
+    SAPOR=$(grep oea-sapor /tmp/inst.status | awk '{print $2}')
+    PLATFORM=$(grep oea-platform /tmp/inst.status | awk '{print $2}')
 
     wait_period=$(($wait_period+10))
 
@@ -49,3 +50,4 @@ data:
 kind: ConfigMap
 metadata:
   name: opa-persist
+{{- end -}}

@@ -1,3 +1,4 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -83,3 +84,4 @@ spec:
             path: carina-manager.yaml
           secretName: oea-carina-config
         name: carina-volume
+{{- end -}}

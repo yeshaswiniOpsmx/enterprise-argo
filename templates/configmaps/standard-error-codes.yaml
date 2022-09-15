@@ -1,3 +1,4 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
 apiVersion: v1
 data:
   standard-error-codes.csv: |-
@@ -65,5 +66,6 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app: oes
+    app: oea
   name: standard-error-codes-config
+{{- end }}

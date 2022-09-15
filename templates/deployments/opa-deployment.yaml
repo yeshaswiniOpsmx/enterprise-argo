@@ -1,4 +1,4 @@
-{{- if .Values.opa.enabled -}}
+{{- if and (.Values.opa.enabled) (eq .Values.installationMode "OEA-AP") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
