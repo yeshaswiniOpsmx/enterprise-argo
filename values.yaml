@@ -43,6 +43,108 @@ global:
 
   createIngress: true
 
+  customCerts:
+    enabled: false
+
+  commonGate:
+    enabled: false
+
+  oeaUI:
+    protocol: http
+    host: oes.example.ops.com
+    # Use below port when hostname above is an external IP instead of a hostname
+    #port: 31466
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: oes-ui-ingress
+
+  oeaGate:
+    protocol: http
+    host: oes-gate.example.ops.com
+    # Use below port when hostname above is an external IP instead of a hostname
+    #port: 31467
+    
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: oes-gate-ingress
+
+  spinDeck:
+    protocol: http
+    host: spin.example.ops.com
+    #port: 31464
+
+    serviceAnnotations: {}
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: spin-deck-ingress
+
+  autoConfiguration:
+    # Set it to false if OES is being installed on restricted evnironment;
+    # Autoconfiguration assumes Load Balancer is available for oes-gate, oes-ui
+    # and spind-deck and configures accordingly
+    enabled: false
+
+    initContainer:
+      # Image for init container to automatically configure oes components
+      # during startup
+      image: quay.io/opsmxpublic/oes-init:v4
+      pullPolicy: IfNotPresent
+
+      # Max time(in secs) that an init container of oes-ui should wait
+      # to fetch External Load Balancer IP of oes-gate and vice versa
+      externalIpCheckDelay: 180
+  minio:
+    enabled: true
+    image:
+      repository: quay.io/opsmxpublic/minio
+      tag: RELEASE.2020-01-03T19-12-21Z
+    mcImage:
+      repository: quay.io/opsmxpublic/minio-mc
+      tag: RELEASE.2020-11-25T23-04-07Z
+    service:
+      type: ClusterIP
+    accessKey: spinnakeradmin
+    secretKey: spinnakeradmin
+    region: us-east-1
+    #Below is the securityContext block for only for K8S
+    securityContext:
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    buckets:
+    - name: "spinnaker"
+      policy: none
+      purge: false
+    - name: "autopilot"
+      policy: none
+      purge: false
+    defaultBucket:
+      enabled: true
+      name: "spinnaker"
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    persistence:
+      enabled: true
+      size: 10Gi
+
+  ## Valid admin details for ISD authorization	
+  saporgate:
+    config:
+      username: admin       #Name of the valid user in your service provider
+      adminGroups: admin    #Name of the valid admin group in your service provider
+      password: saporadmin  #password for the saporgate
+
   argocd:
     host: "cd.ryzon7-argo22.opsmx.org"
 
@@ -83,7 +185,7 @@ global:
 
   ## ldap configuration used for authentication and authorization
   ldap:
-    enabled: false
+    enabled: true
     url: ldap://openldap:389
     managerDn: cn=admin,dc=example,dc=org
     managerPassword: opsmxadmin123
@@ -175,7 +277,8 @@ argo-cd:
       # Argo CD's externally facing base URL. Required when configuring SSO
       url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
-      admin.enabled: "false"
+      admin.enabled: "true"
+      accounts.admin: apiKey
       configManagementPlugins: |-
         - name: argocd-vault-plugin
           generate:
@@ -708,7 +811,7 @@ opa:
 ## Name of the secret for pulling images from container registry.
 ## Use it when the images are stored under private registry.
 ## Create this secret before installing the chart
-imagePullSecret: ""
+imagePullSecret: "opsmx11-secret"
 
 ####################################################
 # AP installs a trial LDAP for POCs and testing purposes
@@ -723,6 +826,7 @@ openldap:
 
   persistence:
     enabled: true
+    size: 5Gi
   env:
     LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
 
@@ -733,6 +837,7 @@ openldap:
       objectClass: olcModuleList
       olcModuleLoad: memberof.la
       olcModulePath: /usr/lib/ldap
+
       dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
       objectClass: olcConfig
       objectClass: olcMemberOf
@@ -801,21 +906,25 @@ openldap:
       objectClass: organizationalRole
       cn: user1
       userpassword: {SSHA}Y9L4AsYL16WLK10qDZ62pTScFnaWb0nz
+
       dn: cn=user2,dc=example,dc=org
       objectClass: simpleSecurityObject
       objectClass: organizationalRole
       cn: user2
       userpassword: {SSHA}DasTBI0eut1F83Bh1F1HXmDT8juJj3pY
+
       dn: cn=user3,dc=example,dc=org
       objectClass: simpleSecurityObject
       objectClass: organizationalRole
       cn: user3
       userpassword: {SSHA}Qu1FW7BdLMndwM/Gf+zc3a8VIMAymbuv
+
       dn: cn=developers,ou=groups,dc=example,dc=org
       changetype: modify
       add: member
       member: cn=user1,dc=example,dc=org
       member: cn=user3,dc=example,dc=org
+
       dn: cn=QA,ou=groups,dc=example,dc=org
       changetype: modify
       add: member
@@ -874,8 +983,505 @@ carina:
   config: {}
 
 #######################################################################################################################
+# Values of OEA Database
 db:
+  ## Set it to false if any external database is to be used
+  enabled: true
+
   ## Change the default configuration when above option is set to false
   ## Below url and credentials are used by Autopilot & Sapor
+  url: jdbc:postgresql://oea-db:5432
   username: postgres
   password: networks123
+
+  ## Image specific details
+  image:
+    repository: ubi8-oes-db
+    tag: v3.0.0
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  ## Strategy to rollout statefulset pods
+  podManagementPolicy: OrderedReady
+
+  ## Default group to which the default user of a pod belongs
+  securityContext:
+    fsGroup: 1000
+
+  ## storageMountSize is the size with which a PVC is to be created
+  storageMountSize: 8Gi
+
+  ## storageClass for DB persistent volume claim (PVC)
+  #storageClassName: default
+###############################################################################################################################
+## Values of OEA UI
+ui:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-ui
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  config:
+    ## Interval, in millsecs, at which UI refreshes application dashboard
+    setApplicationRefreshInterval: 300000
+#############################################################################################################################
+##
+## Values of OEA Autopilot
+##
+autopilot:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-autopilot
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8090"
+    prometheus.io/scrape: "true"
+
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 2Gi
+  #    cpu: 1
+  #  limits:
+  #    memory: 8Gi
+  #    cpu: 2
+
+  config:
+    ## Build Analysis
+    ##
+    buildAnalysis:
+      enabled: false
+
+###############################################################################
+##
+## Values of OEA auditservice
+##
+audit:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-audit-service
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8097"
+    prometheus.io/scrape: "false"
+  resources: {}
+  config: {}
+
+###############################################################################
+##
+## Values of OEA auditclient
+##
+auditClient:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-audit-client
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8098"
+    prometheus.io/scrape: "true"
+  resources: {}
+  config: {}
+ 
+###############################################################################
+##
+## Values of OEA datascience
+##
+datascience:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-datascience
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "5005"
+    prometheus.io/scrape: "false"
+  resources: {}
+  config: {}
+
+###############################################################################
+## Values of OEA Dashboard
+dashboard:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-dashboard
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8094"
+    prometheus.io/scrape: "true"
+  
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1000Mi
+  #    cpu: 1500m
+
+  config:
+    app:
+      sync:
+        enabled: true
+    ## By default spinnakerLink is {{ .Values.global.spinDeck.protocol }}://{{ .Values.global.spinDeck.host }}
+    ## If spinnaker is exposed on Load balancer instead of ingress, set this value to external IP of spinnaker UI
+    #spinnakerLink: http://spinnaker.domain.com
+
+###############################################################################
+##
+## Values of OEA Gate
+##
+gate:
+  ## Image specific details
+  image:
+    repository: ubi8-gate
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8084"
+    prometheus.io/scrape: "false"
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  config:
+    ## Set it to true to disable LDAP authentication and enable file based authentication
+    ## Reach out over support@opsmx.com for pre-configured user credentials
+    fileBasedAuthentication:
+      enabled: false
+    server:
+      session:
+        timeoutInSeconds: 7200
+    agentAPI: false
+    webhooks: true
+
+    #####################################################
+    # SAML AUthentication
+    #####################################################
+    # keytool -genkey -v -keystore oessaml.jks -alias saml -keyalg RSA -keysize 2048 -validity 10000
+    # oessaml.jks and oesmetadata.xml are mounted as secrets, create them as follows
+    # kubectl create secret generic oesmetadataxml --from-file=oesmetadata.xml -n <namespace>
+    # kubectl create secret generic oessamljks --from-file=oessaml.jks -n <namespace>
+    # kubectl create secret generic samljks-password --from-literal password=changeit -n <namespace>
+    saml:
+      enabled: false
+      userSource: gate  # Groups will be obtained from SAML
+      keyStore: /opt/spinnaker/saml/oessaml.jks  # The key in this secret must be oessaml.jks
+      keyStorePassword: changeit
+      keyStoreAliasName: saml
+      metadataUrl: /opt/spinnaker/saml/oesmetadata.xml # The key in this secret must be oesmetadata.xml
+      redirectProtocol: https
+      redirectHostname: oes-gate.ryzon7-gitops.opsmx.org  # OEA gate host name
+      redirectBasePath: /
+      issuerId: ryzonoesgate
+      jksSecretName: oessamljks
+      metadataSecretName: oesmetadataxml
+
+    #####################################################
+    #OAUTH2 Authentication for GitHub
+    #####################################################
+    oauth2:
+      enabled: false
+      client:
+        clientId: #CLIENT_ID
+        clientSecret: #CLIENT_SECRET_ID
+        accessTokenUri: https://github.com/login/oauth/access_token
+        userAuthorizationUri: https://github.com/login/oauth/authorize
+        scope: user-email
+      resource:
+        userInfoUri: https://api.github.com/user
+      userInfoMapping:
+        email: email
+        firstName: firstname
+        lastName: name
+        username: login
+      provider: GITHUB
+
+###############################################################################
+## Values of OEA Platform
+platform:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-platform
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8095"
+    prometheus.io/scrape: "true"
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  config:
+    ##  groups defined here will have superAdmin priviledges in AP
+    #adminGroups: admin
+
+    ## Source of groups for authorization
+    ## Supported sources:- ldap, file, gate. In general, use "gate" for SAML
+    userSource: ldap
+
+    ## List of features to be supported by OEA, please do not change
+    supportedFeatures:
+      - deployment_verification
+      - sapor
+      - visibility
+
+    app:
+      dashboard:
+        adminuser: admin # mandatory to provide admin user name to run admin jobs that compute dashboard counts
+
+###############################################################################
+## Values of OEA Sapor (Security Audit Policy Onboarding & Release)
+sapor:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-sapor
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8085"
+    prometheus.io/scrape: "true"
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 100Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 2000Mi
+  #    cpu: 1500m
+
+  config:
+    ## Use OSS if sapor needs to be connected to Open Source Spinnaker
+    ## If sapor needs to be connected to ubi8 based Spinnaker Images, use OPSMX
+    spinnakerImages: OPSMX
+    spinnaker:
+      ## Spinnaker configuration
+      ## Necessary details needed by Sapor tointegrate with Spinnaker
+      ## Set it to true if authentication is enabled in Spinnaker
+      authnEnabled: true  # This mandatory, un-authenicated Spinnaker is not supported
+
+      ## LDAP
+      #ldap:
+      #  ldapEnabled: true
+      #  ldapUsername: admin
+      #  ldapPassword: opsmxadmin123
+      #  ldapAdminLoginEnabled: false
+      #  ldapAdminUsername: admin
+      #  ldapAdminPassword: admin
+
+      ## X509
+      x509:
+        enabled: false
+        client:
+          password: changeit
+          
+    #encryption key needed for sapor to startup from 3.9
+    encrypt:
+      enabled: false
+      # This key should match the encryption key specified in .hal/default/profiles/spinnakerConfig.yaml 
+      # encryption key needed for sapor to startup from 3.9
+      key: Q7udUkHPuA3VnNlOtksSgQ
+    # Set the below field to true if datasource configurations from platform, please don't change
+    datasources:
+      platform: true
+    sync:
+      permission:
+        enabled: true
+
+###############################################################################
+## Values of OEA Visibility
+visibility:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-visibility
+    tag: v4.0.0-beta
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8096"
+    prometheus.io/scrape: "true"
+
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1000Mi
+  #    cpu: 1500m
+
+  config:
+    ## Autopilot integration options
+    configuredConnectors: JIRA,GIT,AUTOPILOT,SONARQUBE,JENKINS,AQUAWAVE
+
+    ## Logger level
+    logLevel: ERROR
+###################################################################################
+## Use this SAPOR GATE Configuration to Enable Basic Authentication for OES SAPOR to communitcate 
+## with spinnaker instead of x509
+## Values of SAPOR OEA Gate
+##
+saporgate:
+  ## Image specific details
+  ##
+  enabled: false
+  image:
+    repository: ubi8-oes-spin-gate
+    tag: v3.12.0-saporgate
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  #config:
+  #  username: admin      # User name with admin permissions and belonging to admin groups defined in platform service
+  #  password: saporadmin # Any generic String, need not be the real password
+  #  roles: admin # a valid admin group in the ldap
+###############################################################################################################
+rabbitmq:
+  ## rabbitmq  endpoint that is used by oes-gate and oes-platform for caching;
+  ## Change this to custom URL if installRedis is set to false
+  ## url: rabbitmq-service
+  ## url: default port 5672
+  url: rabbitmq-service
+  port: 5672
+  username: rabbitmq
+  password: Networks123
+  image:
+    registry: quay.io/opsmxpublic/rabbitmq
+    repository: 3-management
+
+  serviceAnnotations: {}
+
+  #Blow block is for only for K8S
+  securityContext:
+    fsGroup: 1000
+##################################################################################################################
+vault:
+  enterpriseEdition: false
+  ## Namespace is mandatory when enterpriseEdition flag is set to true
+  namespace: admin/isd-platform
+  address: https://server.vaultint.opsmx.net # Vault Address URL
+  token: 123132 # Vault Root token
+#####################
+secretStore: db
+###################################
+forwarder:
+  externalName: controller.exampleopsmx.net    # This hostname should reach agent-grpc service from the agent
+  enabled: true
+  agent:
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.6
+    serviceType: LoadBalancer
+    # Value is also used in sapor configuration for kubernetes.agent.serverHostName
+    host: opsmx-controller-controller1
+  image:
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.5.6
+    pullPolicy: IfNotPresent
+  serviceAnnotations: {}
+
+################################################################################################
+## Redis configuration
+## Set it to false only if OES needs to be configured with external redis
+installRedis: true
+##########################################################################
+
+
+## Details of redis-master image for OES
+redis:
+  ## Redis endpoint that is used by oes-gate and oes-platform for caching;
+  ## Change this to custom URL if installRedis is set to false
+  ## url: redis://{{ .Release.Name }}-redis-master:6379
+  url: redis://:password@{{ .Release.Name }}-redis-master
+  port: 6379
+  image:
+    registry: quay.io/opsmxpublic
+    repository: bitnami-redis
+  password: password
+  cluster:
+    enabled: false
+ #The flag is set to true by default.Mandatory change to false only if global.openshift is true and change fsGroups and runAsUser if required
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+
+  # External Redis option will be enabled if in-cluster redis is disabled
+  external:
+    host: "<EXTERNAL-REDIS-HOST-NAME>"
+    port: 6379
+    # password: ""
+  nodeSelector: {}
+  master:
+    affinity: {}
+    tolerations: []
+    podAnnotations:
+      moniker.spinnaker.io/application: spin
+
+  ## Redis config file
+  ## ref: https://redis.io/topics/config
+  ##
+  configmap: |-
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly no
+    # Disable RDB persistence, AOF persistence already enabled.
+    save 60 1000
+  # Uncomment if you don't want to create a PVC for redis
+  #  master:
+  #    persistence:
+  #      enabled: false
+
+###########################################################################################
+installationMode: OEA-AP
+

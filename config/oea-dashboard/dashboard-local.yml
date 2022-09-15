@@ -1,0 +1,22 @@
+opsmx:
+  dashboard:
+    installation:
+      mode: {{ .Values.installationMode }}
+standardErrorCodes:
+  filePath: /opsmx/conf/standard-error-code.csv
+platformservice.url: http://oea-platform:8095
+autopilot.url: http://oea-autopilot:8090
+oes.sapor.url: http://oea-sapor:8085
+visibilityservice.url: http://oea-visibility:8096
+auditclientservice:
+  url: "http://oea-audit-client:8098"
+gateservice:
+  url: "http://oea-gate:8084"
+app:
+  sync:
+    enabled: {{ .Values.dashboard.config.app.sync.enabled }}
+{{- if .Values.dashboard.config.spinnakerLink }}
+spinnakerLink: {{ .Values.dashboard.config.spinnakerLink }}
+{{- else }}
+spinnakerLink: /deck/
+{{- end }}

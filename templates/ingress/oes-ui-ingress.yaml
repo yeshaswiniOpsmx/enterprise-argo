@@ -1,0 +1,34 @@
+{{- if and (.Values.global.createIngress) (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{- if .Values.global.certManager.installed }}
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}-oea
+    kubernetes.io/tls-acme: "true"
+{{- end }}
+{{- if .Values.global.oeaUI.ingress.annotations }}
+{{ tpl (toYaml .Values.global.oeaUI.ingress.annotations) . | indent 4 }}
+{{- end }}
+  name: oea-ui-ingress
+spec:
+  rules:
+  - host: {{ .Values.global.oeaUI.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: oea-ui
+            port:
+              number: 8080
+        path: /
+        pathType: ImplementationSpecific
+{{- if .Values.global.ssl.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.global.oeaUI.host }}
+{{ toYaml .Values.global.oeaUI.ingress.tls | indent 4 }}
+{{- end }}
+{{- end }}

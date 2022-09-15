@@ -1,0 +1,24 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oea
+    component: datascience
+{{ include "oea.standard-labels" . | indent 4 }}
+{{- if .Values.datascience.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.datascience.serviceAnnotations | indent 4 }}
+{{- end }}
+  name: oea-datascience
+spec:
+  ports:
+  - name: datascience
+    port: 5005
+    protocol: TCP
+    targetPort: 5005
+  selector:
+    app: oea
+    component: datascience
+  type: ClusterIP
+{{- end -}}

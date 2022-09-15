@@ -1,0 +1,17 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+data:
+{{- if .Values.installSpinnaker  }}
+{{ (tpl (.Files.Glob "config/oea-ui/nginx.conf").AsConfig . ) | indent 2 }}
+{{- else }}
+{{ (tpl (.Files.Glob "config/oea-ui/nginx-ap-only.conf").AsConfig . ) | indent 2 }}
+{{- end }}
+
+kind: ConfigMap
+metadata:
+  name: oea-ui-nginxconf
+  labels:
+    app: oea
+    component: ui
+{{ include "oea.standard-labels" . | indent 4 }}
+{{- end -}}

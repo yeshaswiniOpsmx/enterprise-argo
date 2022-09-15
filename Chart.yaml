@@ -44,3 +44,9 @@ dependencies:
   - name: ingress-nginx
     version: 4.1.4
     condition: ingressnginx
+  - name: redis
+    version: 10.5.3
+    condition: installRedis
+  - name: minio
+    version: 8.0.9
+    condition: global.minio.enabled

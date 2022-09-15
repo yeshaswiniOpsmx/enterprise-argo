@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: {{ .Values.db.url }}/auditdb
+    username: '{{ .Values.db.username }}'
+    password: '{{ .Values.db.password }}'
+logging:
+  level:
+    com.opsmx.auditclientservice: INFO
+standardErrorCodes:
+  filePath: /opsmx/conf/standard-error-code.csv
+oea:
+  admin:
+    user: admin
+feign:
+  client:
+    platformservice:
+      name: platformservice
+      url: http://oea-platform:8095
+    visibilityservice:
+      name: visibilityservice
+      url: http://oea-visibility:8096
+
+fixedDelay:
+  in:
+    milliseconds: 120000
+initialDelay:
+  in:
+    milliseconds: 300000
+scheduler:
+  threads: 16
