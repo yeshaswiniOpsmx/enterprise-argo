@@ -972,7 +972,7 @@ carina:
   ##
   image:
     repository: carina-manager
-    tag: latest
+    tag: v1.1.9
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
