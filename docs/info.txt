@@ -19,3 +19,24 @@ kubectl set image deployment/oea-sapor oea-sapor=opsmx11/sapor:33378c1a827ec1a9f
 kubectl set image deployment/oea-platform oea-platform=opsmx11/oes-platform:d546ce13-1676 -n NAMESPACE
 
 kubectl set image deployment/oea-ui oea-ui=opsmx11/oes-ui:202209150905 -n NAMESPACE
+
+
+If you are unable to add agent and if you face below in UI
+ERROR
+could not execute statement; SQL [n/a]; constraint [spinnaker_id" of relation "generic_agent]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement
+
+
+login to oea-db-0 pod and execute the below commands
+
+psql
+
+\c platformdb;
+
+\d applications;
+
+
+ALTER TABLE generic_agent ALTER COLUMN spinnaker_id drop not null;
+
+
+ALTER TABLE applications DROP constraint <contraintname>;
+
