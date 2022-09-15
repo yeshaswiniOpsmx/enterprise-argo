@@ -15,6 +15,7 @@ redis:
 datasource:
   secretManagement:
     source: {{ .Values.secretStore }}
+rbacEnabled: false
 supportedFeatures:
 {{ toYaml .Values.platform.config.supportedFeatures | indent 2 }}
 userGroup:
