@@ -2,7 +2,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
   labels:
     app: oea
     component: sapor
@@ -18,6 +17,7 @@ spec:
     metadata:
       annotations:
         checksum/configmap: {{ (.Files.Glob "config/oea-sapor/application.yml").AsConfig | sha256sum }}
+        checksum/configmap: {{ (.Files.Glob "templates/forwarder/oea-forwarder-config.yaml").AsConfig | sha256sum }}
 {{- if .Values.sapor.annotations -}}
         {{ toYaml .Values.sapor.annotations | nindent 8 }}
 {{- end }}
@@ -43,6 +43,17 @@ spec:
         - containerPort: 8085
           protocol: TCP
         volumeMounts:
+        {{- if .Values.forwarder.enabled }}
+        - mountPath: /opt/opsmx/controller/ca.crt
+          name: ca-certs-volume
+          subPath: tls.crt
+        - mountPath: /opt/opsmx/controller/cert/tls.crt
+          name: certs-volume
+          subPath: tls.crt
+        - mountPath: /opt/opsmx/controller/cert/tls.key
+          name: certs-volume
+          subPath: tls.key
+        {{- end }}
         - name: sapor-config-volume
           mountPath: /opt/opsmx/application.yml
           subPath: application.yml
@@ -107,6 +118,14 @@ spec:
 {{ toYaml .Values.global.tolerations | indent 8 }}
       {{- end }}
       volumes:
+      {{- if .Values.forwarder.enabled }}
+      - secret:
+          secretName: oes-control-secret
+        name: certs-volume
+      - secret:
+          secretName: ca-secret
+        name: ca-certs-volume
+      {{- end }}
       {{- if .Values.global.customCerts.enabled }}
       - name: cacerts
         secret:
