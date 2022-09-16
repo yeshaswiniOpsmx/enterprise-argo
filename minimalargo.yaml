@@ -182,11 +182,11 @@ argo-workflows:
 argo-events:
   crds:
     # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-    install: false
+    install: true
 
 ###################################################
 # argo-rollouts configuration
 #######################
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-  installCRDs: false
+  installCRDs: true
