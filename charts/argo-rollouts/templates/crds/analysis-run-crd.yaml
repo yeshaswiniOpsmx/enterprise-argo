@@ -2722,6 +2722,10 @@ spec:
                               type: string
                             gateUrl:
                               type: string
+                            globalLogTemplate:
+                              type: string
+                            globalMetricTemplate:
+                              type: string
                             lifetimeHours:
                               type: string
                             services:
@@ -2735,17 +2739,20 @@ spec:
                                     type: string
                                   canaryMetricScope:
                                     type: string
-                                  gateName:
-                                    type: string
                                   logScopeVariables:
+                                    type: string
+                                  logTemplateName:
+                                    type: string
+                                  logTemplateVersion:
                                     type: string
                                   metricScopeVariables:
                                     type: string
+                                  metricTemplateName:
+                                    type: string
+                                  metricTemplateVersion:
+                                    type: string
                                   serviceName:
                                     type: string
-                                required:
-                                - gateName
-                                - serviceName
                                 type: object
                               type: array
                             threshold:
@@ -2765,6 +2772,7 @@ spec:
                           required:
                           - application
                           - gateUrl
+                          - services
                           - threshold
                           - user
                           type: object
