@@ -115,3 +115,11 @@ https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/
           platformdb=# ALTER TABLE applications DROP constraint uk_ghs1q6xciwjy5iijm3w1474r1;
           ALTER TABLE
 
+- **Unable to Connect Argo CD with Agent:**
+    
+   - Execute below command by logging into the Carina pod will get the detail info
+
+        curl localhost:8090/health | jq .
+
+    
+
