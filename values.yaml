@@ -9,14 +9,19 @@ ingressnginx: false
 installArgoRollouts: true
 
 # installArgoWorkflows enable true will install argo-workflows
-installArgoWorkflows: true
+installArgoWorkflows: false
 
 # installArgoEvents enable true will install argo-events
-installArgoEvents: true
+installArgoEvents: false
 
 # installArgoImageupdater enable true will install argocd-image-updater
-installArgoImageupdater: true
+installArgoImageupdater: false
 
+###########################################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: OEA-AP
+
+########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
   repoUrl: https://quay.io/
@@ -1481,7 +1486,3 @@ redis:
   #  master:
   #    persistence:
   #      enabled: false
-
-###########################################################################################
-installationMode: OEA-AP
-
