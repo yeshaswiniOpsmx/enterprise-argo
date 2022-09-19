@@ -8,17 +8,16 @@ metadata:
     "helm.sh/hook-weight": "5"
   labels:
     app: oea
-    component: oea-config
 {{ include "oea.standard-labels" . | indent 4 }}
-  name: oea-config
+  name: oea-autoconfig
 spec:
   template:
     metadata:
       labels:
         app: oea
-        component: oea-config
 {{ include "oea.standard-labels" . | indent 8 }}
     spec:
+      serviceAccountName: argocd-server
       containers:
       - command: ["sh", "/tmp/config/datasource-api.sh" ]
         name: carina-auto-configure
@@ -29,8 +28,6 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret}}
       restartPolicy: OnFailure
-      serviceAccount: argocd-server
-      serviceAccountName: argocd-server
       volumes:
       - configMap:
           defaultMode: 420
