@@ -23,6 +23,4 @@ data:
     yq e '.argos.[].token = "'$encodedtoken'"' carina-secret.yaml > carina-manager.yaml
     kubectl delete secret oea-carina-config
     kubectl create secret generic oea-carina-config  --from-file=carina-manager.yaml
-    ## delete dependency carina pod 
-    kubectl delete po -l component=carina
 {{- end -}}
