@@ -228,3 +228,24 @@ ui:
   image:
     repository: oes-ui
     tag: "202209191005"
+
+###################################################
+dashboard:
+  image:
+    repository: oes-dashboard
+    tag: v4.0.0-beta
+#####################################################
+datascience:
+  image:
+    repository: oes-datascience
+    tag: v4.0.0-beta
+#####################################################
+audit:
+  image:
+    repository: oes-audit-service
+    tag: v4.0.0-beta
+######################################################
+visibility:
+  image:
+    repository: oes-visibility
+    tag: v4.0.0-beta
