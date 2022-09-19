@@ -190,3 +190,34 @@ argo-events:
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
+
+####################################################
+auditClient:
+  image:
+    repository: oes-audit-client
+    tag: 590f6de-1443
+###################################################
+gate:
+  image:
+    repository: gate
+    tag: 711fee20-1679
+##################################################
+sapor:
+  image:
+    repository: sapor
+    tag: 007c96586b91bce78503aedcf3e42e2c93a1a1a6-904
+###################################################
+platform:
+  image:
+    repository: oes-platform
+    tag: f5807e61-1707
+###################################################
+autopilot:
+  image:
+    repository: oes-autopilot
+    tag: bf9499670-783
+###################################################
+ui:
+  image:
+    repository: oes-ui
+    tag: "202209191005"
