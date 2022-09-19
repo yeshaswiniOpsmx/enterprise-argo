@@ -282,7 +282,7 @@ argo-cd:
       # Argo CD's externally facing base URL. Required when configuring SSO
       url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
-      admin.enabled: "false"
+      admin.enabled: "true"
       accounts.admin: apiKey
       configManagementPlugins: |-
         - name: argocd-vault-plugin
