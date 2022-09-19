@@ -1,0 +1,39 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-weight": "5"
+  labels:
+    app: oea
+    component: oea-config
+{{ include "oea.standard-labels" . | indent 4 }}
+  name: oea-config
+spec:
+  template:
+    metadata:
+      labels:
+        app: oea
+        component: oea-config
+{{ include "oea.standard-labels" . | indent 8 }}
+    spec:
+      containers:
+      - command: ["sh", "/tmp/config/datasource-api.sh" ]
+        name: carina-auto-configure
+        image: {{ .Values.global.customImages.registry }}/awsgit:v2-openssh-javalibs
+        volumeMounts:
+        - mountPath: /tmp/config
+          name: carina-autoconfigure
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret}}
+      restartPolicy: OnFailure
+      serviceAccount: argocd-server
+      serviceAccountName: argocd-server
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: oea-carina-autoconfigure
+        name: carina-autoconfigure
+{{- end -}}
