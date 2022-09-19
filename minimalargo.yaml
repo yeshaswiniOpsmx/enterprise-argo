@@ -24,6 +24,13 @@ installationMode: OEA-AP
 #############################################################################
 forwarder:
   externalName: controller.exampleopsmx.net
+
+##############################################################################
+imageCredentials:
+  repoUrl: https://dcoker.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: opsmx11
+
 #####################################################
 # Global Configuration
 ######################
