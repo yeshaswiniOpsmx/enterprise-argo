@@ -27,7 +27,7 @@ forwarder:
 
 ##############################################################################
 imageCredentials:
-  repoUrl: https://dcoker.io/
+  repoUrl: https://docker.io/
   # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
   registry: opsmx11
 
