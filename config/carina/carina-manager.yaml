@@ -1,3 +1,7 @@
+argos:
+  - name: oeaargo
+    url: https://{{ .Values.global.argocd.host }}
+    token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxCI6IkpXVCJ9.xxxxxxxxxxxxxxxxxxxx0MjAsImlhdCI6MTY2MzU3NDQyMCwianRpIjoiMxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxMjdmIn0.xxxxxxxxxxxxxxxxxxxxxxx
 httpListenPort: 8090
 controller:
   url: 'https://opsmx-controller-controller1:9003'
