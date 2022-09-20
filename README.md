@@ -41,30 +41,13 @@ https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/
 
       kubectl create secret docker-registry opsmx11-secret --docker-server=docker.io --docker-username=opsmx11 --docker-password=xxxxx --docker-email=saiteja.katabhatina@opmx.io
 
-- **Replace the OEA service images:**
-
-  Below are Present images for OEA Services
-
-      kubectl set image deployment/oea-audit-client oea-audit-client=opsmx11/oes-audit-client:b0628d3-1400 -n NAMESPACE
-
-      kubectl set image deployment/oea-autopilot oea-autopilot=opsmx11/oes-autopilot:eb9cbb3a4-756 -n NAMESPACE
-
-      kubectl set image deployment/oea-gate oea-gate=opsmx11/gate:68cd8c20-1653 -n NAMESPACE
-
-      kubectl set image deployment/oea-sapor oea-sapor=opsmx11/sapor:33378c1a827ec1a9f12ffbb31685a1a77f8fb9f1-893 -n NAMESPACE
-
-      kubectl set image deployment/oea-platform oea-platform=opsmx11/oes-platform:d546ce13-1676 -n NAMESPACE
-
-      kubectl set image deployment/oea-ui oea-ui=opsmx11/oes-ui:202209150905 -n NAMESPACE
-
-
 
 ## Troubleshooting:
 
 
 - **Unable to add agent in UI:**
 
-  If you are unable to add agent and if you face below in UI
+  If you are unable to add- **Replace the OEA service images:** agent and if you face below in UI
   
       ERROR
       could not execute statement; SQL [n/a]; constraint [spinnaker_id" of relation "generic_agent]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement
@@ -119,7 +102,7 @@ https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/
     
    - Execute below command by logging into the Carina pod will get the detail info
 
-        curl localhost:8090/health | jq .
+         curl localhost:8090/health | jq .
 
     
 
