@@ -1,4 +1,4 @@
-{{- if (eq .Values.installationMode "OEA-AP") -}}
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,6 +12,7 @@ data:
     ## install argoCLI
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     chmod +x /usr/local/bin/argocd
+    sleep 60
     ## get the user password
     argopassword=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
     ## argocli login

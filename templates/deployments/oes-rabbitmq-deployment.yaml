@@ -1,3 +1,4 @@
+{{- if eq .Values.installationMode "OEA-AP" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,4 +47,4 @@ spec:
       tolerations:
 {{ toYaml .Values.global.tolerations | indent 8 }}
       {{- end }}
-
+{{- end -}}

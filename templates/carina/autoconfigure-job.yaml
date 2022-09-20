@@ -1,4 +1,4 @@
-{{- if (eq .Values.installationMode "OEA-AP") -}}
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
 apiVersion: batch/v1
 kind: Job
 metadata:

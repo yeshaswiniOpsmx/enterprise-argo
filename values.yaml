@@ -28,6 +28,10 @@ imageCredentials:
   # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
   registry: quay.io/opsmxpublic
 
+#######################################################################################
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: true
 #####################################################
 # Global Configuration
 ######################
