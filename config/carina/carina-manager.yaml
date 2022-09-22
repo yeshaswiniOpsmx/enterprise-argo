@@ -1,7 +1,9 @@
+{{- if .Values.installArgoCD -}}
 argos:
   - name: oeaargo
     url: https://{{ .Values.global.argocd.host }}
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+{{- end -}}
 httpListenPort: 8090
 controller:
   url: 'https://opsmx-controller-controller1:9003'
