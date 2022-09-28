@@ -18,7 +18,7 @@ spec:
         app: oea
 {{ include "oea.standard-labels" . | indent 8 }}
     spec:
-      serviceAccountName: argocd-server
+      serviceAccountName: auto-config-carina
       containers:
       - command: ["sh", "/tmp/config/datasource-api.sh" ]
         name: carina-auto-configure
