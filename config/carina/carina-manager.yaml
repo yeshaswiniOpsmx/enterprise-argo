@@ -1,4 +1,4 @@
-{{- if .Values.installArgoCD -}}
+{{- if and (.Values.installArgoCD) (.Values.autoconfigurecarina) -}}
 argos:
   - name: oeaargo
     url: https://{{ .Values.global.argocd.host }}
