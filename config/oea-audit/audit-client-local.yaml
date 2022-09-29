@@ -8,7 +8,7 @@ logging:
     com.opsmx.auditclientservice: INFO
 standardErrorCodes:
   filePath: /opsmx/conf/standard-error-code.csv
-oea:
+oes:
   admin:
     user: admin
 feign:
