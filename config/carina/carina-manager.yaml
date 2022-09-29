@@ -1,9 +1,9 @@
-{{- if and (.Values.installArgoCD) (.Values.autoconfigurecarina) -}}
+{{- if and (.Values.installArgoCD) (.Values.autoconfigurecarina) }}
 argos:
   - name: oeaargo
     url: https://{{ .Values.global.argocd.host }}
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-{{- end -}}
+{{- end }}
 httpListenPort: 8090
 controller:
   url: 'https://opsmx-controller-controller1:9003'

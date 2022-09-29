@@ -9,21 +9,67 @@ metadata:
 data:
   datasource-api.sh: |-
     #!/bin/bash
-    set -x
+    #set -x
+    echo \"Waiting for all Argo Server  to come-up\"
+    wait_period=0
+    while true
+    do
     ## install argoCLI
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     chmod +x /usr/local/bin/argocd
-    sleep 60
-    ## get the user password
-    argopassword=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
-    ## argocli login
-    argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web
-    token=$(argocd account generate-token)
-    encodedtoken=$(echo -n $token | base64 -w0)
-    ## replace the secret
-    kubectl get secret oea-carina-config -o jsonpath='{.data.*}' | base64 -d > carina-secret.yaml
-    yq e '.argos.[].token = "'$encodedtoken'"' carina-secret.yaml > carina-manager.yaml
-    kubectl delete secret oea-carina-config
-    kubectl create secret generic oea-carina-config  --from-file=carina-manager.yaml
+
+    status="$(curl -Is https://{{ .Values.global.argocd.host }} | head -1)"
+    validate=$(echo $status | awk '{print $2}')
+    kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
+    ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
+    wait_period=$(($wait_period+10))
+    if   [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ];
+    then
+      echo \"ArgocdServer is  Up and Ready..\"
+      while true
+      do
+      ## get the user password
+      argopassword=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
+
+      ## argocli login
+      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web
+
+      token=$(argocd account generate-token)
+      wait=0
+      if [ -z $token ]
+      then
+        wait=$(($wait+10))
+        if [ $wait -gt 2000 ];
+        then
+          echo \"Script is timed out Admin Secret not found .......\"
+          break
+        else
+          echo \"Waiting to get the admin token\"
+          sleep 1m
+        fi
+
+      else
+         encodedtoken=$(echo -n $token | base64 -w0)
+         ## replace the secret
+         kubectl get secret oea-carina-config -o jsonpath='{.data.*}' | base64 -d > carina-secret.yaml
+         yq e '.argos.[].token = "'$encodedtoken'"' carina-secret.yaml > carina-manager.yaml
+         kubectl delete secret oea-carina-config
+         kubectl create secret generic oea-carina-config  --from-file=carina-manager.yaml
+         kubectl delete  po -l component=carina
+         break
+      fi
+      done
+      break
+    else
+      if [ $wait_period -gt 2000 ];
+      then
+       echo \"Script is timed out as the Argocd Server is not ready yet.......\"
+       break
+      else
+       echo \"Waiting for  Argocd Server to be ready\"
+       sleep 1m
+      fi
+    fi
+    done
 {{- end -}}
 {{- end -}}

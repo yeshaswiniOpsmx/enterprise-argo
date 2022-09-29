@@ -1,4 +1,3 @@
-#{- if and (.Values.global.certManager.installed) (eq .Values.installationMode "OEA-AP") }}
 {{- if and (.Values.global.certManager.installed)  }}
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
