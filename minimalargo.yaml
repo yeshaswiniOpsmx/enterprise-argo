@@ -209,50 +209,50 @@ argo-rollouts:
 auditClient:
   image:
     repository: oes-audit-client
-    tag: 590f6de-1443
+    tag: 7139527-1512
 ###################################################
 gate:
   image:
     repository: gate
-    tag: 711fee20-1679
+    tag: 4475ea51-1727
 ##################################################
 sapor:
   image:
     repository: sapor
-    tag: 007c96586b91bce78503aedcf3e42e2c93a1a1a6-904
+    tag: 6dc5178383bfed651a475669511d9306db7ffd35-482 
 ###################################################
 platform:
   image:
     repository: oes-platform
-    tag: f5807e61-1707
+    tag: d8cdd6d1-1758
 ###################################################
 autopilot:
   image:
     repository: oes-autopilot
-    tag: bf9499670-783
+    tag: 2880066b6-854
 ###################################################
 ui:
   image:
     repository: oes-ui
-    tag: "202209191005"
+    tag: "202209281950"
 
 ###################################################
 dashboard:
   image:
     repository: oes-dashboard
-    tag: v4.0.0-beta
+    tag: 72db500-2167
 #####################################################
 datascience:
   image:
     repository: oes-datascience
-    tag: v4.0.0-beta
+    tag: 2880066b6dd5fbaf673ff23307ad3dcc1a65768b-522
 #####################################################
 audit:
   image:
     repository: oes-audit-service
-    tag: v4.0.0-beta
+    tag: 8e41e5c-1093
 ######################################################
 visibility:
   image:
     repository: oes-visibility
-    tag: v4.0.0-beta
+    tag: f91bc80-2245
