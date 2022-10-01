@@ -6,7 +6,7 @@
 # 3. config.credentials.token: This is a base64 encoded token that can be obtained as follows:
 #     argocd login --sso <external host name> #e.g cd.ryzon7-argo22.opsmx.org
 #     argocd account generate-token
-#     echo <TOKEN> | base64 -w0 
+#     echo -ne "<TOKEN>" | base64 -w0 
 # 4. config.credentials.uiUrl: this is the external argoCD URL e.g https://cd-agent.ryzon7-argo22.opsmx.org
 ###########################################################
 apiVersion: v1

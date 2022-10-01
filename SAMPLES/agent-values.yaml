@@ -1,0 +1,254 @@
+##############################################################################
+# Sample values.yaml for for install ArgoComponents with the agent
+# By default, this will install ArgoCD and Rollouts.
+# To install ArgoCD along with the agent, we need to:
+# 1. Search for "ryzon7-argo22.opsmx.org" and replace with your domain in the file
+# 2. Ensure that DNS entries are created for your URLs
+# 
+# Typically nothing else need to be changed unless we need to configure SSO 
+##############################################################################
+installArgoCD: true
+installArgoRollouts: true
+installArgoWorkflows: false
+installArgoEvents: false
+installArgoImageupdater: false
+enableCentralLogging: false
+##############################################################################
+#  OEA-AP Install OEA and Argo Services. None installs ONLY the Argo Components
+installationMode: None
+
+##############################################################################
+imageCredentials:
+  repoUrl: https://docker.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: opsmx11
+
+##############################################################################
+# Global Configuration
+##############################################################################
+
+global:
+  enableCentralMonitoring: true
+  createIngress: true
+  certManager:
+    installed: true
+  ssl:
+    enabled: true
+  argocd:
+    host: "cd-agent.ryzon7-argo22.opsmx.org"
+
+  argoworkflows:
+    #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
+    host: "workflow-agent.ryzon7-argo22.opsmx.org"
+
+  argorollouts:
+    #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
+    host: "rollouts-agent.ryzon7-argo22.opsmx.org"
+
+  oeaUI:
+    host: oea-agent.ryzon7-argo22.opsmx.org
+
+##############################################################################
+# argo-cd configuration
+##############################################################################
+
+argo-cd:
+  server:
+    extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
+      - --insecure
+    ### To use LDAP enable config 
+    configEnabled: true
+    ########   ldap argc-cm configmap configuration     #######
+    config: 
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "https://cd-agent.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      accounts.admin: apiKey
+      admin.enabled: "true"
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
+      dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        connectors:
+        - type: ldap
+          name: opsmx-openldap
+          id: ldap
+          config:
+            host: "openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+            # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+        - type: saml
+          name: okta
+          id: okta
+          config:
+            ssoURL: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+            redirectURI: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+            usernameAttr: email
+            emailAttr: email
+            groupsAttr: group
+            caData: | 
+              LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
+              QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
+              UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
+              Z3dFVDJ0MFlURVUNCk1CSUdBMVVFQ3d3TFUxTlBVSEp2ZG1sa1pYSXhGVEFUQmdOVkJBTU1ER1Js
+              ZGkwNE1ETTFOVGt3T0RFY01Cb0dDU3FHU0liM0RRRUoNCkFSWU5hVzVtYjBCdmEzUmhMbU52YlRB
+              ZUZ3MHlNakE0TVRNd01qQXlORGxhRncwek1qQTRNVE13TWpBek5EbGFNSUdVTVFzd0NRWUQNClZR
+              UUdFd0pWVXpFVE1CRUdBMVVFQ0F3S1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ3d05VMkZ1SUVa
+              eVlXNWphWE5qYnpFTk1Bc0cNCkExVUVDZ3dFVDJ0MFlURVVNQklHQTFVRUN3d0xVMU5QVUhKdmRt
+              bGtaWEl4RlRBVEJnTlZCQU1NREdSbGRpMDRNRE0xTlRrd09ERWMNCk1Cb0dDU3FHU0liM0RRRUpB
+              UllOYVc1bWIwQnZhM1JoTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FR
+              b0MNCmdnRUJBTytsOEIxdXIzd1ZBbHBiZGhJYmg4Nk1XMk5wQ3gyb0VhZ1g4UkxxeTc3bVYxdHdk
+              aTQxMldYNVpTaU9BQ2toVG9XaUlIZW0NCjRwZ3VMK3drUk9lcnZlRVJ0cXdudU5OL2ROUnlkdXVD
+              UDlqcGNEYVd5NHdaeWxiQmF2TDF3blFJaHgrc3J1akh1M2lmUUdSUUtxUG4NCjI1S3Nway9OaEUv
+              VTBpTlFSNWRFZzI5aHBCakpESjNaayt2eXNDLzNZdmFJM2lmWXBDMGtaTVBLSEt6bC9yYXRYaSt6
+              aVZuNlBCSmkNCnh2T2pnOUd2cVE3YkRSbTAyRyt2bmh1T1RxdjEwQ0g3WC9hNEc1WVhPTWhucW9O
+              M2MvclRJdjlSQjFncXVUZnFHWE1FSGtWbW1jS3ANCmxpYTZURUQ4bWFGUWRwajBRWXFDWXRYK2hw
+              R05GK0k0aHhxNGw4SDN4ZTBDQXdFQUFUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUENCkx4WWg1
+              RlZmWThSY2FoQzJkQXlOMi8zb3pCV2ZhVjF3aXdMQW9qaHVDWVpKREVDdUpVekZPK2hZYm9sakRS
+              bmtFb2tpYThwWXJSUEwNCjdSU0tlYkIwcTVTdEcrV1RPcTg2SmlPQk1wVlR5V1dYSEFHN0ppY2tT
+              T1N2QXkwdncyeVkzT0IwdEE0ZUpWSXVpZFVTUnpTckdNNW0NCllma2hjaFBhNnNZTU9GSGtLOUxG
+              TzNsbjFEZE9JbkJST2hrL1QyL0locXBJL3hwWTlEdCsxNTcxRWExY2ROUjFRd1k2VFRVL013N2oN
+              ClpEZ21LaWhSNDNJenhwaVRLT09hVU1LYlN5RHFjcWpjdTEwaUJ3cmpVUmtzTzFmc3JqNEtXZFJ4
+              aVRpODFOZjFINytUcmJRMldVeG8NCjFncGVBWE9Rd2M2RHp0TlN2b1lQaFpHQmdNeTVjcWQ0TWwr
+              WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+
+
+
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbacConfig:
+      {}
+      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
+      # Policy rules are in the form:
+      #   p, subject, resource, action, object, effect
+      # Role definitions and bindings are in the form:
+      #   g, subject, inherited-subject
+  notifications:
+    enabled: true
+    argocdUrl: "cd-agent.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+
+##############################################################################
+# argo-workflows configuration
+##############################################################################
+
+argo-workflows:
+  server:
+    extraArgs:
+      - --auth-mode=sso
+    sso:
+     #issuerAlias: http://argocd.ninja-test.opsmx.net/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: https://cd-agent.ryzon7-argo22.opsmx.org/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+      sessionExpiry: 240h
+      clientId:
+        name: argo-workflows-sso
+        key: client-id
+      clientSecret:
+        name: argo-workflows-sso
+        key: client-secret
+      redirectUrl: https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      scopes:
+        - groups
+        - email
+      rbac:
+        enabled: false
+##############################################################################
+# argo-events configuration
+##############################################################################
+
+argo-events:
+  crds:
+    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+    install: true
+
+##############################################################################
+# argo-rollouts configuration
+##############################################################################
+argo-rollouts:
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
+
+####################################################
+auditClient:
+  image:
+    repository: oes-audit-client
+    tag: 590f6de-1443
+###################################################
+gate:
+  image:
+    repository: gate
+    tag: 711fee20-1679
+##################################################
+sapor:
+  image:
+    repository: sapor
+    tag: 007c96586b91bce78503aedcf3e42e2c93a1a1a6-904
+###################################################
+platform:
+  image:
+    repository: oes-platform
+    tag: f5807e61-1707
+###################################################
+autopilot:
+  image:
+    repository: oes-autopilot
+    tag: bf9499670-783
+###################################################
+ui:
+  image:
+    repository: oes-ui
+    tag: "202209191005"
+
+###################################################
+dashboard:
+  image:
+    repository: oes-dashboard
+    tag: v4.0.0-beta
+#####################################################
+datascience:
+  image:
+    repository: oes-datascience
+    tag: v4.0.0-beta
+#####################################################
+audit:
+  image:
+    repository: oes-audit-service
+    tag: v4.0.0-beta
+######################################################
+visibility:
+  image:
+    repository: oes-visibility
+    tag: v4.0.0-beta
+
+######################################################
+# If required we can install nginx ingress controller by default
+# Note that DNS entries creation still has to be done by the user
+ingressnginx: false
