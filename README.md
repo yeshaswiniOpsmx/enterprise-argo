@@ -5,6 +5,8 @@
 
 For installing the Argo CD Please follow the below document
 
+https://docs.google.com/document/d/1mvOzxzXujt9Gs6GTZKJSbstDwoaV5e8UbyeHNF6Fq4U/edit#
+
 https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/edit#
 
    - **Troubleshooting**
@@ -31,7 +33,7 @@ https://docs.google.com/document/d/1GWiyWp5e6v92x4quemc4W_-kWfx-hpzvxVnbEIBsTIk/
   
   **Exel sheet**
 
-  https://docs.google.com/spreadsheets/d/19wuRoz0S9f_5t8pRnal6dlU6SpZWIq3AMNFWCVR2r9c/edit#gid=1060304508
+  https://docs.google.com/spreadsheets/d/19wuRoz0S9f_5t8pRnal6dlU6SpZWIq3AMNFWCVR2r9c/edit#gid=0
 
 ## Installation:
 
