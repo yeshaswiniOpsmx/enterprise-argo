@@ -696,10 +696,10 @@ argo-cd:
       #  labels: {}
       #  annotations: {}
       #  config:
-      #    bearerToken: "<Plain authentication token>"
+      #    bearerToken: "<Provide Plain authentication token>"
       #    tlsClientConfig:
       #      insecure: false
-      #      caData: "<Plain encoded certificate>"
+      #      caData: "<Provide Plain certificate>"
 
 ###################################################
 # argo-workflows configuration
