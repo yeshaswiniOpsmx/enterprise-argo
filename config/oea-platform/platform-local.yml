@@ -77,10 +77,12 @@ logging:
 standardErrorCodes:
   filePath: /opsmx/conf/standard-error-code.csv
 argoRollout:
-  {{- if and (.Values.installArgoCD) (.Values.installArgoRollouts) }}
+  {{- if and (.Values.installArgoRollouts) (not .Values.installArgoCD) }}
+  appAutoCreation: true
+  {{- else }}
+  {{- if and (.Values.installArgoCD) (not .Values.installArgoRollouts) }}
   appAutoCreation: false
   {{- else }}
-  {{- if and .Values.installArgoRollouts (not .Values.installArgoCD) }}
-  appAutoCreation: true
+  appAutoCreation: false
   {{- end }}
   {{- end }}
