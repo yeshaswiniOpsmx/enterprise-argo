@@ -285,7 +285,7 @@ argo-cd:
     ### To use LDAP enable config 
     configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
-    config: 
+    config:
       # Argo CD's externally facing base URL. Required when configuring SSO
       url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
@@ -340,7 +340,7 @@ argo-cd:
             usernameAttr: email
             emailAttr: email
             groupsAttr: group
-            caData: | 
+            caData: |
               LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
               QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
               UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
@@ -365,7 +365,6 @@ argo-cd:
               ClpEZ21LaWhSNDNJenhwaVRLT09hVU1LYlN5RHFjcWpjdTEwaUJ3cmpVUmtzTzFmc3JqNEtXZFJ4
               aVRpODFOZjFINytUcmJRMldVeG8NCjFncGVBWE9Rd2M2RHp0TlN2b1lQaFpHQmdNeTVjcWQ0TWwr
               WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
-
 
 
     ################# groups and user permission in argcd-rbac-cm configmap configuration ################
@@ -761,7 +760,7 @@ argo-rollouts:
       # -- Repository to use
       repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v6"
+      tag: "localv37"
 
     readinessProbe:
       httpGet:
