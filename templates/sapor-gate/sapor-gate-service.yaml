@@ -5,7 +5,7 @@ metadata:
   labels:
     app: spin
     component: sapor-gate
-{{ include "oea.standard-labels" . | indent 4 }}
+{{ include "oes.standard-labels" . | indent 4 }}
   name: sapor-gate
 spec:
   type: ClusterIP
@@ -15,6 +15,6 @@ spec:
     protocol: TCP
     targetPort: 8084
   selector:
-    app: oea
+    app: oes
     component: sapor-gate
 {{- end -}}

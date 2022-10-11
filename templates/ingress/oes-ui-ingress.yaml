@@ -6,21 +6,21 @@ metadata:
 {{- if .Values.global.certManager.installed }}
     acme.cert-manager.io/http01-edit-in-place: "true"
     cert-manager.io/issue-temporary-certificate: "true"
-    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}-oea
+    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}-oes
     kubernetes.io/tls-acme: "true"
 {{- end }}
-{{- if .Values.global.oeaUI.ingress.annotations }}
-{{ tpl (toYaml .Values.global.oeaUI.ingress.annotations) . | indent 4 }}
+{{- if .Values.global.oesUI.ingress.annotations }}
+{{ tpl (toYaml .Values.global.oesUI.ingress.annotations) . | indent 4 }}
 {{- end }}
-  name: oea-ui-ingress
+  name: oes-ui-ingress
 spec:
   rules:
-  - host: {{ .Values.global.oeaUI.host }}
+  - host: {{ .Values.global.oesUI.host }}
     http:
       paths:
       - backend:
           service:
-            name: oea-ui
+            name: oes-ui
             port:
               number: 8080
         path: /
@@ -28,7 +28,7 @@ spec:
 {{- if .Values.global.ssl.enabled }}
   tls:
   - hosts:
-    - {{ .Values.global.oeaUI.host }}
-{{ toYaml .Values.global.oeaUI.ingress.tls | indent 4 }}
+    - {{ .Values.global.oesUI.host }}
+{{ toYaml .Values.global.oesUI.ingress.tls | indent 4 }}
 {{- end }}
 {{- end }}

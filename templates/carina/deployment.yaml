@@ -3,16 +3,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: oea
+    app: oes
     component: carina
-{{ include "oea.standard-labels" . | indent 4 }}
-  name: oea-carina
+{{ include "oes.standard-labels" . | indent 4 }}
+  name: oes-carina
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   selector:
     matchLabels:
-      app: oea
+      app: oes
       component: carina
   strategy:
     rollingUpdate:
@@ -22,9 +22,9 @@ spec:
   template:
     metadata:
       labels:
-        app: oea
+        app: oes
         component: carina
-{{ include "oea.standard-labels" . | indent 8 }}
+{{ include "oes.standard-labels" . | indent 8 }}
       annotations:
         checksum/secret: {{ (.Files.Glob "config/carina/carina-manager.yaml").AsConfig | sha256sum }}
 {{- if .Values.carina.annotations -}}
@@ -34,7 +34,7 @@ spec:
       containers:
       - image: {{ template "carina.image" . }}
         imagePullPolicy: IfNotPresent
-        name: oea-carina
+        name: oes-carina
         ports:
         - containerPort: 8090
           protocol: TCP
@@ -75,6 +75,6 @@ spec:
           items:
           - key: carina-manager.yaml
             path: carina-manager.yaml
-          secretName: oea-carina-config
+          secretName: oes-carina-config
         name: carina-volume
 {{- end -}}

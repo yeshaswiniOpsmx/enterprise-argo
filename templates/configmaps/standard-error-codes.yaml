@@ -66,6 +66,6 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app: oea
+    app: oes
   name: standard-error-codes-config
 {{- end }}

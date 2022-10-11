@@ -1,0 +1,128 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: oes
+    component: platform
+{{ include "oes.standard-labels" . | indent 4 }}
+  name: oes-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oes
+      component: platform
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ (.Files.Glob "config/oes-platform/platform-local.yml").AsConfig | sha256sum }}
+{{- if .Values.platform.annotations -}}
+        {{ toYaml .Values.platform.annotations | nindent 8 }}
+{{- end }}
+      labels:
+        app: oes
+        component: platform
+{{ include "oes.standard-labels" . | indent 8 }}
+    spec:
+{{- if .Values.db.enabled  }}
+      initContainers:
+      - name: db-check
+        image: {{ .Values.global.customImages.registry }}/postgres:9.6.5
+        command: ['/bin/bash', '-c', "sleep 30;echo Waiting for oes-db to be up and running; pg_isready -h oes-db -p 5432 && echo PostgreSQL DB is ready to receive connections"]
+{{- end }}
+      containers:
+      - image: {{ template "platform.image" . }}
+        name: oes-platform
+        ports:
+        - containerPort: 8095
+          protocol: TCP
+        env:
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
+        resources:
+{{ toYaml .Values.platform.resources | indent 12 }}
+        readinessProbe:
+          tcpSocket:
+            port: 8095
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /mgmt/health
+            port: 8095
+          initialDelaySeconds: 60
+          periodSeconds: 60
+        volumeMounts:
+        - mountPath: /opsmx/conf/platform-local.yml
+          name: platform-config-volume
+          subPath: platform-local.yml
+        - mountPath: /opsmx/conf/bootstrap.yml
+          name: bootstrap-config-volume
+          subPath: bootstrap.yml
+        - mountPath: /opsmx/conf/standard-error-code.csv
+          name: standard-error-conf
+          subPath: standard-error-codes.csv
+        {{- if .Values.global.customCerts.enabled }}
+        - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
+          subPath: cacerts
+          name: cacerts
+        {{- end }}
+      {{- if .Values.imagePullSecret}}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret}}
+      {{- end }}
+      {{- if and (.Values.global.openshift) (not .Values.global.securityContext) }}
+      securityContext: {{ default "{}" }}
+      {{- else }}
+      {{- if and (.Values.global.openshift) (.Values.global.securityContext) }}
+      securityContext:
+{{ toYaml .Values.global.securityContext | indent 8 }}
+      {{- else }}
+      {{- if and (not .Values.global.openshift) (.Values.global.securityContext) }}
+      securityContext:
+{{ toYaml .Values.global.securityContext | indent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.global.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.global.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.global.affinity }}
+      affinity:
+{{ toYaml .Values.global.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.global.tolerations }}
+      tolerations:
+{{ toYaml .Values.global.tolerations | indent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.global.customCerts.enabled }}
+      - name: cacerts
+        secret:
+          secretName: {{ .Values.global.customCerts.secretName }}
+          items:
+          - key: cacerts
+            path: cacerts
+      {{- end }}
+      - name: platform-config-volume
+        secret:
+          secretName: oes-platform-config
+      - secret:
+          items:
+          - key: bootstrap.yml
+            path: bootstrap.yml
+          secretName: bootstrap
+        name: bootstrap-config-volume
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: standard-error-codes.csv
+            path: standard-error-codes.csv
+          name: standard-error-codes-config
+        name: standard-error-conf
+{{- end -}}
