@@ -61,7 +61,7 @@ global:
   commonGate:
     enabled: false
 
-  oeaUI:
+  oesUI:
     protocol: http
     host: oes.example.ops.com
     # Use below port when hostname above is an external IP instead of a hostname
@@ -73,7 +73,7 @@ global:
       tls:
         secretName: oes-ui-ingress
 
-  oeaGate:
+  oesGate:
     protocol: http
     host: oes-gate.example.ops.com
     # Use below port when hostname above is an external IP instead of a hostname
@@ -1001,7 +1001,7 @@ db:
 
   ## Change the default configuration when above option is set to false
   ## Below url and credentials are used by Autopilot & Sapor
-  url: jdbc:postgresql://oea-db:5432
+  url: jdbc:postgresql://oes-db:5432
   username: postgres
   password: networks123
 

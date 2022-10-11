@@ -10,7 +10,7 @@
 Create a default fully qualified app name.
 We truncate at 24 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "oea.fullname" -}}
+{{- define "oes.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 24 | trimSuffix "-" -}}
 {{- end -}}
@@ -18,7 +18,7 @@ We truncate at 24 chars because some Kubernetes name fields are limited to this 
 {{/*
 Common labels for metadata.
 */}}
-{{- define "oea.standard-labels" -}}
+{{- define "oes.standard-labels" -}}
 heritage: {{ .Release.Service | quote }}
 release: {{ .Release.Name | quote }}
 chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -173,7 +173,7 @@ Usage:
 {{/*
 Redis base URL for Spinnaker
 */}}
-{{- define "oea.redisBaseURL" -}}
+{{- define "oes.redisBaseURL" -}}
 {{- if .Values.installRedis }}
 {{- printf "redis://:%s@%s-redis-master:6379" .Values.redis.password .Release.Name -}}
 {{- else if .Values.redis.external.password }}

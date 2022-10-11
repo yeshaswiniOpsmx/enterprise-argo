@@ -54,7 +54,7 @@ global:
     #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
     host: "argorollouts1.ninja-test.opsmx.net"
 
-  oeaUI:
+  oesUI:
     host: sai.isd.ninja-test.opsmx.net
 
 ###################################################

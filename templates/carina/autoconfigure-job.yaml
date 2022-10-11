@@ -8,15 +8,15 @@ metadata:
     "helm.sh/hook-delete-policy": "before-hook-creation"
     "helm.sh/hook-weight": "5"
   labels:
-    app: oea
-{{ include "oea.standard-labels" . | indent 4 }}
-  name: oea-autoconfig
+    app: oes
+{{ include "oes.standard-labels" . | indent 4 }}
+  name: oes-autoconfig
 spec:
   template:
     metadata:
       labels:
-        app: oea
-{{ include "oea.standard-labels" . | indent 8 }}
+        app: oes
+{{ include "oes.standard-labels" . | indent 8 }}
     spec:
       serviceAccountName: auto-config-carina
       containers:
@@ -32,7 +32,7 @@ spec:
       volumes:
       - configMap:
           defaultMode: 420
-          name: oea-carina-autoconfigure
+          name: oes-carina-autoconfigure
         name: carina-autoconfigure
 {{- end -}}
 {{- end -}}
