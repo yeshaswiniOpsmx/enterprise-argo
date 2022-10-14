@@ -1018,7 +1018,7 @@ carina:
   ##
   image:
     repository: carina-manager
-    tag: v1.1.10
+    tag: v1.1.11
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1467,13 +1467,13 @@ forwarder:
   externalName: controller.exampleopsmx.net    # This hostname should reach agent-grpc service from the agent
   enabled: true
   agent:
-    image: quay.io/opsmxpublic/forwarder-agent:v3.5.6
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.7
     serviceType: LoadBalancer
     # Value is also used in sapor configuration for kubernetes.agent.serverHostName
     host: opsmx-controller-controller1
   image:
     repository: quay.io/opsmxpublic/forwarder-controller
-    tag: v3.5.6
+    tag: v3.5.7
     pullPolicy: IfNotPresent
   serviceAnnotations: {}
 
