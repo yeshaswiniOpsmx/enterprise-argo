@@ -205,6 +205,26 @@ argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
 
+#######################################################
+argocd-image-updater:
+  config:
+    argocd:
+      # -- Use the gRPC-web protocol to connect to the Argo CD API
+      grpcWeb: true
+      # -- Connect to the Argo CD API server at server address
+      serverAddress: ""
+      # -- If specified, the certificate of the Argo CD API server is not verified.
+      insecure: false
+      # -- If specified, use an unencrypted HTTP connection to the ArgoCD API instead of TLS.
+      plaintext: false
+      # -- If specified, the secret with ArgoCD API key will be created.
+      token: ""
+    # -- Username to use for Git commits
+    gitCommitUser: ""
+    # -- E-Mail address to use for Git commits
+    gitCommitMail: ""
+    # -- Changing the Git commit message
+    gitCommitTemplate: ""
 ####################################################
 auditClient:
   image:
