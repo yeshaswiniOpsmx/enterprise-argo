@@ -14,7 +14,7 @@ installArgoWorkflows: false
 installArgoEvents: false
 
 # installArgoImageupdater enable true will install argocd-image-updater
-installArgoImageupdater: true
+installArgoImageupdater: false
 
 
 ############################################################################
