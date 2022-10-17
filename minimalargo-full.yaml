@@ -31,7 +31,7 @@ argo-cd:
     ### To use LDAP enable config 
     configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
-    config: 
+    config:
       # Argo CD's externally facing base URL. Required when configuring SSO
       url: "https://argocd1.ninja-test.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
@@ -86,7 +86,7 @@ argo-cd:
             usernameAttr: email
             emailAttr: email
             groupsAttr: group
-            caData: | 
+            caData: |
               LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
               QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
               UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
