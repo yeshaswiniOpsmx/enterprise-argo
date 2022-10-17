@@ -68,7 +68,7 @@ argo-cd:
     ### To use LDAP enable config 
     configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
-    config: 
+    config:
       # Argo CD's externally facing base URL. Required when configuring SSO
       url: "https://argocd1.ninja-test.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
@@ -123,7 +123,7 @@ argo-cd:
             usernameAttr: email
             emailAttr: email
             groupsAttr: group
-            caData: | 
+            caData: |
               LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
               QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
               UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
@@ -229,50 +229,50 @@ argocd-image-updater:
 auditClient:
   image:
     repository: oes-audit-client
-    tag: 7139527-1512
+    tag: v4.1.0-rc1
 ###################################################
 gate:
   image:
     repository: gate
-    tag: 4475ea51-1727
+    tag: v4.1.0-rc1
 ##################################################
 sapor:
   image:
-    repository: sapor
-    tag: 6dc5178383bfed651a475669511d9306db7ffd35-482 
+    repository: oes-sapor
+    tag: v4.1.0-rc1
 ###################################################
 platform:
   image:
     repository: oes-platform
-    tag: d8cdd6d1-1758
+    tag: v4.1.0-rc1
 ###################################################
 autopilot:
   image:
     repository: oes-autopilot
-    tag: 2880066b6-854
+    tag: cf1fe39f2-1009
 ###################################################
 ui:
   image:
     repository: oes-ui
-    tag: "202209281950"
+    tag: v4.1.0-rc1
 
 ###################################################
 dashboard:
   image:
     repository: oes-dashboard
-    tag: 72db500-2167
+    tag: v4.1.0-rc1
 #####################################################
 datascience:
   image:
     repository: oes-datascience
-    tag: 2880066b6dd5fbaf673ff23307ad3dcc1a65768b-522
+    tag: v4.1.0-rc1
 #####################################################
 audit:
   image:
     repository: oes-audit-service
-    tag: 8e41e5c-1093
+    tag: v4.1.0-rc1
 ######################################################
 visibility:
   image:
     repository: oes-visibility
-    tag: f91bc80-2245
+    tag: v4.1.0-rc1
