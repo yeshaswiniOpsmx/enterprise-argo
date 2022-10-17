@@ -249,7 +249,7 @@ platform:
 autopilot:
   image:
     repository: oes-autopilot
-    tag: v4.1.0-rc1
+    tag: cf1fe39f2-1009
 ###################################################
 ui:
   image:
