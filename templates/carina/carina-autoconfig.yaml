@@ -18,8 +18,18 @@ data:
     curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     chmod +x /usr/local/bin/argocd
 
+    {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
     status="$(curl -Is https://{{ .Values.global.argocd.host }} | head -1)"
     validate=$(echo $status | awk '{print $2}')
+    {{- else }}
+    {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+    status="$(curl -Is http://{{ .Values.global.argocd.host }} | head -1)"
+    validate=$(echo $status | awk '{print $2}')
+    {{- else }}
+    validate=$(echo "200")
+    {{- end }}
+    {{- end }}
+
     kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
     ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
     wait_period=$(($wait_period+10))
@@ -31,10 +41,27 @@ data:
       ## get the user password
       argopassword=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
 
-      ## argocli login
+      ##argocli login
+      {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
       argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web
+      {{- else }}
+      {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web --insecure
+      {{- else }}
+      argocd login --insecure --port-forward --port-forward-namespace=opsmx-argo --plaintext --username=admin --password=$argopassword
+      {{- end }}
+      {{- end }}
 
+
+      {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
       token=$(argocd account generate-token)
+      {{- else }}
+      {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+      token=$(argocd account generate-token --insecure)
+      {{- else }}
+      token=$(argocd account generate-token --insecure --port-forward --port-forward-namespace=opsmx-argo)
+      {{- end }}
+      {{- end }}
       wait=0
       if [ -z $token ]
       then

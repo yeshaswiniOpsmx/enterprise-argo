@@ -1,7 +1,15 @@
 {{- if and (.Values.installArgoCD) (.Values.autoconfigurecarina) }}
 argos:
   - name: oesargo
+    {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
     url: https://{{ .Values.global.argocd.host }}
+    {{- else }}
+    {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+    url: http://{{ .Values.global.argocd.host }}
+    {{- else }}
+    url: http://{{ .Release.Name }}-argocd-server:80
+    {{- end }}
+    {{- end }}
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 {{- end }}
 httpListenPort: 8090
