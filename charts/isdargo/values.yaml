@@ -62,7 +62,7 @@ global:
     enabled: false
 
   oesUI:
-    protocol: http
+    protocol: https
     host: oes.example.ops.com
     # Use below port when hostname above is an external IP instead of a hostname
     #port: 31466
