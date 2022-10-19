@@ -751,16 +751,16 @@ argo-rollouts:
   keepCRDs: false
 
   imagePullSecrets:
-  - name: opsmx11-secret
+  - name:
   #Override the image for the deployment
   controller:
     image:
       # -- Registry to use
-      registry: opsmx11
+      registry: opsmxpublic
       # -- Repository to use
       repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "localv37"
+      tag: "v11"
 
     readinessProbe:
       httpGet:
@@ -844,10 +844,10 @@ argocd-image-updater:
     # -- ArgoCD Image Update log level
     logLevel: "info"
 
-  
+
 ######################################################################
 opa:
-  enabled: false  
+  enabled: false
   image:
     repository: openpolicyagent/opa
     tag: latest
@@ -1066,7 +1066,7 @@ ui:
   ## Image specific details
   image:
     repository: ubi8-oes-ui
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1082,7 +1082,7 @@ autopilot:
   ## Image specific details
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1114,7 +1114,7 @@ audit:
   ##
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1135,7 +1135,7 @@ auditClient:
   ##
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1156,7 +1156,7 @@ datascience:
   ##
   image:
     repository: ubi8-oes-datascience
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1174,7 +1174,7 @@ dashboard:
   ## Image specific details
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1207,7 +1207,7 @@ gate:
   ## Image specific details
   image:
     repository: ubi8-gate
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1283,7 +1283,7 @@ platform:
   ## Image specific details
   image:
     repository: ubi8-oes-platform
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1323,7 +1323,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1383,7 +1383,7 @@ visibility:
   ## Image specific details
   image:
     repository: ubi8-oes-visibility
-    tag: v4.0.0-beta
+    tag: v4.1.0
     pullPolicy: IfNotPresent
 
   annotations:
