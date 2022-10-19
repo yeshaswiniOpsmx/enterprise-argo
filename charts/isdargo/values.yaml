@@ -756,7 +756,7 @@ argo-rollouts:
   controller:
     image:
       # -- Registry to use
-      registry: opsmxpublic
+      registry: quay.io/opsmxpublic
       # -- Repository to use
       repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
