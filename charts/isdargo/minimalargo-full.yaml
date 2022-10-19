@@ -170,55 +170,54 @@ argo-rollouts:
 ####################################################
 auditClient:
   image:
-    repository: oes-audit-client
-    tag: 7139527-1512
+    repository: ubi8-oes-audit-client
+    tag: v4.1.0
 ###################################################
 gate:
   image:
-    repository: gate
-    tag: 4475ea51-1727
+    repository: ubi8-gate
+    tag: v4.1.0
 ##################################################
 sapor:
   image:
-    repository: sapor
-    tag: 6dc5178383bfed651a475669511d9306db7ffd35-482 
+    repository: ubi8-oes-sapor
+    tag: v4.1.0
 ###################################################
 platform:
   image:
-    repository: oes-platform
-    tag: d8cdd6d1-1758
+    repository: ubi8-oes-platform
+    tag: v4.1.0
 ###################################################
 autopilot:
   image:
-    repository: oes-autopilot
-    tag: 2880066b6-854
+    repository: ubi8-oes-autopilot
+    tag: v4.1.0
 ###################################################
 ui:
   image:
-    repository: oes-ui
-    tag: "202209281950"
-
+    repository: ubi8-oes-ui
+    tag: v4.1.0
 ###################################################
 dashboard:
   image:
-    repository: oes-dashboard
-    tag: 72db500-2167
+    repository: ubi8-oes-dashboard
+    tag: v4.1.0
 #####################################################
 datascience:
   image:
-    repository: oes-datascience
-    tag: 2880066b6dd5fbaf673ff23307ad3dcc1a65768b-522
+    repository: ubi8-oes-datascience
+    tag: v4.1.0
 #####################################################
 audit:
   image:
-    repository: oes-audit-service
-    tag: 8e41e5c-1093
+    repository: ubi8-oes-audit-service
+    tag: v4.1.0
 ######################################################
 visibility:
   image:
-    repository: oes-visibility
-    tag: f91bc80-2245
-
+    repository: ubi8-oes-visibility
+    tag: v4.1.0
+####################################################
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: true
 
@@ -237,7 +236,6 @@ installArgoEvents: false
 # installArgoImageupdater enable true will install argocd-image-updater
 installArgoImageupdater: false
 
-
 ############################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
@@ -249,12 +247,4 @@ installdemoapps: true
 #######################################################################################
 # Set to true if ISD needs to connect to ArgoCD using carina service
 autoconfigurecarina: true
-
-#############################################################################
-# FOR INTERNAL USE ONLY. ONCE RELEASED, THIS SHOULD BE REMOVED
-##############################################################################
-imageCredentials:
-  repoUrl: https://docker.io/
-  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
-  registry: opsmx11
 

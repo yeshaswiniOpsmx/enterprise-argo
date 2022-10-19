@@ -16,7 +16,6 @@ installArgoEvents: false
 # installArgoImageupdater enable true will install argocd-image-updater
 installArgoImageupdater: false
 
-
 ############################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
@@ -32,12 +31,12 @@ autoconfigurecarina: false
 forwarder:
   externalName: controller.exampleopsmx.net
 
-##############################################################################
+########################################################################################
+## Info related to registry where OEA images are stored
 imageCredentials:
-  repoUrl: https://docker.io/
+  repoUrl: https://quay.io/
   # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
-  registry: opsmx11
-
+  registry: quay.io/opsmxpublic
 #####################################################
 # Global Configuration
 ######################
@@ -228,51 +227,50 @@ argocd-image-updater:
 ####################################################
 auditClient:
   image:
-    repository: oes-audit-client
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-audit-client
+    tag: v4.1.0
 ###################################################
 gate:
   image:
-    repository: gate
-    tag: v4.1.0-rc1
+    repository: ubi8-gate
+    tag: v4.1.0
 ##################################################
 sapor:
   image:
-    repository: oes-sapor
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-sapor
+    tag: v4.1.0
 ###################################################
 platform:
   image:
-    repository: oes-platform
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-platform
+    tag: v4.1.0
 ###################################################
 autopilot:
   image:
-    repository: oes-autopilot
-    tag: cf1fe39f2-1009
+    repository: ubi8-oes-autopilot
+    tag: v4.1.0
 ###################################################
 ui:
   image:
-    repository: oes-ui
-    tag: v4.1.0-rc1
-
+    repository: ubi8-oes-ui
+    tag: v4.1.0
 ###################################################
 dashboard:
   image:
-    repository: oes-dashboard
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-dashboard
+    tag: v4.1.0
 #####################################################
 datascience:
   image:
-    repository: oes-datascience
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-datascience
+    tag: v4.1.0
 #####################################################
 audit:
   image:
-    repository: oes-audit-service
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-audit-service
+    tag: v4.1.0
 ######################################################
 visibility:
   image:
-    repository: oes-visibility
-    tag: v4.1.0-rc1
+    repository: ubi8-oes-visibility
+    tag: v4.1.0
