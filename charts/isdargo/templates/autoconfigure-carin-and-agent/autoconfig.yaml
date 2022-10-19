@@ -1,9 +1,9 @@
 {{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
-{{- if .Values.autoconfigurecarina -}}
+{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent .Release.IsInstall -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: oes-carina-autoconfigure
+  name: oes-autoconfigure
   labels:
 {{ include "oes.standard-labels" . | indent 4 }}
 data:
@@ -77,12 +77,29 @@ data:
 
       else
          encodedtoken=$(echo -n $token | base64 -w0)
+         {{- if .Values.autoconfigurecarina -}}
+         ## autoconfiguration for carina with isd
          ## replace the secret
          kubectl get secret oes-carina-config -o jsonpath='{.data.*}' | base64 -d > carina-secret.yaml
          yq e '.argos.[].token = "'$encodedtoken'"' carina-secret.yaml > carina-manager.yaml
          kubectl delete secret oes-carina-config
          kubectl create secret generic oes-carina-config  --from-file=carina-manager.yaml
          kubectl delete  po -l component=carina
+         {{- end -}}
+         {{- if .Values.autoconfigureagent -}}
+         ##Configure the Agent to the ISD
+         #Create Agent in the ISD-UI via API
+         curl --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
+         curl --location --request GET 'http://oes-sapor:8085/oes/accountsConfig/agents/isd-argo-agent/manifest' --header 'x-spinnaker-user: admin' > /tmp/manifest.yaml
+         cd /tmp/
+         wget https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         cp /tmp/kubectl-slice /usr/local/bin/
+         mkdir /tmp/yamls
+         kubectl-slice --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
+         yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
+         kubectl apply -f /tmp/yamls/
+         {{- end -}}
          break
       fi
       done

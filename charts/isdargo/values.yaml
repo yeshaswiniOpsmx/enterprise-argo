@@ -33,6 +33,9 @@ imageCredentials:
 # Set to false if no applications to be displayed in ArgoCD as part of default installation
 installdemoapps: true
 #######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
 # Set to true if ISD needs to connect to ArgoCD using carina service
 autoconfigurecarina: false
 #######################################################################################
