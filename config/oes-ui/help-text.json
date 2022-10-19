@@ -226,8 +226,8 @@
     }
   },
   "SPINNAKER_LISTING": {
-    "HEADER": "No Spinnaker Configured!",
-    "BODY": "<div><p>CD Integration page allows you to connect to a CD instance. This enables ML based verification, Policy enforcement, Informed Approvals, etc.</p><p>Click on the <b>New CD Integration</b> button to connect to a CD instance. Only one instance is supported.</p></div>"
+    "HEADER": "No CD Integration found!",
+    "BODY": "<div><p>CD Integration Page allows you to connect to multiple Argo CD instances.  This enables delivery insights, deployments audit and automated analysis across multiple Argo cd instances.</p><p>Click on the <b>New CD Integration</b> button to get started.</p></div>"
   },
   "SPINNAKER_SETUP": {
     "HEADER": "Spinnaker",
