@@ -30,7 +30,13 @@ dependencies:
   repository: ""
   version: 11.16.2
 - name: ingress-nginx
-  repository: https://kubernetes.github.io/ingress-nginx
+  repository: ""
   version: 4.1.4
-digest: sha256:929559df1a98f31f962fc93ae9f1e379f48fb0349af897c8bf270e5ad3e6e8b8
-generated: "2022-08-22T16:05:14.671507327+05:30"
+- name: redis
+  repository: ""
+  version: 10.5.3
+- name: minio
+  repository: ""
+  version: 8.0.9
+digest: sha256:36d781674188e506d6cc504a212d72658095e6d42417b2f517965860c44ca1ad
+generated: "2022-10-19T16:58:14.327775317+05:30"

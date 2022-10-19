@@ -1,15 +1,19 @@
 apiVersion: v2
 name: isdargo
-version: 1.0.0
-description: "ISD-ARGO"
+version: 4.1.0
+appVersion: 4.1.0
+description: "ISD with ArgoCD,ArgoRollouts"
+icon: https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/img/opsmx.png
 maintainers:
 - email: srinivas@opsmx.io
   name: ksrinimba
+- email: mahesh.kota@opsmx.io
+  name: maheshopsmx
 - email: saiteja.katabhatina@opsmx.io
   name: saitejaopsmx
 keywords:
   - OpsMx
-  - OEA
+  - ISDARGO
   - Autopilot
 dependencies:
   - name: argo-cd
