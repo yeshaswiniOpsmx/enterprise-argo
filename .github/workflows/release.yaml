@@ -5,8 +5,8 @@ on:
     branches:
       - master
     paths:
-      - 'charts/oea/Chart.yaml'
-      - 'charts/oea/Chart.lock'
+      - 'charts/isdargo/Chart.yaml'
+      - 'charts/isdargo/Chart.lock'
 
 jobs:
   release:
