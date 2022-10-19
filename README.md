@@ -9,8 +9,8 @@ For more information, visit https://www.opsmx.com
 ## TL;DR;
 Install OpsMx Enterprise for Argo
   ```console
-  $ helm repo add opsmx https://helmcharts.opsmx.com/
-  $ helm install <release-name> opsmx/isdargo --timeout 6m
+  $ helm repo add isdargo https://opsmx.github.io/enterprise-argo/
+  $ helm install <release-name> isdargo/isdargo --timeout 6m
   ```
 
 ## Setup Instructions
@@ -29,7 +29,7 @@ Install OpsMx Enterprise for Argo
 - Add opsmx helm repo to your local machine
 
    ```console
-   $ helm repo add opsmx https://helmcharts.opsmx.com/
+   $ helm repo add isdargo https://opsmx.github.io/enterprise-argo/
    ```
 
   Note: If opsmx helm repo is already added, do a repo update before installing the chart
@@ -58,7 +58,7 @@ Install OpsMx Enterprise for Argo
 
 	Helm v3.x
   ```console
-  $ helm install my-release opsmx/isdargo [--namespace mynamespace] --timeout 6m
+  $ helm install my-release isdargo/isdargo [--namespace mynamespace] --timeout 6m
   ```
 
 The command deploys ISD-ARGO on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
