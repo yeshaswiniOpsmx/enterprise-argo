@@ -90,14 +90,23 @@ data:
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          curl --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
+         ## Download agent manifest file
          curl --location --request GET 'http://oes-sapor:8085/oes/accountsConfig/agents/isd-argo-agent/manifest' --header 'x-spinnaker-user: admin' > /tmp/manifest.yaml
          cd /tmp/
+         ## Download and install the kubectl-slice to split to manifest file that is download
          wget https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          cp /tmp/kubectl-slice /usr/local/bin/
+         ## create a directory to place splited yamls from the manifest
          mkdir /tmp/yamls
          kubectl-slice --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
+         ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
+         ## Adding the agent service configmap with added arocd token
+         kubectl get cm opsmx-services-isd-argo-agent -o yaml > agent-cm.yaml
+         sed -i 's/token: .*xxx/token: '$encodedtoken'/g' agent-cm.yaml
+         ## Apply the yamls
+         kubectl apply -f agent-cm.yaml
          kubectl apply -f /tmp/yamls/
          {{- end -}}
          break

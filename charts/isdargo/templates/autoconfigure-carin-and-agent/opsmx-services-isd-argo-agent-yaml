@@ -16,7 +16,7 @@ data:
           insecure: true
           credentials:
             type: bearer
-            token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            token: xxxx
         annotations:
           description: argocd via agent
           uiUrl: https://{{ .Values.global.argocd.host }}
