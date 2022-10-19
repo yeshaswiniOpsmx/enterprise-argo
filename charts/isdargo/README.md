@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://github.com/OpsMx/enterprise-spinnaker/blob/master/img/opsmx.png" width="20%" align="center" alt="OpsMx">
+	<img src="https://github.com/OpsMx/enterprise-argo/blob/main/img/opsmx.png" width="20%" align="center" alt="OpsMx">
 </p>
 
 # OpsMx Enterprise for Argo
