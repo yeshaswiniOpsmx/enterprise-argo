@@ -27,8 +27,10 @@ spec:
         volumeMounts:
         - mountPath: /tmp/config
           name: autoconfigure
+      {{- if .Values.imagePullSecret }}
       imagePullSecrets:
-      - name: {{ .Values.imagePullSecret}}
+      - name: {{ .Values.imagePullSecret }}
+      {{- end }}
       restartPolicy: OnFailure
       volumes:
       - configMap:
