@@ -10,7 +10,7 @@ metadata:
 data:
   datasource-api.sh: |-
     #!/bin/bash
-    set -x
+    #set -x
     echo \"Waiting for all Argo Server  to come-up\"
     wait_period=0
     while true
