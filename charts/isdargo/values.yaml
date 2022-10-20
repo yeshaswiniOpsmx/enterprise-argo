@@ -1467,7 +1467,7 @@ vault:
 secretStore: db
 ###################################
 forwarder:
-  externalName: agent-grpc.{{ .Release.Namespace }}.svc.cluster.local    # This hostname should reach agent-grpc service from the agent
+  externalName: agent-grpc   # This hostname should reach agent-grpc service from the agent
   enabled: true
   agent:
     image: quay.io/opsmxpublic/forwarder-agent:v3.5.7

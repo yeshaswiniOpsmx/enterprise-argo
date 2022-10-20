@@ -1,3 +1,5 @@
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
+{{- if .Values.autoconfigureagent -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -19,4 +21,14 @@ data:
             token: xxxx
         annotations:
           description: argocd via agent
+          {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
           uiUrl: https://{{ .Values.global.argocd.host }}
+          {{- else }}
+          {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+          uiUrl: http://{{ .Values.global.argocd.host }}
+          {{- else }}
+          uiUrl: http://oes-ui:8080
+          {{- end }}
+          {{- end }}
+{{- end -}}
+{{- end -}}

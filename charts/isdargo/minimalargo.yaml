@@ -28,12 +28,8 @@ installdemoapps: true
 # Set to true if ISD needs to connect to ArgoCD using agent service
 autoconfigureagent: true
 #######################################################################################
-# Set to true if ISD needs to connect to ArgoCD using carina service
-autoconfigurecarina:  true
-#######################################################################################
 forwarder:
-  externalName: controller.exampleopsmx.net
-
+  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
 ########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
