@@ -807,10 +807,10 @@ argo-rollouts:
       #     when: rollout.spec.template.spec.containers[0].image == 'argoproj/rollouts-demo:purple'
 
   dashboard:
-   # -- Deploy dashboard server
-   enabled: true
-   # -- Value of label `app.kubernetes.io/component`
-   component: rollouts-dashboard
+    # -- Deploy dashboard server
+    enabled: true
+    # -- Value of label `app.kubernetes.io/component`
+    component: rollouts-dashboard
 
 #####################################################################
 argocd-image-updater:
