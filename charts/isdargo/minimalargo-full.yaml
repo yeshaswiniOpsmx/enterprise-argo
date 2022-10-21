@@ -2,8 +2,7 @@
 # Update it to host url (FQDN) that agents to connect to
 #######################################################################################
 forwarder:
-  externalName: controller.exampleopsmx.net
-
+  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
 #####################################################
 # Global Configuration
 ######################
@@ -245,6 +244,7 @@ installationMode: OEA-AP
 # Set to false if no applications to be displayed in ArgoCD as part of default installation
 installdemoapps: true
 #######################################################################################
-# Set to true if ISD needs to connect to ArgoCD using carina service
-autoconfigurecarina: true
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+
 

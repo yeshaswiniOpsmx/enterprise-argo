@@ -1,9 +1,10 @@
 {{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
-{{- if .Values.autoconfigurecarina -}}
+{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent -}}
+{{- if .Release.IsInstall -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: oes-carina-autoconfigure
+  name: oes-autoconfigure
   labels:
 {{ include "oes.standard-labels" . | indent 4 }}
 data:
@@ -29,11 +30,11 @@ data:
     validate=$(echo "200")
     {{- end }}
     {{- end }}
-
     kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
     ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
+    OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
     wait_period=$(($wait_period+10))
-    if   [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ];
+    if   [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     then
       echo \"ArgocdServer is  Up and Ready..\"
       while true
@@ -51,7 +52,6 @@ data:
       argocd login --insecure --port-forward --port-forward-namespace=opsmx-argo --plaintext --username=admin --password=$argopassword
       {{- end }}
       {{- end }}
-
 
       {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
       token=$(argocd account generate-token)
@@ -77,6 +77,8 @@ data:
 
       else
          encodedtoken=$(echo -n $token | base64 -w0)
+         {{- if .Values.autoconfigurecarina }}
+         ## autoconfiguration for carina with isd
          ## replace the secret
          kubectl get secret oes-carina-config -o jsonpath='{.data.*}' | base64 -d > carina-secret.yaml
          yq e '.argos.[].token = "'$encodedtoken'"' carina-secret.yaml > carina-manager.yaml
@@ -84,6 +86,33 @@ data:
          kubectl create secret generic oes-carina-config  --from-file=carina-manager.yaml
          kubectl delete  po -l component=carina
          break
+         {{- end }}
+         {{- if .Values.autoconfigureagent }}
+         ##Configure the Agent to the ISD
+         #Create Agent in the ISD-UI via API
+         sleep 20
+         curl --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
+         sleep 20
+         ## Download agent manifest file
+         curl --location --request GET 'http://oes-sapor:8085/oes/accountsConfig/agents/isd-argo-agent/manifest' --header 'x-spinnaker-user: admin' > /tmp/manifest.yaml
+         cd /tmp/
+         ## Download and install the kubectl-slice to split to manifest file that is download
+         wget https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         cp /tmp/kubectl-slice /usr/local/bin/
+         ## create a directory to place splited yamls from the manifest
+         mkdir /tmp/yamls
+         kubectl-slice --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
+         ## Replace the namespace in the manifest
+         yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
+         ## Adding the agent service configmap with added arocd token
+         kubectl get cm opsmx-services-isd-argo-agent -o yaml > /tmp/agent-cm.yaml
+         sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/agent-cm.yaml
+         ## Apply the yamls
+         kubectl replace --force -f /tmp/agent-cm.yaml
+         kubectl apply -f /tmp/yamls/
+         break
+         {{- end }}
       fi
       done
       break
@@ -98,5 +127,6 @@ data:
       fi
     fi
     done
+{{- end -}}
 {{- end -}}
 {{- end -}}

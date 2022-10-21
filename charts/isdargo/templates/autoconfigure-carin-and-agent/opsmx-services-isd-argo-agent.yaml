@@ -1,0 +1,34 @@
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
+{{- if .Values.autoconfigureagent -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opsmx-services-isd-argo-agent
+  labels:
+    agent.opsmx.com/name: isd-argo-agent
+    agent.opsmx.com/role: agent
+data:
+  services.yaml: |
+    outgoingServices:
+      - name: argocd
+        type: argocd
+        enabled: true
+        config:
+          url: http://{{ .Release.Name }}-argocd-server:80
+          insecure: true
+          credentials:
+            type: bearer
+            token: xxxx
+        annotations:
+          description: argocd via agent
+          {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
+          uiUrl: https://{{ .Values.global.argocd.host }}
+          {{- else }}
+          {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+          uiUrl: http://{{ .Values.global.argocd.host }}
+          {{- else }}
+          uiUrl: http://oes-ui:8080
+          {{- end }}
+          {{- end }}
+{{- end -}}
+{{- end -}}

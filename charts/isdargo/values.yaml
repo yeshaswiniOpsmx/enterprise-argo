@@ -33,6 +33,9 @@ imageCredentials:
 # Set to false if no applications to be displayed in ArgoCD as part of default installation
 installdemoapps: true
 #######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
 # Set to true if ISD needs to connect to ArgoCD using carina service
 autoconfigurecarina: false
 #######################################################################################
@@ -750,8 +753,7 @@ argo-rollouts:
   #Set to false if crds to be deleted as part of helm uninstall
   keepCRDs: false
 
-  imagePullSecrets:
-  - name:
+  imagePullSecrets: []
   #Override the image for the deployment
   controller:
     image:
@@ -805,10 +807,10 @@ argo-rollouts:
       #     when: rollout.spec.template.spec.containers[0].image == 'argoproj/rollouts-demo:purple'
 
   dashboard:
-   # -- Deploy dashboard server
-   enabled: true
-   # -- Value of label `app.kubernetes.io/component`
-   component: rollouts-dashboard
+    # -- Deploy dashboard server
+    enabled: true
+    # -- Value of label `app.kubernetes.io/component`
+    component: rollouts-dashboard
 
 #####################################################################
 argocd-image-updater:
@@ -857,7 +859,7 @@ opa:
 ## Name of the secret for pulling images from container registry.
 ## Use it when the images are stored under private registry.
 ## Create this secret before installing the chart
-imagePullSecret: "opsmx11-secret"
+imagePullSecret: ""
 
 ####################################################
 # AP installs a trial LDAP for POCs and testing purposes
@@ -1464,7 +1466,7 @@ vault:
 secretStore: db
 ###################################
 forwarder:
-  externalName: controller.exampleopsmx.net    # This hostname should reach agent-grpc service from the agent
+  externalName: agent-grpc   # This hostname should reach agent-grpc service from the agent
   enabled: true
   agent:
     image: quay.io/opsmxpublic/forwarder-agent:v3.5.7
