@@ -19,7 +19,7 @@ spec:
         app: oes
 {{ include "oes.standard-labels" . | indent 8 }}
     spec:
-      serviceAccountName: oes-auto-configure
+      serviceAccountName: oes-auto-configure-{{ .Release.Namespace }}
       containers:
       - command: ["sh", "/tmp/config/datasource-api.sh" ]
         name: auto-configure
