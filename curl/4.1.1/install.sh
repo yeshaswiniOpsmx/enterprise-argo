@@ -26,7 +26,7 @@ echo "-------------------------------------"
 echo "           Pre Installation          "
 echo "-------------------------------------"
 echo "Please Specify the required data for installation ...."
-echo "---"
+echo ""
 ## Read Version
 #echo -n "Specify ISD Version: "
 #while read isdversion; do
@@ -42,8 +42,9 @@ echo "|         Descrption                     -      Mode      |"
 echo "|---------------------------------------------------------|"
 echo "|To install only ISD mode is             -       ISD      |"
 echo "|                                                         |"
-echo "|Full installation with ISD-ARGO mode is -    ISD-ARGO    |"
+echo "|Full installation with ISD-ARGO mode is -     ISD-ARGO   |"
 echo "|_________________________________________________________|"
+echo ""
 echo -n "Specify Mode of installation: "
 while read isdmode; do
   test "$isdmode" != "" && break
@@ -169,7 +170,7 @@ yq e -i '.installArgoRollouts = true' values.yaml
 #yq e -i '.installArgoEvents = true' values.yaml
 yq e -i '.installationMode = "OEA-AP"' values.yaml
 yq e -i '.installdemoapps = true' values.yaml
-#yq e -i '.autoconfigureagent = true' values.yaml
+yq e -i '.autoconfigureagent = true' values.yaml
 echo "-------------------------------------"
 echo "             Installation     "
 echo "-------------------------------------"
@@ -196,8 +197,14 @@ else
 fi
 echo "Installing..."
 echo ""
-#helm install isdargo isdargo/isdargo -f values.yaml -n $isdnamespace
-helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
+###########################
+rm -rf enterprise-argo
+git clone https://github.com/maheshopsmx/enterprise-argo.git > /dev/null 2>&1
+cd enterprise-argo/charts/isdargo
+helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdnamespace
+
+####################
+#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
 if [ $? == 0 ];
 then
   echo "-------------------------------------"
@@ -213,8 +220,9 @@ then
     PLATFORM=$(grep oes-platform /tmp/inst.status | awk '{print $2}')
     AUTOPILOT=$(grep oes-autopilot /tmp/inst.status | awk '{print $2}')
     ARGOSERVER=$(grep argocd-server /tmp/inst.status | awk '{print $2}')
+    OESGATE=$(grep oes-gate /tmp/inst.status | awk '{print $2}')
     wait_period=$(($wait_period+10))
-    READYBASIC=$([ "$ARGOSERVER" == "true" ] && [ "$SAPOR" == "true" ] && [ "$PLATFORM" == "true" ] && [ "$AUTOPILOT" == "true" ]; echo $(($? == 0)) )
+    READYBASIC=$([ "$OESGATE" == "true" ] &&[ "$ARGOSERVER" == "true" ] && [ "$SAPOR" == "true" ] && [ "$PLATFORM" == "true" ] && [ "$AUTOPILOT" == "true" ]; echo $(($? == 0)) )
     READY=$READYBASIC
     if [ $READY == 1 ];
     then
