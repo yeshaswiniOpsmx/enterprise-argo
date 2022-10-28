@@ -100,7 +100,7 @@ fi
 
 rm -rf values.yaml
 ## Override the vaules.yaml
-curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/charts/isdargo/values.yaml 2> /dev/null
+curl -o values.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
 ## replacing the urls
 sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
 sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
