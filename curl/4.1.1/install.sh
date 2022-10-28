@@ -1,6 +1,10 @@
 #!/bin/bash
 
 #set -x
+
+## Chart Version 
+version=4.1.0
+
 echo ""
 echo "             ██    ███████    ██████               █████     ██████      ██████      ██████           "
 echo "   ▄ ██ ▄    ██    ██         ██   ██             ██   ██    ██   ██    ██          ██    ██    ▄ ██ ▄"
@@ -8,6 +12,16 @@ echo "    ████     ██    ███████    ██   ██   
 echo "   ▀ ██ ▀    ██         ██    ██   ██             ██   ██    ██   ██    ██    ██    ██    ██    ▀ ██ ▀"
 echo "             ██    ███████    ██████              ██   ██    ██   ██     ██████      ██████           "
 echo "                                                                                                      "
+echo "------------------------------------------------------------"
+echo " System Requirements "
+echo "------------------------------------------------------------"
+echo "   Configuration with at least 4 cores and 16 GB memory"
+echo "   Kubernetes cluster 1.19 or later                    "
+echo "   Helm 3 is setup on the client system   Installation - https://helm.sh/docs/intro/install/"
+echo "   Nginx ingress controlled installed     Installation - https://kubernetes.github.io/ingress-nginx/deploy/"
+echo "   Cert-manager installed                 Installation - https://cert-manager.io/docs/installation/kubernetes/"
+echo "-------------------------"
+read -p "Press enter to continue..."
 echo "-------------------------------------"
 echo "           Pre Installation          "
 echo "-------------------------------------"
@@ -20,6 +34,23 @@ echo "---"
 #  echo ""
 #  break
 #done
+
+## Read Mode
+echo "Installation Modes"
+echo " _________________________________________________________"
+echo "|         Descrption                     -      Mode      |"
+echo "|---------------------------------------------------------|"
+echo "|To install only ISD mode is             -       ISD      |"
+echo "|                                                         |"
+echo "|Full installation with ISD-ARGO mode is -    ISD-ARGO    |"
+echo "|_________________________________________________________|"
+echo -n "Specify Mode of installation: "
+while read isdmode; do
+  test "$isdmode" != "" && break
+  echo "              INFO: ANSWER CANNOT BE BLANK!"
+  echo ""
+  echo -n "Your Mode of installation: "
+done
 
 ## Read Namespace
 echo -n "Specify Namespace: "
@@ -101,6 +132,8 @@ rm -rf values.yaml
 ## Override the vaules.yaml
 curl -o values.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
 ## replacing the urls
+
+
 sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
 sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
 #sed -i "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
@@ -164,7 +197,7 @@ fi
 echo "Installing..."
 echo ""
 #helm install isdargo isdargo/isdargo -f values.yaml -n $isdnamespace
-helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version 4.1.0 --namespace $isdnamespace
+helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
 if [ $? == 0 ];
 then
   echo "-------------------------------------"
