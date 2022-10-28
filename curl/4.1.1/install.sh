@@ -256,6 +256,6 @@ then
     fi
   done
 else
-  echo "ERROR: helm installation failed..."
+  echo "ERROR: helm installation failed..., Some times it is due to timeout, Please check the pods and service...."
   exit 1
 fi
