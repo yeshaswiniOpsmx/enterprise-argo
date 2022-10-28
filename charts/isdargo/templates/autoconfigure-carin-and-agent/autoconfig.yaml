@@ -33,8 +33,10 @@ data:
     kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
     ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
     OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
+    OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
+    OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
     wait_period=$(($wait_period+10))
-    if   [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    if  [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     then
       echo \"ArgocdServer is  Up and Ready..\"
       while true
