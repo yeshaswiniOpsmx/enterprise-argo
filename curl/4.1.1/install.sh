@@ -142,9 +142,9 @@ echo "             Installation     "
 echo "-------------------------------------"
 ## Helm repo add
 echo "Adding the helm repo...."
-helm repo add isdargo https://opsmx.github.io/enterprise-argo/
+helm repo add isdargo https://opsmx.github.io/enterprise-argo/ > /dev/null 2>&1
 echo "Updating the helm repo ..."
-helm repo update > /dev/null
+helm repo update > /dev/null 2>&1
 ## Create Namespace
 echo "Creating the Namespace ..."
 kubectl create namespace $isdnamespace
