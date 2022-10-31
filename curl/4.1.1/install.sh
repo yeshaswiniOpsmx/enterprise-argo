@@ -40,7 +40,7 @@ readmode() {
 ## Read Mode
 echo "Installation Modes"
 echo " _________________________________________________________"
-echo "|         Descrption                     -      Mode      |"
+echo "|         Description                     -      Mode      |"
 echo "|---------------------------------------------------------|"
 echo "|To install only ISD mode is             -       ISD      |"
 echo "|                                                         |"
