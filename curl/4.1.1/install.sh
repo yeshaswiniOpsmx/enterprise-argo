@@ -225,10 +225,10 @@ echo ""
 rm -rf enterprise-argo
 git clone https://github.com/maheshopsmx/enterprise-argo.git > /dev/null 2>&1
 cd enterprise-argo/charts/isdargo
-helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdnamespace
+helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdnamespace --debug
 
 ####################
-#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
+#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace --debug
 }
 isdargocheck() {
 if [ $? == 0 ];
