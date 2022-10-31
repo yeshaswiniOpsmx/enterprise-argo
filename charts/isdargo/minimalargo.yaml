@@ -203,6 +203,15 @@ argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
 
+  imagePullSecrets: []
+  controller:
+    image:
+      registry: quay.io/opsmxpublic
+      # -- Repository to use
+      repository: argo-isd-metric-provider
+      # -- Overrides the image tag (default is the chart appVersion)
+      tag: "v11"
+
 #######################################################
 argocd-image-updater:
   config:
@@ -227,49 +236,49 @@ argocd-image-updater:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.0
+    tag: v4.1.1-rc1
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.0
+    tag: v4.1.1-rc1
