@@ -194,7 +194,7 @@ fi
 #fi
 }
 
-installation(){
+helminstallation(){
 echo "-------------------------------------"
 echo "             Installation     "
 echo "-------------------------------------"
@@ -229,6 +229,8 @@ helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdname
 
 ####################
 #helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
+}
+isdargocheck() {
 if [ $? == 0 ];
 then
   echo "-------------------------------------"
@@ -285,6 +287,56 @@ else
   exit 1
 fi
 }
+isdcheck() {
+if [ $? == 0 ];
+then
+  echo "-------------------------------------"
+  echo "             Post Installation       "
+  echo "-------------------------------------"
+  echo "ISD services to be stabilize"
+  wait_period=0
+  while true
+  do
+    kubectl get po -n $isdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
+    ## AUTOPILOT
+    SAPOR=$(grep oes-sapor /tmp/inst.status | awk '{print $2}')
+    PLATFORM=$(grep oes-platform /tmp/inst.status | awk '{print $2}')
+    AUTOPILOT=$(grep oes-autopilot /tmp/inst.status | awk '{print $2}')
+    OESGATE=$(grep oes-gate /tmp/inst.status | awk '{print $2}')
+    wait_period=$(($wait_period+10))
+    READYBASIC=$([ "$OESGATE" == "true" ] && [ "$SAPOR" == "true" ] && [ "$PLATFORM" == "true" ] && [ "$AUTOPILOT" == "true" ]; echo $(($? == 0)) )
+    READY=$READYBASIC
+    if [ $READY == 1 ];
+    then
+        echo "       ISD services are Up and Ready.."
+        echo ""
+        sleep 5
+        echo "           ....Installation Completed Sucessfully...."
+        echo ""
+        echo "       Login with Openldap Credentials"
+        echo ""
+        echo "                           Username: admin"
+        echo "                           Password: opsmxadmin123"
+        echo "      ------------------------------------------------------"
+        break
+    else
+        if [ $wait_period -gt 2000 ];
+        then
+            echo \"      Script is timed out as the ISD is not ready yet.......\"
+            break
+        else
+            echo "       Waiting for ISD services to be ready"
+            kubectl get po -n $isdnamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $isdnamespace > /dev/null 2>&1
+            sleep 1m
+        fi
+    fi
+  done
+else
+  echo "ERROR: helm installation failed..."
+  echo "ERROR: Some times it is due to timeout, Please check the pods and service...."
+  exit 1
+fi
+}
 isdlogo
 readmode
 if [ "$isdmode" == "ISD" ];
@@ -296,7 +348,8 @@ then
    checkdep
    getvalues
    isdmodevalues
-   installation
+   helminstallation
+   isdcheck
 elif [ "$isdmode" == "ISD-ARGO" ];
 then
    echo ""
@@ -307,7 +360,8 @@ then
    getvalues
    checkcrds
    isdargomodevalues
-   installation
+   helminstallation
+   isdargocheck
 else
    echo "ERROR: Not specified None of the Modes - ISD or ISD-ARGO"
    exit 1
