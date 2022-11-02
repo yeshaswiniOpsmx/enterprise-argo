@@ -8,7 +8,7 @@ metadata:
 data:
   services.yaml: |
     outgoingServices:
-      - name: argocd
+      - name: argocd-AGENTNAME
         type: argocd
         enabled: true
         config:
