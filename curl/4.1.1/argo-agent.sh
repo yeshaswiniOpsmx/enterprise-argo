@@ -47,8 +47,8 @@ echo ""
 readnamespace(){
 ## Read Namespace
 echo -n "Specify Namespace: "
-while read isdnamespace; do
-  test "$isdnamespace" != "" && break
+while read argonamespace; do
+  test "$argonamespace" != "" && break
   echo "              INFO: ANSWER CANNOT BE BLANK!"
   echo ""
   echo -n "Your Namespace : "
@@ -226,15 +226,15 @@ echo "Updating the helm repo ..."
 helm repo update > /dev/null 2>&1
 ## Create Namespace
 echo "Creating the Namespace ..."
-kubectl create namespace $isdnamespace
+kubectl create namespace $argonamespace
 if [ $? == 0 ];
 then
         echo ""
 else
        echo "Namespace already exists.."
        echo -n "Specify Namespace: "
-       while read isdnamespace; do
-          test "$isdnamespace" != "" && kubectl create namespace $isdnamespace && break
+       while read argonamespace; do
+          test "$argonamespace" != "" && kubectl create namespace $argonamespace && break
           echo "              INFO: ANSWER CANNOT BE BLANK!"
           echo ""
           echo -n "Your Namespace : "
@@ -246,10 +246,10 @@ echo ""
 rm -rf enterprise-argo
 git clone https://github.com/maheshopsmx/enterprise-argo.git > /dev/null 2>&1
 cd enterprise-argo/charts/isdargo
-helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdnamespace
+helm install isdargo$argonamespace . -f ../../../values.yaml --namespace $argonamespace
 
 ####################
-#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
+#helm install isdargo$argonamespace isdargo/isdargo -f values.yaml --version $version --namespace $argonamespace
 }
 argocheck() {
 if [ $? == 0 ];
@@ -257,12 +257,12 @@ then
   echo "-------------------------------------"
   echo "             Post Installation       "
   echo "-------------------------------------"
-  echo "ISD services to be stabilize"
+  echo "ARGO services to be stabilize"
   wait_period=0
   while true
   do
     #live status of pods
-    kubectl get po -n $isdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
+    kubectl get po -n $argonamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
     #Check argocd url status
     status="$(curl -Is https://$argocdurl | head -1)"
     validate=$(echo $status | awk '{print $2}')
@@ -276,13 +276,13 @@ then
     if [ $READY == 1 ];
     then
       # Get service name
-      argosvcname=$(kubectl get svc -n $isdnamespace -l app.kubernetes.io/name=argocd-server | awk '{print $1}' | tail -1)
+      argosvcname=$(kubectl get svc -n $argonamespace -l app.kubernetes.io/name=argocd-server | awk '{print $1}' | tail -1)
       echo "       ARGO services are Up and Ready.."
       echo ""
       while true
       do
       ##argocli login
-      argocdpassword=$(kubectl -n $isdnamespace get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
+      argocdpassword=$(kubectl -n $argonamespace get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
       argocd login  $argocdurl --username=admin --password=$argocdpassword --grpc-web
       token=$(argocd account generate-token)
       wait=0
@@ -303,7 +303,7 @@ then
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          sleep 20
-         curl --location --request POST 'https://'$isduiurl'/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic '$isdenocdedcred'' --data-raw '{"agentName":"'$agentname'","description":"Agent is running '$isdnamespace' namespace"}'
+         curl --location --request POST 'https://'$isduiurl'/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic '$isdenocdedcred'' --data-raw '{"agentName":"'$agentname'","description":"Agent is running '$argonamespace' namespace"}'
          sleep 20
          ##Download the manifest
          curl --location --request GET 'https://'$isduiurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/$agentname-manifest.yaml
@@ -320,7 +320,7 @@ then
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
 
          ## Replace the namespace in the manifest
-         yq e -i '.subjects[0].namespace = "'$isdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+         yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
@@ -334,7 +334,7 @@ then
          echo "-------------------------------------------------"
          echo "   Applying the agent file in argocd namespcace"
          ## Apply the yamls
-         kubectl apply -f /tmp/yamls/ -n $isdnamespace
+         kubectl apply -f /tmp/yamls/ -n $argonamespace
          echo ""
          echo "-------------------------------------------------------"
          echo "           ....Installation Completed Sucessfully...."
@@ -360,7 +360,7 @@ then
             break
         else
             echo "       Waiting for ISD services to be ready"
-            kubectl get po -n $isdnamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $isdnamespace > /dev/null 2>&1
+            kubectl get po -n $argonamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $argonamespace > /dev/null 2>&1
             sleep 1m
         fi
     fi
