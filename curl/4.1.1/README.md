@@ -4,7 +4,6 @@
   ### Two modes
     
   - ISD-ARGO (Full installtion ISD and ARGO with agent)
-  - 
   - ISD      (ISD Autopilot only)
 
 
