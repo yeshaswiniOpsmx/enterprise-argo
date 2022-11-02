@@ -161,6 +161,7 @@ sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
 #sed -i "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
 sed -i "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
 
+yq e -i '.cdagentname = argocd' values.yaml
 yq e -i '.installArgoCD = true' values.yaml
 yq e -i '.installArgoRollouts = true' values.yaml
 yq e -i '.installArgoEvents = false' values.yaml
