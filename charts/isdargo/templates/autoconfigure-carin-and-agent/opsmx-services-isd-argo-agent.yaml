@@ -10,7 +10,7 @@ metadata:
 data:
   services.yaml: |
     outgoingServices:
-      - name: argocd
+      - name: {{ .Values.cdagentname }}
         type: argocd
         enabled: true
         config:

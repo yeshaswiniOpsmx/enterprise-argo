@@ -28,6 +28,9 @@ installdemoapps: true
 # Set to true if ISD needs to connect to ArgoCD using agent service
 autoconfigureagent: true
 #######################################################################################
+# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
+cdagentname: argocd
+#######################################################################################
 forwarder:
   externalName: agent-grpc ## specify the controller URL in order to connect with external agent
 ########################################################################################
