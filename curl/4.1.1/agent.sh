@@ -10,9 +10,9 @@ echo "                                           "
 echo "-------------------------------------------"
 echo " Prerequisite"
 echo "-------------------------------------------"
-echo "         ISD installed "
-echo "         Argo installed"
-echo "         Controller mapped to the DNS"
+echo "         1. ISD installed "
+echo "         2. Argo installed"
+echo "         3. Controller mapped to the DNS"
 echo "                    CHECK: nslookup <controller DNS>"
 echo "---"
 echo "Please specify required data to configure Argo Agent with ISD"
@@ -113,6 +113,17 @@ else
   chmod a+x /usr/local/bin/yq
   echo "Installed yq dependency"
 fi
+## argocli installed
+argocd version
+if [ $? == 0 ];
+then
+  echo "ArgoCLI present in server.."
+else
+  #Installing Argo CLI
+  curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
+  chmod +x /usr/local/bin/argocd
+  echo "Installed ArgoCLI dependency"
+fi
 
 echo "------------------"
 echo \"Waiting for all Argo Server  to come-up\"
@@ -122,9 +133,6 @@ do
 
   # Get service name
   argosvcname=$(kubectl get svc -n $argocdnamespace -l app.kubernetes.io/name=argocd-server | awk '{print $1}' | tail -1)
-  #Installing Argo CLI
-  curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
-  chmod +x /usr/local/bin/argocd
 
   #Check argocd url status
   status="$(curl -Is https://$argocdurl | head -1)"
@@ -191,22 +199,22 @@ do
          sed -i 's/ARGOCDSVCNAME/'$argosvcname'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
-   echo ""
-   echo "-------------------------------------------------"
-   echo "   Applying the agent file in argocd namespcace"
+         echo ""
+         echo "-------------------------------------------------"
+         echo "   Applying the agent file in argocd namespcace"
          ## Apply the yamls
          kubectl apply -f /tmp/yamls/ -n $argocdnamespace
-   echo ""
-   echo "-------------------------------------------------------"
-   echo "                Agent configured succesfully"
-   echo ""
-   echo "Access the ISD : $isdurl"
-   echo ""
-   echo "   Credentials : "
-   echo "               Username: $isdusername"
-   echo "               Password: $isdpassword"
-   echo ""
-   echo "-------------------------------------------------------"
+         echo ""
+         echo "-------------------------------------------------------"
+         echo "                Agent configured succesfully"
+         echo ""
+         echo "Access the ISD : $isdurl"
+         echo ""
+         echo "   Credentials : "
+         echo "               Username: $isdusername"
+         echo "               Password: $isdpassword"
+         echo ""
+         echo "-------------------------------------------------------"
          break
       fi
     done
