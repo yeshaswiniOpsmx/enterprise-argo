@@ -1,4 +1,16 @@
 #! /bin/bash
+
+echo ""
+echo "                                                                                   "
+echo "    _      ____     ____    ___               _       ____   _____   _   _   _____ "
+echo "   / \    |  _ \   / ___|  / _ \             / \     / ___| | ____| | \ | | |_   _|"
+echo "  / _ \   | |_) | | |  _  | | | |  _____    / _ \   | |  _  |  _|   |  \| |   | |  "
+echo " / ___ \  |  _ <  | |_| | | |_| | |_____|  / ___ \  | |_| | | |___  | |\  |   | |  "
+echo "/_/   \_\ |_| \_\  \____|  \___/          /_/   \_\  \____| |_____| |_| \_|   |_|  "
+echo "                                                                                   "
+echo ""
+echo "Please specify required data to configure Argo Agent with ISD"
+echo "-------------------------"
 echo -n "Specify Agent name: "
 while read agentname; do
   test "$agentname" != "" && break
