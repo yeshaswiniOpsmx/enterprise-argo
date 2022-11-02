@@ -41,7 +41,7 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /app/secrets/controller-ca.crt 
+        - mountPath: /app/secrets/controller-ca.crt
           name: ca-certs-volume
           subPath: tls.crt
         - mountPath: /app/secrets/controller-control/tls.crt
@@ -52,7 +52,7 @@ spec:
           subPath: tls.key
         - mountPath: /app/config/carina-manager.yaml
           name: carina-volume
-          subPath: carina-manager.yaml          
+          subPath: carina-manager.yaml
       dnsPolicy: ClusterFirst
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:

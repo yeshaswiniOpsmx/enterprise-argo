@@ -10,7 +10,7 @@ metadata:
 data:
   services.yaml: |
     outgoingServices:
-      - name: argocd
+      - name: {{ .Values.cdagentname }}
         type: argocd
         enabled: true
         config:
@@ -27,7 +27,7 @@ data:
           {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
           uiUrl: http://{{ .Values.global.argocd.host }}
           {{- else }}
-          uiUrl: http://oes-ui:8080
+          uiUrl: http://localhost:8099
           {{- end }}
           {{- end }}
 {{- end -}}
