@@ -193,9 +193,12 @@ do
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
-
+         curl -o /tmp/yamls/opsmx-profile.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-profile.yaml
          #Replacing the values
          sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
+         sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-profile.yaml
+         sed -i 's/ISDURL/'$isdurl'/g' /tmp/yamls/opsmx-profile.yaml
+         sed -i 's/ISDUSERNAME/'$isdusername'/g' /tmp/yamls/opsmx-profile.yaml
          sed -i 's/ARGOCDSVCNAME/'$argosvcname'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
