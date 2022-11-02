@@ -19,7 +19,7 @@ spec:
           service:
             name: {{ .Release.Name }}-argo-workflows-server
             port:
-              number: 2746 
+              number: 2746
         path: /
         pathType: ImplementationSpecific
 {{- if .Values.global.ssl.enabled }}

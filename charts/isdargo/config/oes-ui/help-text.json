@@ -1031,7 +1031,7 @@
     "HEADER": "No Users found",
     "BODY": ""
   },
-    
+
   "APPLICATION_DEPLOYMENT": {
     "DEPLOYMENT_GRID_SYNC": {
       "TOOLTIP": "When the cluster deployment matches with the latest pipeline execution it is 'In Sync'; if not, it is 'Out of Sync'"
@@ -1095,25 +1095,25 @@
       "startingFromNumber": "Account Name cannot start with numbers"
     }
   },
-  "ENDPOINT":{ 
+  "ENDPOINT":{
     "TOOLTIP":"The base URL of your Artifactory search is reachable at",
     "VALIDATION_MESSAGE":{
       "required":"Endpoint cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Endpoint URL is invalid"
     }
   },
-  "REPO":{ 
+  "REPO":{
     "TOOLTIP":"The repo in your artifactory to be searched",
     "VALIDATION_MESSAGE":{
       "required":"Repo cannot be empty"
     }
   },
-  "REPOTYPE":{ 
+  "REPOTYPE":{
     "TOOLTIP":"The package type of repo in your Artifactory is to be searched. Default is Maven.",
     "VALIDATION_MESSAGE":{
     }
   },
-  "GROUPID":{ 
+  "GROUPID":{
     "TOOLTIP":"The group id in your Artifactory is to be searched.",
     "VALIDATION_MESSAGE":{
     }
@@ -1163,14 +1163,14 @@
     "TOOLTIP":"BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   },
   "APIURL":{
     "TOOLTIP":"Bitbucket API base URL. Eg. https://api.github.com",
     "VALIDATION_MESSAGE":{
       "required":"API URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "API URL is invalid"
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -1219,7 +1219,7 @@
     "TOOLTIP":"BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -1308,7 +1308,7 @@
     "TOOLTIP":"Docker Registry Host URL",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   },
   "SPINNAKERTOGGLE":{
@@ -1383,7 +1383,7 @@
     "TOOLTIP":"Container Registry Host URL",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   }
 },
@@ -1403,14 +1403,14 @@
     "TOOLTIP":"Github's host address, such as https://github.com",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   },
   "URL":{
     "TOOLTIP":"Github's API endpoint host address, such as https://api.github.com",
     "VALIDATION_MESSAGE":{
       "required":"API URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "API URL is invalid"
     }
   },
   "TOKEN":{
@@ -1449,14 +1449,14 @@
     "TOOLTIP":"GitLab's host address, such as https://gitlab.com",
     "VALIDATION_MESSAGE":{
       "required":"Host URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Host URL is invalid"
     }
   },
   "APIBASEURL":{
     "TOOLTIP":"",
     "VALIDATION_MESSAGE":{
       "required":"API URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "API URL is invalid"
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -1489,8 +1489,8 @@
   "DEPLOYMENT":{
     "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
     "VALIDATION_MESSAGE":{
-      "required":"URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "required":"Deployment URL cannot be empty",
+      "invalidUrl": "Deployment URL is invalid"
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -1501,7 +1501,7 @@
     "TOOLTIP":"",
     "VALIDATION_MESSAGE":{
       "required":"API URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "API URL is invalid"
     }
   },
   "TOKEN":{
@@ -1546,13 +1546,13 @@
     "TOOLTIP":"Helm Chart Repository’s HTTP endpoint",
     "VALIDATION_MESSAGE":{
       "required":"Repository cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "Repository URL is invalid"
     }
   },
   "DEPLOYMENT":{
     "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
     "VALIDATION_MESSAGE":{
-    
+
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -1903,7 +1903,7 @@
     "TOOLTIP":"",
     "VALIDATION_MESSAGE":{
       "required":"API URL cannot be empty",
-      "invalidUrl": "URL is invalid"
+      "invalidUrl": "API URL is invalid"
     }
   },
   "TOKEN":{
@@ -1959,7 +1959,7 @@
       "TOOLTIP":"Bamboo URL",
       "VALIDATION_MESSAGE":{
         "required":"Bamboo End Point cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Bamboo End Point URL is invalid"
       }
     },
     "AUTHENTICATIONTYPE":{
@@ -2004,7 +2004,7 @@
       "TOOLTIP":"Jenkins host address, such as https://jenkins.opsmx.net",
       "VALIDATION_MESSAGE":{
         "required":"Host URL cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Host URL is invalid"
       }
     },
     "CSRFFLAG":{
@@ -2069,14 +2069,14 @@
       "TOOLTIP":"Jira Host URL",
       "VALIDATION_MESSAGE":{
         "required":"Host URL cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Host URL is invalid"
       }
     },
     "SPINNAKERTOGGLE":{
       "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
       "VALIDATION_MESSAGE":{}
     }
-    
+
   },
   "SERVICENOW":{
     "HEADER": "Service Now",
@@ -2109,7 +2109,7 @@
       "TOOLTIP":"Service Now Host URL",
       "VALIDATION_MESSAGE":{
         "required":"Host URL cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Host URL is invalid"
       }
     }
   }
@@ -2130,7 +2130,7 @@
       "TOOLTIP":"APPDYNAMICS Controller Host",
       "VALIDATION_MESSAGE":{
         "required":"Controller Host  cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Controller Host URL is invalid"
       }
     },
     "TEMPORARYACCESSTOKEN":{
@@ -2176,7 +2176,7 @@
       "required":"Account Name cannot be empty",
       "startingFromNumber": "Account Name cannot start with numbers"
     }
-    
+
     },
     "API_KEY":{
       "TOOLTIP":"DATADOG Api Key",
@@ -2206,8 +2206,8 @@
     "END_POINT":{
       "TOOLTIP":"Dynatrace URL",
       "VALIDATION_MESSAGE":{
-        "required":"Url cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "required":"Endpoint Url cannot be empty",
+        "invalidUrl": "Endpoint URL is invalid"
       }
     },
     "API_TOKEN":{
@@ -2233,7 +2233,7 @@
       "TOOLTIP":"Elasticsearch host address, from which you access the Elasticsearch",
       "VALIDATION_MESSAGE":{
         "required":"Elastic End Point cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Elastic End Point is invalid"
       }
     },
     "USERNAME":{
@@ -2254,7 +2254,7 @@
       "TOOLTIP":"Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana",
       "VALIDATION_MESSAGE":{
         "required":"Kibana End Point cannot be empty",
-        "invalidUrl": "URL is invalid"
+        "invalidUrl": "Kibana End Point is invalid"
       }
     },
     "KIBANAUSERNAME":{
@@ -2289,7 +2289,7 @@
         "TOOLTIP":"Graphite host address, from which you access the Graphite",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       }
     },
@@ -2309,7 +2309,7 @@
         "TOOLTIP":"Graylog host address, from which you access the Graylog",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       },
       "TOKEN":{
@@ -2372,7 +2372,7 @@
         "TOOLTIP":"Prometheus host address, from which you access the Prometheus",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       },
       "USERNAME":{
@@ -2407,7 +2407,7 @@
         "TOOLTIP":"Splunk host address, from which you access the Splunk",
         "VALIDATION_MESSAGE":{
           "required":"Splunk Url  cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "Splunk Url is invalid"
         }
       },
       "PASSWORD":{
@@ -2429,7 +2429,7 @@
         "TOOLTIP":"Splunk Dashboard URL that you want to access",
         "VALIDATION_MESSAGE":{
           "required":"Splunk DashBoard Url cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "Splunk DashBoard Url is invalid"
         }
       }
     },
@@ -2486,7 +2486,7 @@
     }
       }
     },
-    
+
     "VMWARETANZU":{
       "HEADER": "VMWare Tanzu Observability",
       "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your VMWare Tanzu access</li><li><strong>Endpoint</strong>: VMWare Tanzu host address, from which you access the VMWare Tanzu</li><li><strong>Email</strong>: Provide the user's registered and authorized email</li><li><strong>API token</strong>: The user's API token </li></span>",
@@ -2503,7 +2503,7 @@
         "TOOLTIP":"VMWare Tanzu host address, from which you access the VMWare Tanzu",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       },
       "EMAIL":{
@@ -2572,7 +2572,7 @@
         "TOOLTIP":"OPA server host address, such as https://opa:8181",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       }
     },
@@ -2639,7 +2639,7 @@
         "TOOLTIP":"Jfrog Xray host address, from which you access the Jfrog Xray instance",
         "VALIDATION_MESSAGE":{
           "required":"Endpoint cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       },
       "TOKEN":{
@@ -2665,14 +2665,14 @@
         "TOOLTIP":"Prisma Cloud host address, from which you access the Prisma Cloud instance",
         "VALIDATION_MESSAGE":{
           "required":"Host URL cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "End Point URL is invalid"
         }
       },
       "APPLICATIONURL":{
         "TOOLTIP":"Prisma Cloud Application URL",
         "VALIDATION_MESSAGE":{
           "required":"Application URL cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "Application URL is invalid"
         }
       },
       "ACCESSKEYID":{
@@ -2704,7 +2704,7 @@
         "TOOLTIP":"Sonarqube host address, from which you access the Sonaqube instance",
         "VALIDATION_MESSAGE":{
           "required":"Host URL cannot be empty",
-          "invalidUrl": "URL is invalid"
+          "invalidUrl": "Host URL is invalid"
         }
       },
       "TOKEN":{
