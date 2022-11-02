@@ -1,17 +1,20 @@
 #! /bin/bash
 
-echo ""
-echo "                                                                                   "
-echo "                                         "
+echo "                                           "
 echo "      _       ____   _____   _   _   _____ "
 echo "     / \     / ___| | ____| | \ | | |_   _|"
 echo "    / _ \   | |  _  |  _|   |  \| |   | |  "
 echo "   / ___ \  | |_| | | |___  | |\  |   | |  "
 echo "  /_/   \_\  \____| |_____| |_| \_|   |_|  "
-echo "                                          "
-echo ""
+echo "                                           "
+echo "-------------------------------------------"
+echo " Prerequisite"
+echo "-------------------------------------------"
+echo "         ISD installed "
+echo "         Argo installed"
+echo "---"
 echo "Please specify required data to configure Argo Agent with ISD"
-echo "-------------------------"
+echo ""
 echo -n "Specify Agent name: "
 while read agentname; do
   test "$agentname" != "" && break
@@ -62,13 +65,13 @@ while read argocdusername; do
   echo -n "Your ArgoCD Username : "
 done
 
-echo -n "Specify ArgoCD Password: "
-while read argocdpassword; do
-  test "$argocdpassword" != "" && break
-  echo "              INFO: ANSWER CANNOT BE BLANK!"
-  echo ""
-  echo -n "Your ArgoCD Password : "
-done
+#echo -n "Specify ArgoCD Password: "
+#while read argocdpassword; do
+#  test "$argocdpassword" != "" && break
+#  echo "              INFO: ANSWER CANNOT BE BLANK!"
+#  echo ""
+#  echo -n "Your ArgoCD Password : "
+#done
 
 echo -n "Specify ArgoCD Installed Namespace : "
 while read argocdnamespace; do
@@ -111,6 +114,7 @@ do
       while true
       do
       ##argocli login
+      argocdpassword=$(kubectl -n $argocdnamespace get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
       argocd login  $argocdurl --username=$argocdusername --password=$argocdpassword --grpc-web
       token=$(argocd account generate-token)
       wait=0
@@ -131,11 +135,11 @@ do
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          sleep 20
-         curl --location --request POST 'https://"'$isdurl'"/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic "'$isdenocdedcred'"' --data-raw '{"agentName":"'$agentname'","description":"agnet-argo"}'
+         curl --location --request POST 'https://'$isdurl'/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic '$isdenocdedcred'' --data-raw '{"agentName":"'$agentname'","description":"Agent is running $argocdnamepace namespace"}'
 
          sleep 20
          ##Download the manifest
-         curl --location --request GET 'https://"'$isdurl'"/gate/oes/accountsConfig/agents/"'$agentname'"/manifest' --header 'Authorization: Basic "'$isdenocdedcred'"'
+         curl --location --request GET 'https://'$isdurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/manifest.yaml
 
          cd /tmp/
          ## Download and install the kubectl-slice to split to manifest file that is download
@@ -143,13 +147,25 @@ do
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          cp /tmp/kubectl-slice /usr/local/bin/
 
+         #Need to remove at the end
+         ls -l /tmp/yamls/
+
+         #Will be deleted at the end
+         #kubectl delete -f /tmp/yamls/ -n $argocdnamespace
+         #sleep 20
+         #rm -rf /tmp/yamls/
+         #ls -l /tmp/yamls/
          ## create a directory to place splited yamls from the manifest
          mkdir /tmp/yamls
          kubectl-slice --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
 
+         ls -l /tmp/yamls/
+
          ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "'$argocdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
-         yq e  -i '.data[.controllerHostname] = "controllerHostname: "'$controllerdns'":9001"' /tmp/yamls/opsmx-agent-$agentname.yaml
+         yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
+         #cat /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
+         #cat /tmp/yamls/opsmx-services-agent.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml
          #Replacing the values
@@ -158,7 +174,8 @@ do
          sed -i 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
          ## Apply the yamls
-         kubectl apply -f /tmp/yamls/ -n $argocdnamespace
+         #kubectl apply -f /tmp/yamls/ -n $argocdnamespace
+         #kubectl apply -f /tmp/yamls/opsmx-services-agent.yaml -n $argocdnamespace
          break
       fi
     done
