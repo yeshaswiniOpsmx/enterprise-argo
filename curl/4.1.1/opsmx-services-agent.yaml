@@ -19,5 +19,4 @@ data:
             token: xxx
         annotations:
           description: argocd via agent
-          uiUrl: https://ARGOCDURL/
-
+          uiUrl: https://ARGOCDURL
