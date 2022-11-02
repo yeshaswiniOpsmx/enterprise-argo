@@ -353,17 +353,17 @@ then
       fi
     done
     break
+  else
+    if [ $wait_period -gt 2000 ];
+    then
+      echo \"      Script is timed out as the ISD is not ready yet.......\"
+      break
     else
-        if [ $wait_period -gt 2000 ];
-        then
-            echo \"      Script is timed out as the ISD is not ready yet.......\"
-            break
-        else
-            echo "       Waiting for ISD services to be ready"
-            kubectl get po -n $argonamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $argonamespace > /dev/null 2>&1
-            sleep 1m
-        fi
+      echo "       Waiting for ISD services to be ready"
+      kubectl get po -n $argonamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $argonamespace > /dev/null 2>&1
+      sleep 1m
     fi
+  fi
   done
 else
   echo "ERROR: helm installation failed..."
