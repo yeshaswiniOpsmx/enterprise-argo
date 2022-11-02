@@ -1,5 +1,5 @@
 
-## ISD-ARGO full installtion 
+##1. ISD-ARGO full installtion 
 
   ### Two modes
     
@@ -10,6 +10,11 @@
         curl -o install.sh https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/install.sh && chmod 700 install.sh && sudo ./install.sh
 
 
-## AGENT installtion 
+##2. AGENT installtion 
 
       curl -o agent.sh https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/agent.sh && chmod 700 agent.sh && sudo ./agent.sh
+
+
+##3. ARGO with AGENT installtion 
+
+      curl -o argo-agent.sh https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/argo-agent.sh && chmod 700 argo-agent.sh && sudo ./argo-agent.sh
