@@ -359,7 +359,7 @@ then
       echo \"      Script is timed out as the ISD is not ready yet.......\"
       break
     else
-      echo "       Waiting for ISD services to be ready"
+      echo "       Waiting for ARGO services to be ready"
       kubectl get po -n $argonamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $argonamespace > /dev/null 2>&1
       sleep 1m
     fi
