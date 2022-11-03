@@ -258,11 +258,11 @@ then
         sleep 5
         echo "           ....Installation Completed Sucessfully...."
         echo ""
-        echo "       Access the ISD    --> https://$isduiurl"
+        echo "       Access the ISD          --> https://$isduiurl"
         echo ""
-        echo "       Access the ArgoCD --> https://$argocdurl"
+        echo "       Access the ArgoCD       --> https://$argocdurl"
         echo ""
-        echo "       Access the ArgoCD --> https://$argoroll"
+        echo "       Access the Argorollouts --> https://$argoroll"
         echo ""
         echo "       Login with Openldap Credentials"
         echo ""
@@ -313,6 +313,8 @@ then
         echo ""
         sleep 5
         echo "           ....Installation Completed Sucessfully...."
+        echo ""
+        echo "       Access the ISD    --> https://$isduiurl"
         echo ""
         echo "       Login with Openldap Credentials"
         echo ""
