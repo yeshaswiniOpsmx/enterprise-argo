@@ -278,7 +278,7 @@ then
         else
             echo "       Waiting for ISD services to be ready"
             kubectl get po -n $isdnamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $isdnamespace > /dev/null 2>&1
-            sleep 1m
+            sleep 30
         fi
     fi
   done
@@ -330,7 +330,7 @@ then
         else
             echo "       Waiting for ISD services to be ready"
             kubectl get po -n $isdnamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $isdnamespace > /dev/null 2>&1
-            sleep 1m
+            sleep 30
         fi
     fi
   done
