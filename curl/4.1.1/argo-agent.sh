@@ -365,7 +365,7 @@ then
     else
       echo "       Waiting for ARGO services to be ready"
       kubectl get po -n $argonamespace | egrep 'ContainerStatusUnknown|CrashLoopBackOff|Evicted' | awk '{print $1}' | xargs kubectl delete po -n $argonamespace > /dev/null 2>&1
-      sleep 1m
+      sleep 30
     fi
   fi
   done
