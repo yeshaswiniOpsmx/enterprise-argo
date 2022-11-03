@@ -210,7 +210,7 @@ do
          echo "-------------------------------------------------"
          echo "   Applying the agent file in argocd namespcace"
          ## Apply the yamls
-         kubectl replace --force -f /tmp/yamls/agent/opsmx-profile.yaml
+         kubectl replace --force -f /tmp/yamls/agent/opsmx-profile.yaml -n $argocdnamespace
          kubectl apply -f /tmp/yamls/ -n $argocdnamespace
          echo ""
          echo "-------------------------------------------------------"
