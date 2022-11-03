@@ -138,12 +138,16 @@ do
   status="$(curl -Is https://$argocdurl | head -1)"
   validate=$(echo $status | awk '{print $2}')
 
+  #Check isd url status
+  isdstatus="$(curl -Is https://$isdurl | head -1)"
+  isdvalidate=$(echo $isdstatus | awk '{print $2}')
+  
   #live status of pods
   kubectl get po -n $argocdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
   ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
 
   wait_period=$(($wait_period+10))
-  if  [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] ;
+  if  [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$isdvalidate" == "302" ] ;
   then
       echo \"ArgocdServer is  Up and Ready..\"
       while true
