@@ -234,7 +234,7 @@ do
        break
       else
        echo \"Waiting for  Argocd Server to be ready\"
-       sleep 1m
+       sleep 30
       fi
   fi
 done
