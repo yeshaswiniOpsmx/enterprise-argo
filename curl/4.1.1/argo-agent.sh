@@ -266,12 +266,16 @@ then
     #Check argocd url status
     status="$(curl -Is https://$argocdurl | head -1)"
     validate=$(echo $status | awk '{print $2}')
-
+    
+    #Check isd url status
+    isdstatus="$(curl -Is https://$isduiurl | head -1)"
+    isdvalidate=$(echo $isdstatus | awk '{print $2}')
+    
     ## ARGO service
     ARGOREPOSERVER=$(grep argocd-repo-server /tmp/inst.status | awk '{print $2}')
     ARGOSERVER=$(grep argocd-server /tmp/inst.status | awk '{print $2}')
     wait_period=$(($wait_period+10))
-    READYBASIC=$([ "$validate" == "200" ] && [ "$ARGOSERVER" == "true" ] && [ "$ARGOREPOSERVER" == "true" ]; echo $(($? == 0)) )
+    READYBASIC=$([ "$validate" == "200" ] && [ "$isdvalidate" == "302" ] && [ "$ARGOSERVER" == "true" ] && [ "$ARGOREPOSERVER" == "true" ]; echo $(($? == 0)) )
     READY=$READYBASIC
     if [ $READY == 1 ];
     then
