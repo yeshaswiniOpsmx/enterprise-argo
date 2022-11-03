@@ -15,10 +15,6 @@ data:
     wait_period=0
     while true
     do
-    ## install argoCLI
-    curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-    chmod +x /usr/local/bin/argocd
-
     {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
     status="$(curl -Is https://{{ .Values.global.argocd.host }} | head -1)"
     validate=$(echo $status | awk '{print $2}')
@@ -41,6 +37,9 @@ data:
       echo \"ArgocdServer is  Up and Ready..\"
       while true
       do
+      ## install argoCLI
+      curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+      chmod +x /usr/local/bin/argocd
       ## get the user password
       argopassword=$(kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
 
