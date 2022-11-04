@@ -125,14 +125,14 @@ done
 checkdep(){
 echo "Checking for dependency......"
 ## check kubectl 
-kubectl version > /dev/null 2>&1
-if [ $? == 0 ];
-then
-  echo "Kubectl present in server.."
-else
-  echo "ERROR: kubectl not installed ..."
-  exit 1
-fi
+#kubectl version > /dev/null 2>&1
+#if [ $? == 0 ];
+#then
+#  echo "Kubectl present in server.."
+#else
+#  echo "ERROR: kubectl not installed ..."
+#  exit 1
+#fi
 ## check Helm
 helm version > /dev/null 2>&1
 if [ $? == 0 ];
@@ -161,8 +161,8 @@ then
   echo "ArgoCLI present in server.."
 else
   #Installing Argo CLI
-  curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
-  chmod +x /usr/local/bin/argocd
+  sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
+  sudo chmod +x /usr/local/bin/argocd
   echo "Installed ArgoCLI dependency"
 fi
 }
