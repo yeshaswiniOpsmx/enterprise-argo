@@ -315,7 +315,7 @@ then
          ## Download and install the kubectl-slice to split to manifest file that is download
          wget -O /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz > /dev/null 2>&1
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
-         cp /tmp/kubectl-slice /usr/local/bin/
+         sudo cp /tmp/kubectl-slice /usr/local/bin/
 
          #Need to remove at the end
          rm -rf /tmp/yamls/
