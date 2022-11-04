@@ -170,7 +170,7 @@ fi
 getvalues(){
 rm -rf values.yaml
 ## Get the vaules.yaml
-curl -o values.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
+curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
 }
 
 
@@ -244,12 +244,12 @@ echo "Installing..."
 echo ""
 ###########################
 rm -rf enterprise-argo
-git clone https://github.com/maheshopsmx/enterprise-argo.git > /dev/null 2>&1
+git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
 cd enterprise-argo/charts/isdargo
 helm install isdargo$argonamespace . -f ../../../values.yaml --namespace $argonamespace
 
 ####################
-#helm install isdargo$argonamespace isdargo/isdargo -f values.yaml --version $version --namespace $argonamespace
+#helm install $argonamespace-isd isdargo/isdargo -f values.yaml --version $version --namespace $argonamespace
 }
 argocheck() {
 if [ $? == 0 ];
@@ -327,7 +327,7 @@ then
          yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
-         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
+         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
 
          #Replacing the values
          sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
