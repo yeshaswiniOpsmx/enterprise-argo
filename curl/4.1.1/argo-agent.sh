@@ -324,7 +324,8 @@ then
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
 
          ## Replace the namespace in the manifest
-         yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+         sed -i 's/default/'$argonamespace'/g' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+         #yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
