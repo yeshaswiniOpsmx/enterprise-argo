@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opsmx-profile
+stringData:
+  cd-integration: "true"
+  source-name: argocd-AGENTNAME
+  gate-url: "https://ISDURL"
+  user: "ISDUSERNAME"
