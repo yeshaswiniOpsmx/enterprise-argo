@@ -140,7 +140,7 @@ fi
 getvalues(){
 rm -rf values.yaml
 ## Get the vaules.yaml
-curl -o values.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
+curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/values.yaml 2> /dev/null
 }
 
 
@@ -224,9 +224,9 @@ echo "Installing..."
 echo ""
 ###########################
 rm -rf enterprise-argo
-git clone https://github.com/maheshopsmx/enterprise-argo.git > /dev/null 2>&1
+git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
 cd enterprise-argo/charts/isdargo
-helm install isdargo$isdnamespace . -f ../../../values.yaml --namespace $isdnamespace
+helm install $isdnamespace-isd . -f ../../../values.yaml --namespace $isdnamespace
 
 ####################
 #helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace

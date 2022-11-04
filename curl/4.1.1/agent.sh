@@ -197,8 +197,8 @@ do
          #yq e -i '.subjects[0].namespace = "'$argocdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
-         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
-         curl -o /tmp/yamls/agent/opsmx-profile.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-profile.yaml
+         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
+         curl -o /tmp/yamls/agent/opsmx-profile.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/opsmx-profile.yaml
          #Replacing the values
          sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
          sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/agent/opsmx-profile.yaml
