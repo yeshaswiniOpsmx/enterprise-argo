@@ -7,7 +7,7 @@
   - **ISD**      (ISD Autopilot only)
 
 
-        curl -o install.sh https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/install.sh && chmod 777 install.sh && sudo ./install.sh
+        curl -o install.sh https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/install.sh && chmod 777 install.sh && ./install.sh
 
 
 ## 2. AGENT installtion 
