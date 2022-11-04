@@ -125,14 +125,14 @@ done
 checkdep(){
 echo "Checking for dependency......"
 ## check kubectl 
-kubectl version > /dev/null 2>&1
-if [ $? == 0 ];
-then
-  echo "Kubectl present in server.."
-else
-  echo "ERROR: kubectl not installed ..."
-  exit 1
-fi
+#kubectl version > /dev/null 2>&1
+#if [ $? == 0 ];
+#then
+#  echo "Kubectl present in server.."
+#else
+#  echo "ERROR: kubectl not installed ..."
+#  exit 1
+#fi
 ## check Helm
 helm version > /dev/null 2>&1
 if [ $? == 0 ];
@@ -155,14 +155,14 @@ else
 fi
 
 ## argocli installed
-argocd version > /dev/null 2>&1
+argocd > /dev/null 2>&1
 if [ $? == 0 ];
 then
   echo "ArgoCLI present in server.."
 else
   #Installing Argo CLI
-  curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
-  chmod +x /usr/local/bin/argocd
+  sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 > /dev/null
+  sudo chmod +x /usr/local/bin/argocd
   echo "Installed ArgoCLI dependency"
 fi
 }
@@ -315,7 +315,7 @@ then
          ## Download and install the kubectl-slice to split to manifest file that is download
          wget -O /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz > /dev/null 2>&1
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
-         cp /tmp/kubectl-slice /usr/local/bin/
+         sudo cp /tmp/kubectl-slice /usr/local/bin/
 
          #Need to remove at the end
          rm -rf /tmp/yamls/
@@ -324,7 +324,8 @@ then
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
 
          ## Replace the namespace in the manifest
-         yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+         sed -i 's/default/'$argonamespace'/g' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+         #yq e -i '.subjects[0].namespace = "'$argonamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
          #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/maheshopsmx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1

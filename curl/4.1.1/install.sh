@@ -107,14 +107,14 @@ echo "---"
 checkdep(){
 echo "Checking for dependency......"
 ## check kubectl 
-kubectl version > /dev/null 2>&1
-if [ $? == 0 ];
-then
-  echo "Kubectl present in server.."
-else
-  echo "ERROR: kubectl not installed ..."
-  exit 1
-fi
+#kubectl version > /dev/null 2>&1
+#if [ $? == 0 ];
+#then
+#  echo "Kubectl present in server.."
+#else
+#  echo "ERROR: kubectl not installed ..."
+#  exit 1
+#fi
 ## check Helm
 helm version > /dev/null 2>&1
 if [ $? == 0 ];
