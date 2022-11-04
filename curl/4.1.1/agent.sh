@@ -217,7 +217,7 @@ do
          echo "-------------------------------------------------------"
          echo "                Agent configured succesfully"
          echo ""
-         echo "Access the ISD : $isdurl"
+         echo "Access the ISD : https:// $isdurl"
          echo ""
          echo "   Credentials : "
          echo "               Username: $isdusername"
