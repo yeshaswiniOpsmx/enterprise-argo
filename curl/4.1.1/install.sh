@@ -241,7 +241,7 @@ then
   wait_period=0
   while true
   do
-    rm -rf /tmp/inst.status
+    sudo rm -rf /tmp/inst.status
     kubectl get po -n $isdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
     ## AUTOPILOT
     SAPOR=$(grep oes-sapor /tmp/inst.status | awk '{print $2}')
