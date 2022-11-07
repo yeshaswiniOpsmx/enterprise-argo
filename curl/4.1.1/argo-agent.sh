@@ -246,7 +246,7 @@ echo ""
 rm -rf enterprise-argo
 git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
 cd enterprise-argo/charts/isdargo
-helm install isdargo$argonamespace . -f ../../../values.yaml --namespace $argonamespace
+helm install $argonamespace-isd . -f ../../../values.yaml --namespace $argonamespace
 
 ####################
 #helm install $argonamespace-isd isdargo/isdargo -f values.yaml --version $version --namespace $argonamespace
@@ -310,15 +310,17 @@ then
          curl --location --request POST 'https://'$isduiurl'/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic '$isdenocdedcred'' --data-raw '{"agentName":"'$agentname'","description":"Agent is running '$argonamespace' namespace"}'
          sleep 20
          ##Download the manifest
+	 sudo rm -rf /tmp/$agentname-manifest.yaml
          curl --location --request GET 'https://'$isduiurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/$agentname-manifest.yaml
          cd /tmp/
+	 sudo rm -rf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          ## Download and install the kubectl-slice to split to manifest file that is download
          wget -O /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz > /dev/null 2>&1
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          sudo cp /tmp/kubectl-slice /usr/local/bin/
 
          #Need to remove at the end
-         rm -rf /tmp/yamls/
+         sudo rm -rf /tmp/yamls/
 
          ## slice command to extract file
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
