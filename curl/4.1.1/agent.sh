@@ -143,6 +143,7 @@ do
   isdvalidate=$(echo $isdstatus | awk '{print $2}')
   
   #live status of pods
+  sudo rm -rf /tmp/live.status
   kubectl get po -n $argocdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
   ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
 
@@ -178,16 +179,18 @@ do
 
          sleep 20
          ##Download the manifest
+	 sudo rm -rf /tmp/$agentname-manifest.yaml
          curl --location --request GET 'https://'$isdurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/$agentname-manifest.yaml
 
          cd /tmp/
+	 sudo rm -rf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          ## Download and install the kubectl-slice to split to manifest file that is download
          wget -O /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz > /dev/null 2>&1
          tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
          sudo cp /tmp/kubectl-slice /usr/local/bin/
 
          #Need to remove at the end
-         rm -rf /tmp/yamls/
+         sudo rm -rf /tmp/yamls/
 
          ## slice command to extract file
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
@@ -217,7 +220,7 @@ do
          echo "-------------------------------------------------------"
          echo "                Agent configured succesfully"
          echo ""
-         echo "Access the ISD : https:// $isdurl"
+         echo "Access the ISD : https://$isdurl"
          echo ""
          echo "   Credentials : "
          echo "               Username: $isdusername"
