@@ -262,6 +262,7 @@ then
   while true
   do
     #live status of pods
+    rm /tmp/inst.status
     kubectl get po -n $argonamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
     #Check argocd url status
     status="$(curl -Is https://$argocdurl | head -1)"
@@ -310,7 +311,7 @@ then
          curl --location --request POST 'https://'$isduiurl'/gate/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'Authorization: Basic '$isdenocdedcred'' --data-raw '{"agentName":"'$agentname'","description":"Agent is running '$argonamespace' namespace"}'
          sleep 20
          ##Download the manifest
-	 sudo rm -rf /tmp/$agentname-manifest.yaml
+	 rm -rf /tmp/$agentname-manifest.yaml
          curl --location --request GET 'https://'$isduiurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/$agentname-manifest.yaml
          cd /tmp/
 	 sudo rm -rf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz

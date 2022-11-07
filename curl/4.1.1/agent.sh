@@ -143,7 +143,7 @@ do
   isdvalidate=$(echo $isdstatus | awk '{print $2}')
   
   #live status of pods
-  sudo rm -rf /tmp/live.status
+  rm -rf /tmp/live.status
   kubectl get po -n $argocdnamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
   ARGOCDSERVER=$(grep argocd-server /tmp/live.status |grep -v deck | awk '{print $2}')
 
@@ -179,7 +179,7 @@ do
 
          sleep 20
          ##Download the manifest
-	 sudo rm -rf /tmp/$agentname-manifest.yaml
+	 rm -rf /tmp/$agentname-manifest.yaml
          curl --location --request GET 'https://'$isdurl'/gate/oes/accountsConfig/agents/'$agentname'/manifest' --header 'Authorization: Basic '$isdenocdedcred'' > /tmp/$agentname-manifest.yaml
 
          cd /tmp/
