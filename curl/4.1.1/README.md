@@ -1,3 +1,6 @@
+# Curl Installtion
+
+- Single curl command to install the ISD services and argo componets
 
 ## 1. ISD-ARGO full installtion 
 
