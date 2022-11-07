@@ -262,6 +262,7 @@ then
   while true
   do
     #live status of pods
+    rm /tmp/inst.status
     kubectl get po -n $argonamespace -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
     #Check argocd url status
     status="$(curl -Is https://$argocdurl | head -1)"
