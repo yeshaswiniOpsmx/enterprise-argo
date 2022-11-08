@@ -765,7 +765,7 @@ argo-rollouts:
       # -- Repository to use
       repository: argo-isd-metric-provider
       # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v11"
+      tag: "v20"
 
     readinessProbe:
       httpGet:
@@ -1023,7 +1023,7 @@ carina:
   ##
   image:
     repository: carina-manager
-    tag: v1.1.11
+    tag: v1.3.0
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
