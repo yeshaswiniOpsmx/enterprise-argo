@@ -265,6 +265,8 @@ argo-cd:
       prometheus.io/path: /metrics
       prometheus.io/port: "8080"
       prometheus.io/scrape: "true"
+    serviceAccount:
+      automountServiceAccountToken: true
   controller:
     podAnnotations:
       prometheus.io/path: /metrics
@@ -385,6 +387,8 @@ argo-cd:
       #   g, subject, inherited-subject
   notifications:
     enabled: true
+    serviceAccount:
+      automountServiceAccountToken: true
     podAnnotations:
       prometheus.io/path: /metrics
       prometheus.io/port: "9001"
