@@ -89,6 +89,24 @@ data:
          break
          {{- end }}
          {{- if .Values.autoconfigureagent }}
+         ##create sample SPLUNK integraton
+       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       --header 'Authorization: Basic YWRtaW46b3BzbXhhZG1pbjEyMw==' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"datasourceType":"SPLUNK","name":"sample-splunk","configurationFields":{"end_point":"http://demosplunk.in","user_name":"","password":"","dashboard_endpoint":""}}'
+         sleep 10
+         ## create LOG anf METRIC template
+       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"templateName":"sample-logtemplate","monitoringProvider":"SPLUNK","scoringAlgorithm":"Canary","accountName":"sample-splunk","index":"app*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":""}' > /dev/null
+
+
+       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
+       --header "x-spinnaker-user:admin" \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"isEdit":false,"templateName":"sample-metrictemplate2","data":{"groups":[],"isNormalize":false,"percent_diff_threshold":"hard"},"filterKey":"container_Id"}' > /dev/null
+
+
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          sleep 20
