@@ -91,7 +91,6 @@ data:
          {{- if .Values.autoconfigureagent }}
          ##create sample SPLUNK integraton
        curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Authorization: Basic YWRtaW46b3BzbXhhZG1pbjEyMw==' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"SPLUNK","name":"sample-splunk","configurationFields":{"end_point":"http://demosplunk.in","user_name":"","password":"","dashboard_endpoint":""}}'
          sleep 10
