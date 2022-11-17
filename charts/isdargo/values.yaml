@@ -277,6 +277,11 @@ argo-cd:
       prometheus.io/path: /metrics
       prometheus.io/port: "8083"
       prometheus.io/scrape: "true"
+    extensions:
+      enabled: true
+      contents:
+      - name: opsmx-extensions
+        url: https://github.com/OpsMx/rollout-extension/releases/download/v0.2.1.4/extension.tar
     env:
       - name: ARGOCD_SERVER_CONTENT_SECURITY_POLICY
         valueFrom:
