@@ -146,6 +146,12 @@ curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main
 
 isdmodevalues(){
 sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
+if [ $? == 0 ];
+then
+   echo ""
+else
+   sed -i.bu "s/oes.example.ops.com/$isduiurl/g" values.yaml
+fi
 yq e -i '.installArgoCD = false' values.yaml
 yq e -i '.installArgoRollouts = false' values.yaml
 yq e -i '.installArgoEvents = false' values.yaml
@@ -157,9 +163,19 @@ yq e -i '.autoconfigureagent = false' values.yaml
 
 isdargomodevalues(){
 sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
-sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
-#sed -i "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
-sed -i "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
+if [ $? == 0 ];
+then
+   #echo "If linux .."
+   sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
+   #sed -i "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
+   sed -i "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
+else
+   #echo "If MAC ..."
+   sed -i.bu "s/oes.example.ops.com/$isduiurl/g" values.yaml
+   sed -i.bu "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
+   #sed -i.bu "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
+   sed -i.bu "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
+fi
 
 yq e -i '.cdagentname = "argocd"' values.yaml
 yq e -i '.installArgoCD = true' values.yaml
