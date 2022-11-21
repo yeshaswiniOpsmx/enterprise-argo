@@ -36,19 +36,19 @@ imageCredentials:
 
 global:
   argocd:
-    # Please below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
+    # Please replace below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
     host: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   argoworkflows:
-    # Please below string for all occurences in this file with proper dns entry to access the ArgoWorkflows UI eg:argoworkflow.example.ops.com
+    # Please replace below string for all occurences in this file with proper dns entry to access the ArgoWorkflows UI eg: argoworkflow.example.ops.com
     host: "WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   argorollouts:
-    # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
+    # Please replace below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
     host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   oesUI:
-    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
+    # Please replace below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   # Set it to false if own LDAP is to be configured
