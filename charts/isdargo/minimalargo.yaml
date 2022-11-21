@@ -239,49 +239,49 @@ argocd-image-updater:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.1-rc1
+    tag: v4.1.1-rc2

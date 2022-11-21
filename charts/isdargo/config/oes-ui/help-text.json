@@ -2503,14 +2503,14 @@
         "TOOLTIP":"VMWare Tanzu host address, from which you access the VMWare Tanzu",
         "VALIDATION_MESSAGE":{
           "required":"End Point cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
+          "invalidUrl": "End Point is invalid"
         }
       },
       "EMAIL":{
         "TOOLTIP":"Provide the user's registered and authorized email",
         "VALIDATION_MESSAGE":{
-          "email":"Email Id is invalid",
-          "required":"Email Id cannot be empty"
+          "email":"Email is invalid",
+          "required":"Email cannot be empty"
         }
       },
       "API_TOKEN":{
