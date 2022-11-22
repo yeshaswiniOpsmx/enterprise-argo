@@ -105,6 +105,34 @@ global:
       tls:
         secretName: spin-deck-ingress
 
+  #### If ingress required for elasticsearch and kibana enable enableCentralLogging: "ture" and define URL's
+  elasticsearch:
+    protocol: https
+    host: elslttt.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: elasticsearch-ingress
+
+  kibana:
+    protocol: https
+    host: kibbb.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: kibana-ingress
+  ## If ingress is required for prometheus enable enableCentralMonitoring: "ture" and define URL
+  prometheus:
+    protocol: https
+    host: prometheus.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: prometheus-ingress
+
   autoConfiguration:
     # Set it to false if OES is being installed on restricted evnironment;
     # Autoconfiguration assumes Load Balancer is available for oes-gate, oes-ui
@@ -1008,7 +1036,7 @@ elasticsearch:
 
 kibana:
   service:
-    type: LoadBalancer
+    type: ClusterIP
   resources:
     requests:
       cpu: "100m"
