@@ -150,7 +150,7 @@ then
   echo "yq present in server.."
 else
    if [[ $OSTYPE == 'darwin'* ]]; then
-       brew install yq
+       brew install yq > /dev/null
        echo "Installed yq dependency"
    else
        sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 > /dev/null 2>&1
