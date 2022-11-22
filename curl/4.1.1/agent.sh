@@ -109,9 +109,14 @@ if [ $? == 0 ];
 then
   echo "yq present in server.."
 else
-  sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 > /dev/null 2>&1
-  sudo chmod a+x /usr/local/bin/yq
-  echo "Installed yq dependency"
+   if [[ $OSTYPE == 'darwin'* ]]; then
+       brew install yq
+       echo "Installed yq dependency"
+   else
+       sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 > /dev/null 2>&1
+       sudo chmod a+x /usr/local/bin/yq
+       echo "Installed yq dependency"
+   fi
 fi
 ## argocli installed
 argocd > /dev/null 2>&1
@@ -195,21 +200,40 @@ do
          ## slice command to extract file
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
          mkdir /tmp/yamls/agent
-         ## Replace the namespace in the manifest
-         sed -i 's/default/'$argocdnamespace'/g' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
-         #yq e -i '.subjects[0].namespace = "'$argocdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
-         #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
          # Download Agent CM file
          curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/opsmx-services-agent.yaml > /dev/null 2>&1
          curl -o /tmp/yamls/agent/opsmx-profile.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.1/opsmx-profile.yaml
-         #Replacing the values
-         sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
-         sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/agent/opsmx-profile.yaml
-         sed -i 's/ISDURL/'$isdurl'/g' /tmp/yamls/agent/opsmx-profile.yaml
-         sed -i 's/ISDUSERNAME/'$isdusername'/g' /tmp/yamls/agent/opsmx-profile.yaml
-         sed -i 's/ARGOCDSVCNAME/'$argosvcname'/g' /tmp/yamls/opsmx-services-agent.yaml
-         sed -i 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
-         sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
+
+         if [[ $OSTYPE == 'darwin'* ]]; then
+           ## Replace the namespace in the manifest
+           sed -i.bu 's/default/'$argocdnamespace'/g' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+           #yq e -i '.subjects[0].namespace = "'$argocdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+           #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
+
+           #Replacing the values
+           sed -i.bu 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i.bu 's/AGENTNAME/'$agentname'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i.bu 's/ISDURL/'$isdurl'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i.bu 's/ISDUSERNAME/'$isdusername'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i.bu 's/ARGOCDSVCNAME/'$argosvcname'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i.bu 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i.bu 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
+         else
+           ## Replace the namespace in the manifest
+           sed -i 's/default/'$argocdnamespace'/g' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+           #yq e -i '.subjects[0].namespace = "'$argocdnamespace'"' /tmp/yamls/clusterrolebinding-opsmx-agent-$agentname.yaml
+           #yq e -i '.data[.controllerHostname] = "controllerHostname: '$controllerdns':9001"' /tmp/yamls/configmap-opsmx-agent-$agentname.yaml
+
+	   #Replacing the values
+           sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i 's/AGENTNAME/'$agentname'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i 's/ISDURL/'$isdurl'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i 's/ISDUSERNAME/'$isdusername'/g' /tmp/yamls/agent/opsmx-profile.yaml
+           sed -i 's/ARGOCDSVCNAME/'$argosvcname'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i 's/ARGOCDURL/'$argocdurl'/g' /tmp/yamls/opsmx-services-agent.yaml
+           sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/yamls/opsmx-services-agent.yaml
+         fi
+
          echo ""
          echo "-------------------------------------------------"
          echo "   Applying the agent file in argocd namespcace"

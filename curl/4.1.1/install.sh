@@ -133,6 +133,7 @@ then
 else
    if [[ $OSTYPE == 'darwin'* ]]; then
        brew install yq
+       echo "Installed yq dependency"
    else
        sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 > /dev/null 2>&1
        sudo chmod a+x /usr/local/bin/yq
