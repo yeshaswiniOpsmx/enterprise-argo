@@ -53,8 +53,15 @@ fi
 }
 
 replaceports(){
-sed -i "s/ARGOCD_PORT/$ARGOCD_PORT/g" curl-isd-argo-quick.yaml
-sed -i "s/ISDUI_PORT/$ISDUI_PORT/g" curl-isd-argo-quick.yaml
+
+if [[ $OSTYPE == 'darwin'* ]]; then
+  sed -i.bu "s/ARGOCD_PORT/$ARGOCD_PORT/g" curl-isd-argo-quick.yaml
+  sed -i.bu "s/ISDUI_PORT/$ISDUI_PORT/g" curl-isd-argo-quick.yaml
+
+else
+  sed -i "s/ARGOCD_PORT/$ARGOCD_PORT/g" curl-isd-argo-quick.yaml
+  sed -i "s/ISDUI_PORT/$ISDUI_PORT/g" curl-isd-argo-quick.yaml
+fi
 }
 
 checkcrds(){
