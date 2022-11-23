@@ -1,0 +1,34 @@
+{{- if and (.Values.enableCentralLogging) (.Values.global.elasticsearch.enabled) -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{- if .Values.global.certManager.installed }}
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}-oes
+    kubernetes.io/tls-acme: "true"
+{{- end }}
+{{- if .Values.global.elasticsearch.ingress.annotations }}
+{{ tpl (toYaml .Values.global.elasticsearch.ingress.annotations) . | indent 4 }}
+{{- end }}
+  name: elasticsearch-ingress
+spec:
+  rules:
+  - host: {{ .Values.global.elasticsearch.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: elasticsearch-master
+            port:
+              number: 9200
+        path: /
+        pathType: ImplementationSpecific
+{{- if .Values.global.ssl.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.global.elasticsearch.host }}
+{{ toYaml .Values.global.elasticsearch.ingress.tls | indent 4 }}
+{{- end }}
+{{- end }}
