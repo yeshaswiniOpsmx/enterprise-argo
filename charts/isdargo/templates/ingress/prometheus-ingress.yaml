@@ -1,5 +1,4 @@
-{{- if and (.Values.global.enableCentralMonitoring) (eq .Values.installationMode "OEA-AP") -}}
-{{- if .Values.global.prometheus.enabled -}}
+{{- if and (.Values.global.enableCentralMonitoring) (.Values.global.prometheus.enabled) -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -33,4 +32,3 @@ spec:
 {{ toYaml .Values.global.prometheus.ingress.tls | indent 4 }}
 {{- end }}
 {{- end}}
-{{- end }}
