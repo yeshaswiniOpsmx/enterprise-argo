@@ -242,12 +242,12 @@ echo "Installing..."
 echo ""
 ###########################
 rm -rf enterprise-argo
-git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
-cd enterprise-argo/charts/isdargo
-helm install $isdnamespace-isd . -f ../../../values.yaml --namespace $isdnamespace
+#git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
+#cd enterprise-argo/charts/isdargo
+#helm install $isdnamespace-isd . -f ../../../values.yaml --namespace $isdnamespace
 
 ####################
-#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version $version --namespace $isdnamespace
+helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version=$version --namespace $isdnamespace
 }
 isdargocheck() {
 if [ $? == 0 ];
