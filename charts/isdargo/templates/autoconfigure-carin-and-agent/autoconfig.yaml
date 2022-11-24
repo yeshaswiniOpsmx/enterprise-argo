@@ -31,8 +31,9 @@ data:
     OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
     OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
     OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
+    OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
     wait_period=$(($wait_period+10))
-    if  [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     then
       echo \"ArgocdServer is  Up and Ready..\"
       while true
@@ -89,10 +90,18 @@ data:
          break
          {{- end }}
          {{- if .Values.autoconfigureagent }}
-         ##create sample SPLUNK integraton
+         ## create sample SPLUNK integraton
        curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"SPLUNK","name":"sample-splunk","configurationFields":{"end_point":"http://demosplunk.in","user_name":"","password":"","dashboard_endpoint":""}}'
+       ## create Elasticsearch datasource
+       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
+       ## Create prometheus datasource
+       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
          sleep 10
          ## create LOG anf METRIC template
        curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
