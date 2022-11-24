@@ -202,13 +202,6 @@ spec:
                             query:
                               type: string
                           type: object
-                        influxdb:
-                          properties:
-                            profile:
-                              type: string
-                            query:
-                              type: string
-                          type: object
                         job:
                           properties:
                             metadata:
@@ -2582,9 +2575,6 @@ spec:
                                               maxSkew:
                                                 format: int32
                                                 type: integer
-                                              minDomains:
-                                                format: int32
-                                                type: integer
                                               topologyKey:
                                                 type: string
                                               whenUnsatisfiable:
@@ -2709,82 +2699,6 @@ spec:
                               type: string
                           required:
                           - query
-                          type: object
-                        opsmx:
-                          properties:
-                            application:
-                              type: string
-                            baselineStartTime:
-                              type: string
-                            canaryStartTime:
-                              type: string
-                            delay:
-                              format: int64
-                              type: integer
-                            endTime:
-                              type: string
-                            gateUrl:
-                              type: string
-                            gitops:
-                              type: boolean
-                            globalLogTemplate:
-                              type: string
-                            globalMetricTemplate:
-                              type: string
-                            intervalTime:
-                              format: int64
-                              type: integer
-                            lifetimeMinutes:
-                              format: int64
-                              type: integer
-                            lookBackType:
-                              type: string
-                            profile:
-                              type: string
-                            services:
-                              items:
-                                properties:
-                                  baselineLogScope:
-                                    type: string
-                                  baselineMetricScope:
-                                    type: string
-                                  canaryLogScope:
-                                    type: string
-                                  canaryMetricScope:
-                                    type: string
-                                  logScopeVariables:
-                                    type: string
-                                  logTemplateName:
-                                    type: string
-                                  logTemplateVersion:
-                                    type: string
-                                  metricScopeVariables:
-                                    type: string
-                                  metricTemplateName:
-                                    type: string
-                                  metricTemplateVersion:
-                                    type: string
-                                  serviceName:
-                                    type: string
-                                type: object
-                              type: array
-                            threshold:
-                              properties:
-                                marginal:
-                                  format: int64
-                                  type: integer
-                                pass:
-                                  format: int64
-                                  type: integer
-                              required:
-                              - marginal
-                              - pass
-                              type: object
-                            user:
-                              type: string
-                          required:
-                          - application
-                          - threshold
                           type: object
                         prometheus:
                           properties:

@@ -212,15 +212,6 @@ argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
 
-  imagePullSecrets: []
-  controller:
-    image:
-      registry: quay.io/opsmxpublic
-      # -- Repository to use
-      repository: argo-isd-metric-provider
-      # -- Overrides the image tag (default is the chart appVersion)
-      tag: "v20"
-
 ####################################################
 auditClient:
   image:
