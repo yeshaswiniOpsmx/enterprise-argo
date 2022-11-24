@@ -1,0 +1,8 @@
+{{- if or (eq .Values.installationMode "OEA-AP") (eq .Values.installationMode "None") }}
+{{- if or (.Values.installArgoRollouts) (.Values.installArgoCD) }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opsmx-provider-account-{{ .Release.Namespace }}
+{{- end }}
+{{- end }}

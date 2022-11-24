@@ -4,7 +4,7 @@
 
    ### ISD-ARGO installtion 
 
-        curl -o quickinstall.sh https://raw.githubusercontent.com/saitejaopsmx/enterprise-argo/main/curl/4.1.1/quickinstall.sh && chmod 777 quickinstall.sh && ./quickinstall.sh
+        curl -o quickinstall.sh https://raw.githubusercontent.com/opsmx/enterprise-argo/main/curl/4.1.1/quickinstall.sh && chmod 777 quickinstall.sh && ./quickinstall.sh
 
 
 ## with DNS
