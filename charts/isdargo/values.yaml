@@ -21,7 +21,7 @@ installArgoImageupdater: false
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
 ########################################################################################
-k8sServiceType: NodePort
+k8sServiceType: ClusterIP
 ########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
