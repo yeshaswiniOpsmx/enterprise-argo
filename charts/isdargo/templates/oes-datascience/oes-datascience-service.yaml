@@ -17,8 +17,11 @@ spec:
     port: 5005
     protocol: TCP
     targetPort: 5005
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 5005
+    {{- end }}
   selector:
     app: oes
     component: datascience
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
 {{- end -}}
