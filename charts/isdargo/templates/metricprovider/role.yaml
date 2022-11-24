@@ -1,0 +1,24 @@
+{{- if or (eq .Values.installationMode "OEA-AP") (eq .Values.installationMode "None") }}
+{{- if or (.Values.installArgoRollouts) (.Values.installArgoCD) }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: opsmx-provider-account-{{ .Release.Namespace }}
+rules:
+  - apiGroups:
+      - "batch"
+    resources:
+      - jobs/status
+    verbs:
+      - get
+      - list
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+{{- end }}
+{{- end }}

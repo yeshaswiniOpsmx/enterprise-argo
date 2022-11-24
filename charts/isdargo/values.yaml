@@ -818,7 +818,6 @@ argo-rollouts:
       successThreshold: 1
       timeoutSeconds: 4
 
-
   notifications:
     secret:
       # -- Whether to create notifications secret
@@ -1064,7 +1063,7 @@ carina:
   ##
   image:
     repository: carina-manager
-    tag: v1.3.0
+    tag: v1.4.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1112,7 +1111,7 @@ ui:
   ## Image specific details
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1128,7 +1127,7 @@ autopilot:
   ## Image specific details
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1160,7 +1159,7 @@ audit:
   ##
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1181,7 +1180,7 @@ auditClient:
   ##
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1202,7 +1201,7 @@ datascience:
   ##
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1220,7 +1219,7 @@ dashboard:
   ## Image specific details
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1253,7 +1252,7 @@ gate:
   ## Image specific details
   image:
     repository: ubi8-gate
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1329,7 +1328,7 @@ platform:
   ## Image specific details
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1369,7 +1368,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1429,7 +1428,7 @@ visibility:
   ## Image specific details
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.0
+    tag: v4.1.1
     pullPolicy: IfNotPresent
 
   annotations:
