@@ -12,11 +12,14 @@ metadata:
 {{- end }}
   name: oes-sapor
 spec:
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
   ports:
   - name: "sapor"
     port: 8085
     targetPort: 8085
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8085
+    {{- end }}
   selector:
     app: oes
     component: sapor

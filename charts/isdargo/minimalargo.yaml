@@ -19,7 +19,8 @@ installArgoImageupdater: false
 ############################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
-
+########################################################################
+k8sServiceType: NodePort
 #######################################################################################
 # If installed ArgoCD set to true it will installdemoapps
 # Set to false if no applications to be displayed in ArgoCD as part of default installation

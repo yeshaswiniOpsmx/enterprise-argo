@@ -12,11 +12,14 @@ metadata:
 {{- end }}
   name: oes-autopilot
 spec:
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
   ports:
   - name: "cas-service"
     port: 8090
     targetPort: 8090
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8090
+    {{- end }}
   - name: "monitoring-service"
     port: 9090
     targetPort: 9090

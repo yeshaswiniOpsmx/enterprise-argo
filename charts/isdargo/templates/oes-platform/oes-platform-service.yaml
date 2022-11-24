@@ -12,12 +12,15 @@ metadata:
 {{- end }}
   name: oes-platform
 spec:
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
   ports:
   - name: oes-platform
     protocol: TCP
     port: 8095
     targetPort: 8095
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8095
+    {{- end }}
   selector:
     app: oes
     component: platform
