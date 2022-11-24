@@ -1,5 +1,4 @@
-{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
-{{- if .Values.autoconfigureagent -}}
+{{- if or (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -30,5 +29,4 @@ data:
           uiUrl: http://localhost:8099
           {{- end }}
           {{- end }}
-{{- end -}}
 {{- end -}}

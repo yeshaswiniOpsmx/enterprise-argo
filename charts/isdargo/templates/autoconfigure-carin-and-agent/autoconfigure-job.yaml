@@ -1,5 +1,4 @@
-{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
-{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent -}}
+{{- if or (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
 {{- if .Release.IsInstall -}}
 apiVersion: batch/v1
 kind: Job
@@ -37,6 +36,5 @@ spec:
           defaultMode: 420
           name: oes-autoconfigure
         name: autoconfigure
-{{- end -}}
 {{- end -}}
 {{- end -}}
