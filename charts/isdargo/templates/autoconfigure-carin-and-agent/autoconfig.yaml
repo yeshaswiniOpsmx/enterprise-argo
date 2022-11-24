@@ -169,8 +169,8 @@ data:
     {{- end -}}
     {{- end -}}
     #### If only ISD installed
-    {{- if .Values.installationMode "OEA-AP") -}}
-    {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
+    {{- if (eq .Values.installationMode "OEA-AP") -}}
+    {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) -}}
     echo \"Waiting for ISD and Argo Services   to come-up\"
     wait_period=0
     while true
