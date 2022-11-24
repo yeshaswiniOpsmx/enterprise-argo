@@ -26,7 +26,7 @@ echo ""
 getinstallyaml(){
 rm -rf curl-isd-argo-quick.yaml
 ## Get the vaules.yaml
-curl -o curl-isd-argo-quick.yaml https://raw.githubusercontent.com/saitejaopsmx/isd-quick-install/main/isd411/curl-isd-argo-quick.yaml 2> /dev/null
+curl -o curl-isd-argo-quick.yaml https://raw.githubusercontent.com/opsmx/isd-quick-install/main/isd411/curl-isd-argo-quick.yaml 2> /dev/null
 }
 
 getports(){
