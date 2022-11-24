@@ -17,8 +17,11 @@ spec:
     port: 8098
     protocol: TCP
     targetPort: 8098
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8098
+    {{- end }}
   selector:
     app: oes
     component: auditclient
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
 {{- end -}}

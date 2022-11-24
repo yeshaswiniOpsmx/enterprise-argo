@@ -12,5 +12,8 @@ spec:
   - protocol: TCP
     port: 8181
     targetPort: 8181
-  type: ClusterIP
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8181
+    {{- end }}
+  type: {{ .Values.k8sServiceType }}
 {{- end -}}

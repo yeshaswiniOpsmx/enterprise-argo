@@ -12,12 +12,15 @@ metadata:
 {{- end }}
   name: oes-dashboard
 spec:
-  type: ClusterIP
+  type: {{ .Values.k8sServiceType }}
   ports:
   - name: dashboard
     protocol: TCP
     port: 8094
     targetPort: 8094
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8094
+    {{- end }}
   selector:
     app: oes
     component: dashboard
