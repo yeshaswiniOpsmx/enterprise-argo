@@ -1,4 +1,5 @@
-{{- if or (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
+{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent -}}
 {{- if .Release.IsInstall -}}
 apiVersion: v1
 kind: ConfigMap
@@ -10,9 +11,7 @@ data:
   datasource-api.sh: |-
     #!/bin/bash
     #set -x
-    {{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) }}
-    {{- if or .Values.autoconfigurecarina .Values.autoconfigureagent }}
-    echo \"Waiting for ISD and Argo Services   to come-up\"
+    echo \"Waiting for all Argo Server  to come-up\"
     wait_period=0
     while true
     do
@@ -37,15 +36,24 @@ data:
     ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
     KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
+    {{- else if .Values.global.enableCentralMonitoring }}
+    PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
+    {{- else if .Values.enableCentralLogging }}
+    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
+    KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     {{- end }}
     wait_period=$(($wait_period+10))
     {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
     if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- else if .Values.enableCentralLogging }}
+    if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- else if .Values.global.enableCentralMonitoring }}
+    if [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- else }}
     if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- end }}
     then
-      echo \"Isd and Argo servers are  Up and Ready..\"
+      echo \"ArgocdServer is  Up and Ready..\"
       while true
       do
       ## install argoCLI
@@ -106,7 +114,6 @@ data:
        curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
-
        ## Create prometheus datasource
        curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
@@ -121,11 +128,28 @@ data:
        --header "x-spinnaker-user:admin" \
        --header 'Content-Type: application/json' \
        --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
-
          ## End of datasources
-         {{- end }}
-
+         {{- else if .Values.global.enableCentralMonitoring }}
+       ## Create prometheus datasource
+       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
          sleep 10
+       ## create metric template
+       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
+       --header "x-spinnaker-user:admin" \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
+       {{- else if .Values.enableCentralLogging }}
+       ## create Elasticsearch datasource
+       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
+         ## create LOG template
+       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{"templateName":"opsmx-logtemplate","monitoringProvider":"ELASTICSEARCH","scoringAlgorithm":"Canary","accountName":"opsmx-elasticsearch","index":"test_*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log,message","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":"","versionNo":"v1.0"}' > /dev/null
+         {{- end }}
 
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
@@ -161,157 +185,11 @@ data:
        echo \"Script is timed out as the Argocd Server is not ready yet.......\"
        break
       else
-       echo \"Waiting for  ISD and Argo Server to be ready\"
+       echo \"Waiting for  Argocd Server to be ready\"
        sleep 30
       fi
     fi
     done
-    {{- else }}
-        ### argo installed but not auto configire enabled 
-        exit 0
-    {{- end }}
-    {{- else }}
-    {{- if (eq .Values.installationMode "OEA-AP") }}
-    {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
-    ### only ISD with central and monitor
-    echo \"Waiting for ISD Services   to come-up\"
-    wait_period=0
-    while true
-    do
-    kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
-    OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
-    OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
-    OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
-    OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
-    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
-    KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
-    PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
-    wait_period=$(($wait_period+10))
-    if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
-    then
-      echo \"Isd servers Up and Ready..\"
-         ### Create Datasource 
-       ## create Elasticsearch datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
-
-       ## Create prometheus datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
-         sleep 10
-         ## create LOG template
-       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"templateName":"opsmx-logtemplate","monitoringProvider":"ELASTICSEARCH","scoringAlgorithm":"Canary","accountName":"opsmx-elasticsearch","index":"test_*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log,message","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":"","versionNo":"v1.0"}' > /dev/null
-       ## create metric template
-       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
-       --header "x-spinnaker-user:admin" \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
-
-      break
-    else
-      if [ $wait_period -gt 2000 ];
-      then
-       echo \"Script is timed out as the ISD Server is not ready yet.......\"
-       break
-      else
-       echo \"Waiting for  ISD Server to be ready\"
-       sleep 30
-      fi
-    fi
-    done
-    {{- else if .Values.global.enableCentralMonitoring  }}
-    ### only isd and monotoring 
-    echo \"Waiting for ISD Services to come-up\"
-    wait_period=0
-    while true
-    do
-    kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
-    OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
-    OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
-    OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
-    OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
-    PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
-    wait_period=$(($wait_period+10))
-    if [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
-    then
-      echo \"Isd servers Up and Ready..\"
-         ### Create Datasource 
-       ## Create prometheus datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
-         sleep 10
-       ## create metric template
-       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
-       --header "x-spinnaker-user:admin" \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
-
-      break
-    else
-      if [ $wait_period -gt 2000 ];
-      then
-       echo \"Script is timed out as the ISD Server is not ready yet.......\"
-       break
-      else
-       echo \"Waiting for  ISD Server to be ready\"
-       sleep 30
-      fi
-    fi
-    done
-    {{- else if .Values.enableCentralLogging }}
-    ### only isd and centarl
-    echo \"Waiting for ISD and Argo Services   to come-up\"
-    wait_period=0
-    while true
-    do
-    kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/live.status
-    OESSAPOR=$(grep oes-sapor /tmp/live.status | awk '{print $2}')
-    OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
-    OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
-    OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
-    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
-    KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
-    wait_period=$(($wait_period+10))
-    if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
-    then
-      echo \"Isd servers Up and Ready..\"
-         ### Create Datasource 
-       ## create Elasticsearch datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
-
-       ## Create prometheus datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
-         sleep 10
-         ## create LOG template
-       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
-       --header 'Content-Type: application/json' \
-       --data-raw '{"templateName":"opsmx-logtemplate","monitoringProvider":"ELASTICSEARCH","scoringAlgorithm":"Canary","accountName":"opsmx-elasticsearch","index":"test_*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log,message","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":"","versionNo":"v1.0"}' > /dev/null
-      break
-    else
-      if [ $wait_period -gt 2000 ];
-      then
-       echo \"Script is timed out as the Argocd Server is not ready yet.......\"
-       break
-      else
-       echo \"Waiting for  ISD and Argo Server to be ready\"
-       sleep 30
-      fi
-    fi
-    done
-    {{- else }}
-          ### only ISD installed without Log and Metric 
-          exit 0
-    {{- end }}
-    {{- end }}
-    {{- end }}
+{{- end -}}
 {{- end -}}
 {{- end -}}
