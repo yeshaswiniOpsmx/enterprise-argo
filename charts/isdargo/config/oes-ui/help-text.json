@@ -227,7 +227,8 @@
   },
   "SPINNAKER_LISTING": {
     "HEADER": "No CD Integration found!",
-    "BODY": "<div><p>CD Integration Page allows you to connect to multiple Argo CD instances.  This enables delivery insights, deployments audit and automated analysis across multiple Argo cd instances.</p><p>Click on the <b>New CD Integration</b> button to get started.</p></div>"
+     "BODY": "<div><p>CD Integration Page allows you to connect to multiple Argo CD instances.  This enables delivery insights, deployments audit and automated analysis across multiple Argo cd instances.</p><p>Click on the <b>New CD Integration</b> button to get started.</p></div>",
+     "CDTOOL_ERROR": "Unable to connect to CD Tool"
   },
   "SPINNAKER_SETUP": {
     "HEADER": "Spinnaker",

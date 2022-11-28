@@ -1,0 +1,15 @@
+{{- if or (eq .Values.installationMode "OEA-AP") (eq .Values.installationMode "None") }}
+{{- if or (.Values.installArgoRollouts) (.Values.installArgoCD) }}
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: opsmx-provider-account-{{ .Release.Namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: opsmx-provider-account-{{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: opsmx-provider-account-{{ .Release.Namespace }}
+{{- end }}
+{{- end }}
