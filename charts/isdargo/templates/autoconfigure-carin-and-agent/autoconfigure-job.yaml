@@ -11,7 +11,7 @@ metadata:
   labels:
     app: oes
 {{ include "oes.standard-labels" . | indent 4 }}
-  name: oes-autoconfig
+  name: oes-autoconfigure
 spec:
   template:
     metadata:
