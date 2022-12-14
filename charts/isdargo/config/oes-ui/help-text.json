@@ -2867,6 +2867,7 @@
       "QUERY_NAME": {
         "TOOLTIP": "A meaningful name given to a query or a group of similar queries ",
         "VALIDATION_MESSAGE": {
+          "exist": "Query Name already exists",
           "required": "Query Name cannot be empty"
         }
       },
