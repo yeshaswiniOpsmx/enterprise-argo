@@ -18,6 +18,11 @@ message-broker:
 standardErrorCodes:
   filePath: /opsmx/conf/standard-error-code.csv
 
+argo:
+  manifest:
+    newArgoAgentTemplate: newargoagentmanifest.template
+    existingArgoAgentTemplate: existingargoagentmanifest.template
+
 secretManagement:
   source:
     config: {{ .Values.secretStore }}
