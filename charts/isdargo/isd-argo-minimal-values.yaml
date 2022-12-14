@@ -24,6 +24,11 @@ cdagentname: argocd
 #######################################################################################
 forwarder:
   externalName: agent-grpc ## specify the controller URL in order to connect with external agent
+  agent:
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.8
+  image:
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.5.8
 ########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
@@ -216,49 +221,53 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.1
+    tag: v4.1.2-rc1
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.1
+    tag: v4.1.2-rc1
+#####################################################
+carina:
+  image:
+    tag: v1.9.1

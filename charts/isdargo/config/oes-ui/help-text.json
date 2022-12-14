@@ -226,9 +226,9 @@
     }
   },
   "SPINNAKER_LISTING": {
-    "HEADER": "No CD Integration found!",
-     "BODY": "<div><p>CD Integration Page allows you to connect to multiple Argo CD instances.  This enables delivery insights, deployments audit and automated analysis across multiple Argo cd instances.</p><p>Click on the <b>New CD Integration</b> button to get started.</p></div>",
-     "CDTOOL_ERROR": "Unable to connect to CD Tool"
+   "HEADER": "No CD Integration found!",
+    "BODY": "<div><p>Use this page to connect an existing Argo CD or to Create a new Argo CD instance.</p><strong>Existing Argo CD</strong><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></ul><p><strong>Create New Argo CD</strong></p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li><li><strong> Argo Rollouts URL</strong>: URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li><li>argorolloutsurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></div>",
+    "CDTOOL_ERROR": "Unable to connect to CD Tool"
   },
   "SPINNAKER_SETUP": {
     "HEADER": "Spinnaker",
@@ -457,7 +457,7 @@
   "VERIFICATION": {
     "HEADER": "No Analysis Report found!",
     "BODY": "<div><p>This page shows Analysis reports in a list view. To configure an analysis for your application, visit the manage analysis page.</p><p>The Continuous Verification performs automated log and metrics analysis for new releases with built-in unsupervised and supervised machine learning algorithms for risk analysis and canary deployments.</p><p>Continuous Verification is a release verification process that provides Dev and Ops engineers an intelligent automated real-time actionable risk assessment of a new release deployed. The Continuous Verification verifies the latest version of the service compared to the baseline or prior release before, during or after a production rollout. The baseline can be a deployment done prior or the current deployment during rollout using canary or blue/green strategies.</p><p>It leverages unsupervised and supervised machine learning techniques to analyse 100s of metrics and logs data to perform in-depth analysis of architectural regressions, performance, scalability and security violations of new releases in a scalable way for enterprises.</p></div>",
-	"LOG_ANALYSIS": {
+    "LOG_ANALYSIS": {
       "BODY": "",
       "SENSITIVITY": {
         "TOOLTIP": "Impact of Unexpected Issues on the log scoring",
@@ -1032,7 +1032,6 @@
     "HEADER": "No Users found",
     "BODY": ""
   },
-
   "APPLICATION_DEPLOYMENT": {
     "DEPLOYMENT_GRID_SYNC": {
       "TOOLTIP": "When the cluster deployment matches with the latest pipeline execution it is 'In Sync'; if not, it is 'Out of Sync'"
@@ -1265,7 +1264,7 @@
       "startingFromNumber": "Account Name cannot start with numbers"
     }
   },
-  "REGISTRYURL":{
+  "URL":{
     "TOOLTIP":"The registry URL from which you want to pull and deploy images. DockerHub example: https://hub.docker.com",
     "VALIDATION_MESSAGE": {
   "required": "Registry URL cannot be empty"
@@ -1553,7 +1552,6 @@
   "DEPLOYMENT":{
     "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
     "VALIDATION_MESSAGE":{
-
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -2077,7 +2075,6 @@
       "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
       "VALIDATION_MESSAGE":{}
     }
-
   },
   "SERVICENOW":{
     "HEADER": "Service Now",
@@ -2177,7 +2174,6 @@
       "required":"Account Name cannot be empty",
       "startingFromNumber": "Account Name cannot start with numbers"
     }
-
     },
     "API_KEY":{
       "TOOLTIP":"DATADOG Api Key",
@@ -2234,7 +2230,7 @@
       "TOOLTIP":"Elasticsearch host address, from which you access the Elasticsearch",
       "VALIDATION_MESSAGE":{
         "required":"Elastic End Point cannot be empty",
-        "invalidUrl": "Elastic End Point is invalid"
+        "invalidUrl": "Elastic End Poin URL is invalid"
       }
     },
     "USERNAME":{
@@ -2255,7 +2251,7 @@
       "TOOLTIP":"Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana",
       "VALIDATION_MESSAGE":{
         "required":"Kibana End Point cannot be empty",
-        "invalidUrl": "Kibana End Point is invalid"
+        "invalidUrl": "Kibana End Poin URL is invalid"
       }
     },
     "KIBANAUSERNAME":{
@@ -2487,7 +2483,6 @@
     }
       }
     },
-
     "VMWARETANZU":{
       "HEADER": "VMWare Tanzu Observability",
       "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your VMWare Tanzu access</li><li><strong>Endpoint</strong>: VMWare Tanzu host address, from which you access the VMWare Tanzu</li><li><strong>Email</strong>: Provide the user's registered and authorized email</li><li><strong>API token</strong>: The user's API token </li></span>",
@@ -2640,7 +2635,7 @@
         "TOOLTIP":"Jfrog Xray host address, from which you access the Jfrog Xray instance",
         "VALIDATION_MESSAGE":{
           "required":"Endpoint cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
+          "invalidUrl": "Endpoint URL is invalid"
         }
       },
       "TOKEN":{
@@ -2666,7 +2661,7 @@
         "TOOLTIP":"Prisma Cloud host address, from which you access the Prisma Cloud instance",
         "VALIDATION_MESSAGE":{
           "required":"Host URL cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
+          "invalidUrl": "Host URL is invalid"
         }
       },
       "APPLICATIONURL":{
@@ -3216,6 +3211,63 @@
       "VALIDATION_MESSAGE": {
         "required": "Test Suite Key cannot be empty",
         "cannotContainSpace": "Test Suite Key cannot contain space"
+      }
+    }
+  },
+  "CDINTEGRATION":{
+  "NEW_ARGOCD":{
+    "HEADER": "Create New Argo CD Instance",
+    "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li><li><strong> Argo Rollouts URL</strong>: URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li><li>argorolloutsurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></span>",
+    "ARGOCD_NAME": {
+      "TOOLTIP" :"User Defined Name for this CD integration.",
+      "VALIDATION_MESSAGE" : {
+        "required":"ArgoCd Name cannot be empty"
+      }
+    },
+    "ARGOCD_NAMESPACE": {
+      "TOOLTIP" :"Namespace where argocd needs to be installed. You should create this namespace in your target cluster.",
+      "VALIDATION_MESSAGE" : {
+      }
+    },
+    "ARGOCD_URL": {
+      "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
+      "VALIDATION_MESSAGE" : {
+      }
+    },
+    "ARGOCD_ROLLOUTSURL": {
+      "TOOLTIP" :"URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
+      "VALIDATION_MESSAGE" : {
+      }
+    },
+    "ARGOCD_DESCRIPTION": {
+      "TOOLTIP" :"",
+      "VALIDATION_MESSAGE" : {
+      }
+    }
+  },
+  "EXISTING_ARGOCD":{
+    "HEADER": "Connect An Existing Argo CD to ISD",
+      "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></ul></span>",
+      "ARGOCD_NAME": {
+        "TOOLTIP" :"User Defined Name for this CD integration.",
+        "VALIDATION_MESSAGE" : {
+          "required":"ArgoCd Name cannot be empty"
+        }
+      },
+      "ARGOCD_NAMESPACE": {
+        "TOOLTIP" :"Namespace where argocd is installed. Usually it is 'argocd'",
+        "VALIDATION_MESSAGE" : {
+        }
+      },
+      "ARGOCD_URL": {
+        "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
+        "VALIDATION_MESSAGE" : {
+        }
+      },
+      "ARGOCD_DESCRIPTION": {
+        "TOOLTIP" :"",
+        "VALIDATION_MESSAGE" : {
+        }
       }
     }
   }
