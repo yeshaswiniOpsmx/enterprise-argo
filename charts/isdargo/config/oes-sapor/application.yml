@@ -22,6 +22,7 @@ argo:
   manifest:
     newArgoAgentTemplate: newargoagentmanifest.template
     existingArgoAgentTemplate: existingargoagentmanifest.template
+    newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
 
 secretManagement:
   source:
