@@ -256,7 +256,7 @@ global:
 
 argo-cd:
   crds:
-    install: false
+    install: true
   configs:
     cm:
       # Argo CD's externally facing base URL. Required when configuring SSO
