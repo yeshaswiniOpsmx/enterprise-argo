@@ -1079,7 +1079,7 @@ argo-rollouts:
               }]
   
     # -- The trigger defines the condition when the notification should be sent
-    triggers:
+    triggers: 
       trigger.on-analysis-run-error: |
         - send: [analysis-run-error]
       trigger.on-analysis-run-failed: |
