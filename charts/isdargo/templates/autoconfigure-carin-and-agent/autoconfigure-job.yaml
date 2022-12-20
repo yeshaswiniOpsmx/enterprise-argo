@@ -1,11 +1,11 @@
-{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) -}}
-{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent -}}
-{{- if .Release.IsInstall -}}
+{{- if or .Values.autoconfigurecarina .Values.autoconfigureagent }}
+{{- if (eq .Values.installationMode "OEA-AP") }}
+{{- if and .Values.installArgoCD .Release.IsInstall }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   annotations:
-    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook": "post-install"
     "helm.sh/hook-delete-policy": "before-hook-creation"
     "helm.sh/hook-weight": "5"
   labels:
@@ -37,6 +37,6 @@ spec:
           defaultMode: 420
           name: oes-autoconfigure
         name: autoconfigure
-{{- end -}}
-{{- end -}}
-{{- end -}}
+{{- end }}
+{{- end }}
+{{- end }}

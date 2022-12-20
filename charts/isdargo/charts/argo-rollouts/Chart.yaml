@@ -1,14 +1,18 @@
-apiVersion: v2
-appVersion: "v1.2.0"
-description: A Helm chart for Argo Rollouts
-name: argo-rollouts
-version: 2.18.0
-icon: https://argoproj.github.io/argo-rollouts/assets/logo.png
-home: https://github.com/argoproj/argo-helm
-maintainers:
-  - name: alexmt
-  - name: dthomson25
-  - name: jessesuen
 annotations:
   artifacthub.io/changes: |
-    - "[Added]: Additional manifests to deploy within the chart"
+    - "[Changed]: Upgrade ArgoRollouts to v1.3.1"
+apiVersion: v2
+appVersion: v1.3.1
+description: A Helm chart for Argo Rollouts
+home: https://github.com/argoproj/argo-helm
+icon: https://argoproj.github.io/argo-rollouts/assets/logo.png
+keywords:
+- argoproj
+- argo-rollouts
+maintainers:
+- name: argoproj
+  url: https://argoproj.github.io/
+name: argo-rollouts
+sources:
+- https://github.com/argoproj/argo-rollouts
+version: 2.21.1

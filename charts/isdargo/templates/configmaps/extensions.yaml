@@ -1,0 +1,12 @@
+{{- if and .Values.installArgoCD .Release.IsInstall }}
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCDExtension
+metadata:
+  finalizers:
+  - extensions-finalizer.argocd.argoproj.io
+  name: opsmx-extensions
+spec:
+  sources:
+  - web:
+      url: https://github.com/OpsMx/rollout-extension/releases/download/v0.3.6/extension.tar
+{{- end }}

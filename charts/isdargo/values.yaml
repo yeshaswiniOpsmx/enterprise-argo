@@ -255,6 +255,146 @@ global:
 #######################
 
 argo-cd:
+  crds:
+    install: false
+  configs:
+    cm:
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      admin.enabled: "true"
+      accounts.admin: apiKey
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
+      dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        connectors:
+        - type: ldap
+          name: opsmx-openldap
+          id: ldap
+          config:
+            host: "openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+             # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+        #########Below is the Okta Configuration ########################
+        #- type: saml
+        #  name: okta
+        #  id: okta
+        #  config:
+        #    ssoURL: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+        #    redirectURI: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+        #    usernameAttr: email
+        #    emailAttr: email
+        #    groupsAttr: group
+        #    caData: |
+        #      LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
+        #      QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
+        #      UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
+        #      Z3dFVDJ0MFlURVUNCk1CSUdBMVVFQ3d3TFUxTlBVSEp2ZG1sa1pYSXhGVEFUQmdOVkJBTU1ER1Js
+        #      ZGkwNE1ETTFOVGt3T0RFY01Cb0dDU3FHU0liM0RRRUoNCkFSWU5hVzVtYjBCdmEzUmhMbU52YlRB
+        #      ZUZ3MHlNakE0TVRNd01qQXlORGxhRncwek1qQTRNVE13TWpBek5EbGFNSUdVTVFzd0NRWUQNClZR
+        #      UUdFd0pWVXpFVE1CRUdBMVVFQ0F3S1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ3d05VMkZ1SUVa
+        #      eVlXNWphWE5qYnpFTk1Bc0cNCkExVUVDZ3dFVDJ0MFlURVVNQklHQTFVRUN3d0xVMU5QVUhKdmRt
+        #      bGtaWEl4RlRBVEJnTlZCQU1NREdSbGRpMDRNRE0xTlRrd09ERWMNCk1Cb0dDU3FHU0liM0RRRUpB
+        #      UllOYVc1bWIwQnZhM1JoTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FR
+        #      b0MNCmdnRUJBTytsOEIxdXIzd1ZBbHBiZGhJYmg4Nk1XMk5wQ3gyb0VhZ1g4UkxxeTc3bVYxdHdk
+        #      aTQxMldYNVpTaU9BQ2toVG9XaUlIZW0NCjRwZ3VMK3drUk9lcnZlRVJ0cXdudU5OL2ROUnlkdXVD
+        #      UDlqcGNEYVd5NHdaeWxiQmF2TDF3blFJaHgrc3J1akh1M2lmUUdSUUtxUG4NCjI1S3Nway9OaEUv
+        #      VTBpTlFSNWRFZzI5aHBCakpESjNaayt2eXNDLzNZdmFJM2lmWXBDMGtaTVBLSEt6bC9yYXRYaSt6
+        #      aVZuNlBCSmkNCnh2T2pnOUd2cVE3YkRSbTAyRyt2bmh1T1RxdjEwQ0g3WC9hNEc1WVhPTWhucW9O
+        #      M2MvclRJdjlSQjFncXVUZnFHWE1FSGtWbW1jS3ANCmxpYTZURUQ4bWFGUWRwajBRWXFDWXRYK2hw
+        #      R05GK0k0aHhxNGw4SDN4ZTBDQXdFQUFUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUENCkx4WWg1
+        #      RlZmWThSY2FoQzJkQXlOMi8zb3pCV2ZhVjF3aXdMQW9qaHVDWVpKREVDdUpVekZPK2hZYm9sakRS
+        #      bmtFb2tpYThwWXJSUEwNCjdSU0tlYkIwcTVTdEcrV1RPcTg2SmlPQk1wVlR5V1dYSEFHN0ppY2tT
+        #      T1N2QXkwdncyeVkzT0IwdEE0ZUpWSXVpZFVTUnpTckdNNW0NCllma2hjaFBhNnNZTU9GSGtLOUxG
+        #      TzNsbjFEZE9JbkJST2hrL1QyL0locXBJL3hwWTlEdCsxNTcxRWExY2ROUjFRd1k2VFRVL013N2oN
+        #      ClpEZ21LaWhSNDNJenhwaVRLT09hVU1LYlN5RHFjcWpjdTEwaUJ3cmpVUmtzTzFmc3JqNEtXZFJ4
+        #      aVRpODFOZjFINytUcmJRMldVeG8NCjFncGVBWE9Rd2M2RHp0TlN2b1lQaFpHQmdNeTVjcWQ0TWwr
+        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbac:
+      create: true
+      # -- The name of the default role which Argo CD will falls back to, when authorizing API requests (optional).
+      # If omitted or empty, users may be still be able to login, but will see no apps, projects, etc...
+      policy.default: ''
+
+      # -- File containing user-defined policies and role definitions.
+      # @default -- `''` (See [values.yaml])
+      policy.csv: ''
+      # Policy rules are in the form:
+      #  p, subject, resource, action, object, effect
+      # Role definitions and bindings are in the form:
+      #  g, subject, inherited-subject
+      # policy.csv |
+      #   p, role:org-admin, applications, *, */*, allow
+      #   p, role:org-admin, clusters, get, *, allow
+      #   p, role:org-admin, repositories, *, *, allow
+      #   p, role:org-admin, logs, get, *, allow
+      #   p, role:org-admin, exec, create, */*, allow
+      #   g, your-github-org:your-team, role:org-admin
+      # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
+      # The scope value can be a string, or a list of strings.
+      scopes: "[groups]"
+
+    repositories: {}
+      #private-repo:
+      #  url: https://github.com/OpsMx/argo-sample-apps.git
+      #  name: git-private-repo
+      #  type: git
+      #  # if the repo is private and pass credentials
+      #  password: gituser   # Git Username
+      #  username: randamtoken   # Git Token
+      # private-helm-repo:
+      #  url: https://my-private-chart-repo.internal
+      #  name: private-repo
+      #  type: helm
+      #  password: my-password
+      #  username: my-username
+    #### -- Provide one or multiple [external cluster credentials]
+    clusterCredentials: []
+      #- name: myexternalcluster
+      #  server: https://xx.xx.xx.xx
+      #  labels: {}
+      #  annotations: {}
+      #  config:
+      #    bearerToken: "<Provide Plain authentication token>"
+      #    tlsClientConfig:
+      #      insecure: false
+      #      caData: "<Provide Plain certificate>"
+    params:
+      server.content.security.policy: default-src * 'unsafe-inline'
+      server.x.frame.options: ' '
+
   repoServer:
     volumeMounts:
     - mountPath: /usr/local/bin/argocd-vault-plugin
@@ -311,117 +451,9 @@ argo-cd:
       prometheus.io/scrape: "true"
     extensions:
       enabled: true
-      contents:
-      - name: opsmx-extensions
-        url: https://github.com/OpsMx/rollout-extension/releases/download/v0.3.6/extension.tar
-    env:
-      - name: ARGOCD_SERVER_CONTENT_SECURITY_POLICY
-        valueFrom:
-          configMapKeyRef:
-            key: server.content.security.policy
-            name: argocd-cmd-params-cm
-      - name: ARGOCD_SERVER_X_FRAME_OPTIONS
-        valueFrom:
-          configMapKeyRef:
-            key: server.x.frame.options
-            name: argocd-cmd-params-cm
     extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
       - --insecure
-    ### To use LDAP enable config 
-    configEnabled: true
     ########   ldap argc-cm configmap configuration     #######
-    config:
-      # Argo CD's externally facing base URL. Required when configuring SSO
-      url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
-      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
-      admin.enabled: "true"
-      accounts.admin: apiKey
-      configManagementPlugins: |-
-        - name: argocd-vault-plugin
-          generate:
-            command: ["argocd-vault-plugin"]
-            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
-      dex.config: |-
-        staticClients:
-        - id: argo-workflows-sso
-          name: Argo Workflow
-          redirectURIs:
-            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
-          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
-        connectors:
-        - type: ldap
-          name: opsmx-openldap
-          id: ldap
-          config:
-            host: "openldap:389"
-            insecureNoSSL: true
-            insecureSkipVerify: true
-            # Variable name stores ldap bindDN in argocd-secret
-            bindDN: "cn=admin,dc=example,dc=org"
-            # Variable name stores ldap bind password in argocd-secret
-            bindPW: "opsmxadmin123"
-            usernamePrompt: Username
-            # Ldap user serch attributes
-            userSearch:
-              baseDN: "dc=example,dc=org"
-              filter: "(objectClass=simpleSecurityObject)"
-              username: cn
-              idAttr: cn
-              emailAttr: cn
-              nameAttr: cn
-            # Ldap group serch attributes
-            groupSearch:
-              baseDN: "dc=example,dc=org"
-              filter: "(objectClass=simpleSecurityObject)"
-              userAttr: cn
-              groupAttr: cn
-              nameAttr: cn
-        #########Below is the Okta Configuration ########################
-        #- type: saml
-        #  name: okta
-        #  id: okta
-        #  config:
-        #    ssoURL: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
-        #    redirectURI: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
-        #    usernameAttr: email
-        #    emailAttr: email
-        #    groupsAttr: group
-        #    caData: |
-        #      LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
-        #      QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
-        #      UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
-        #      Z3dFVDJ0MFlURVUNCk1CSUdBMVVFQ3d3TFUxTlBVSEp2ZG1sa1pYSXhGVEFUQmdOVkJBTU1ER1Js
-        #      ZGkwNE1ETTFOVGt3T0RFY01Cb0dDU3FHU0liM0RRRUoNCkFSWU5hVzVtYjBCdmEzUmhMbU52YlRB
-        #      ZUZ3MHlNakE0TVRNd01qQXlORGxhRncwek1qQTRNVE13TWpBek5EbGFNSUdVTVFzd0NRWUQNClZR
-        #      UUdFd0pWVXpFVE1CRUdBMVVFQ0F3S1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ3d05VMkZ1SUVa
-        #      eVlXNWphWE5qYnpFTk1Bc0cNCkExVUVDZ3dFVDJ0MFlURVVNQklHQTFVRUN3d0xVMU5QVUhKdmRt
-        #      bGtaWEl4RlRBVEJnTlZCQU1NREdSbGRpMDRNRE0xTlRrd09ERWMNCk1Cb0dDU3FHU0liM0RRRUpB
-        #      UllOYVc1bWIwQnZhM1JoTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FR
-        #      b0MNCmdnRUJBTytsOEIxdXIzd1ZBbHBiZGhJYmg4Nk1XMk5wQ3gyb0VhZ1g4UkxxeTc3bVYxdHdk
-        #      aTQxMldYNVpTaU9BQ2toVG9XaUlIZW0NCjRwZ3VMK3drUk9lcnZlRVJ0cXdudU5OL2ROUnlkdXVD
-        #      UDlqcGNEYVd5NHdaeWxiQmF2TDF3blFJaHgrc3J1akh1M2lmUUdSUUtxUG4NCjI1S3Nway9OaEUv
-        #      VTBpTlFSNWRFZzI5aHBCakpESjNaayt2eXNDLzNZdmFJM2lmWXBDMGtaTVBLSEt6bC9yYXRYaSt6
-        #      aVZuNlBCSmkNCnh2T2pnOUd2cVE3YkRSbTAyRyt2bmh1T1RxdjEwQ0g3WC9hNEc1WVhPTWhucW9O
-        #      M2MvclRJdjlSQjFncXVUZnFHWE1FSGtWbW1jS3ANCmxpYTZURUQ4bWFGUWRwajBRWXFDWXRYK2hw
-        #      R05GK0k0aHhxNGw4SDN4ZTBDQXdFQUFUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUENCkx4WWg1
-        #      RlZmWThSY2FoQzJkQXlOMi8zb3pCV2ZhVjF3aXdMQW9qaHVDWVpKREVDdUpVekZPK2hZYm9sakRS
-        #      bmtFb2tpYThwWXJSUEwNCjdSU0tlYkIwcTVTdEcrV1RPcTg2SmlPQk1wVlR5V1dYSEFHN0ppY2tT
-        #      T1N2QXkwdncyeVkzT0IwdEE0ZUpWSXVpZFVTUnpTckdNNW0NCllma2hjaFBhNnNZTU9GSGtLOUxG
-        #      TzNsbjFEZE9JbkJST2hrL1QyL0locXBJL3hwWTlEdCsxNTcxRWExY2ROUjFRd1k2VFRVL013N2oN
-        #      ClpEZ21LaWhSNDNJenhwaVRLT09hVU1LYlN5RHFjcWpjdTEwaUJ3cmpVUmtzTzFmc3JqNEtXZFJ4
-        #      aVRpODFOZjFINytUcmJRMldVeG8NCjFncGVBWE9Rd2M2RHp0TlN2b1lQaFpHQmdNeTVjcWQ0TWwr
-        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
-
-
-    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
-    # -- Argo CD rbac config ([Argo CD RBAC policy])
-    rbacConfig:
-      {}
-      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
-      # Policy rules are in the form:
-      #   p, subject, resource, action, object, effect
-      # Role definitions and bindings are in the form:
-      #   g, subject, inherited-subject
   notifications:
     enabled: true
     serviceAccount:
@@ -725,29 +757,6 @@ argo-cd:
               }]
             }]
 
-  configs:
-    #### -- Repositories list to be used by applications, It can be private or public repository
-    repositories: {}
-      #private-repo:
-      #  url: https://github.com/OpsMx/argo-sample-apps.git
-      #  name: git-private-repo
-      #  type: git
-      #  # if the repo is private and pass credentials
-      #  password: gituser   # Git Username
-      #  username: randamtoken   # Git Token
-
-    #### -- Provide one or multiple [external cluster credentials]
-    clusterCredentials: []
-      #- name: myexternalcluster
-      #  server: https://xx.xx.xx.xx
-      #  labels: {}
-      #  annotations: {}
-      #  config:
-      #    bearerToken: "<Provide Plain authentication token>"
-      #    tlsClientConfig:
-      #      insecure: false
-      #      caData: "<Provide Plain certificate>"
-
 ###################################################
 # argo-workflows configuration
 #######################
@@ -807,27 +816,280 @@ argo-rollouts:
         # slack-token:
   
     # -- Configures notification services
-    notifiers: {}
-      # service.slack: |
-      #   token: $slack-token
+    notifiers:
+      log.level: trace
+      service.slack: |
+        token: $slack-token
   
     # -- Notification templates
-    templates: {}
-      # template.my-purple-template: |
-      #   message: |
-      #     Rollout {{.rollout.metadata.name}} has purple image
-      #   slack:
-      #       attachments: |
-      #           [{
-      #             "title": "{{ .rollout.metadata.name}}",
-      #             "color": "#800080"
-      #           }]
+    templates:
+      template.analysis-run-error: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run is in error state.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run is in error state.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#ECB22E",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.analysis-run-failed: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run failed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run failed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#E01E5A",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Failed Due to",
+                  "value": "{{.rollout.status.message}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.analysis-run-running: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run is running.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run is running.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-aborted: |
+        message: Rollout {{.rollout.metadata.name}} has been aborted.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been aborted.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#E01E5A",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-completed: |
+        message: Rollout {{.rollout.metadata.name}} has been completed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been completed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-paused: |
+        message: Rollout {{.rollout.metadata.name}} has been paused.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been paused.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-step-completed: |
+        message: Rollout {{.rollout.metadata.name}} step number {{ add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}} has been completed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} step number {{ add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}} has been completed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Step completed",
+                  "value": "{{add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-updated: |
+        message: Rollout {{.rollout.metadata.name}} has been updated.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been updated.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.scaling-replicaset: |
+        message: Scaling Rollout {{.rollout.metadata.name}}'s replicaset to {{.rollout.spec.replicas}}.
+        email:
+          subject: Scaling Rollout {{.rollout.metadata.name}}'s replcaset to {{.rollout.spec.replicas}}.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Desired replica",
+                  "value": "{{.rollout.spec.replicas}}",
+                  "short": true
+                },
+                {
+                  "title": "Updated replicas",
+                  "value": "{{.rollout.status.updatedReplicas}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
   
     # -- The trigger defines the condition when the notification should be sent
-    triggers: {}
-      # trigger.on-purple: |
-      #   - send: [my-purple-template]
-      #     when: rollout.spec.template.spec.containers[0].image == 'argoproj/rollouts-demo:purple'
+    triggers:
+      trigger.on-analysis-run-error: |
+        - send: [analysis-run-error]
+      trigger.on-analysis-run-failed: |
+        - send: [analysis-run-failed]
+      trigger.on-analysis-run-running: |
+        - send: [analysis-run-running]
+      trigger.on-rollout-aborted: |
+        - send: [rollout-aborted]
+      trigger.on-rollout-completed: |
+        - send: [rollout-completed]
 
   dashboard:
     # -- Deploy dashboard server

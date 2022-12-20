@@ -17,10 +17,10 @@ keywords:
   - Autopilot
 dependencies:
   - name: argo-cd
-    version: 4.10.5
+    version: 5.16.6
     condition: installArgoCD
   - name: argo-rollouts
-    version: 2.18.0
+    version: 2.21.1
     condition: installArgoRollouts
   - name: argo-workflows
     version: 0.16.8
