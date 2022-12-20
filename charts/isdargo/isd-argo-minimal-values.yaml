@@ -79,7 +79,7 @@ argo-cd:
   configs:
     cm:
       # Argo CD's externally facing base URL. Required when configuring SSO
-      url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      url: "https://ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "true"
       accounts.admin: apiKey
@@ -93,7 +93,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+            - https://WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
