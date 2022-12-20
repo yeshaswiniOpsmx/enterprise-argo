@@ -17,8 +17,8 @@ Install OpsMx Enterprise for Argo
 
 ### Prerequisites
 
-- Kubernetes cluster 1.19 or later with at least 4 cores and 16 GB memory
-- Helm 3 is setup on the client system
+- Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
+- Helm 3 is setup on the client system with 3.10.3 or later
   ```console
   $ helm version
   ```
