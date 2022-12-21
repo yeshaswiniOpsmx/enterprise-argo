@@ -13,10 +13,10 @@ spec:
     namespace: {{ .Release.Namespace }}
     server: ''
   source:
-    path: sampleapps
+    path: sampleapps-opsmxproj
     repoURL: 'git@github.com:OpsMx/argo-sample-apps.git'
     targetRevision: HEAD
-  project: default
+  project: opsmxproj
   syncPolicy:
     automated:
       prune: false
