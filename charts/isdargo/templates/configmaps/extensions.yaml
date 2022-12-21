@@ -2,9 +2,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ArgoCDExtension
 metadata:
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-weight": "10"
+  name: opsmx-extensions
   finalizers:
   - extensions-finalizer.argocd.argoproj.io
-  name: opsmx-extensions
 spec:
   sources:
   - web:
