@@ -246,3 +246,7 @@ visibility:
 carina:
   image:
     tag: v1.9.1
+#####################################################
+rabbitmq:
+  image:
+    repository: 3.11.4-management
