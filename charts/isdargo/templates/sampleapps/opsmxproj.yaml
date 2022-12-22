@@ -1,0 +1,32 @@
+{{- if .Values.installArgoCD -}}
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: opsmxproj
+spec:
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - name: '*'
+    namespace: '!default'
+    server: '*'
+  - name: '*'
+    namespace: '!cert-manager'
+    server: '*'
+  - name: '*'
+    namespace: '!ingress-nginx'
+    server: '*'
+  - name: '*'
+    namespace: '!kube-node-lease'
+    server: '*'
+  - name: '*'
+    namespace: '!kube-public'
+    server: '*'
+  - name: '*'
+    namespace: '!kube-system'
+    server: '*'
+  sourceRepos:
+  - '*'
+status: {}
+{{- end -}}
