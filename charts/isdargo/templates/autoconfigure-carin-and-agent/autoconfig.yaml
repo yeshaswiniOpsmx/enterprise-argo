@@ -12,6 +12,38 @@ data:
     #!/bin/bash
     #set -x
     echo \"Waiting for all Argo Server  to come-up\"
+    cat << 'EOF' >> /tmp/agent-cm.yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: opsmx-services-isd-argo-agent
+      labels:
+        agent.opsmx.com/name: isd-argo-agent
+        agent.opsmx.com/role: agent
+    data:
+      services.yaml: |
+        outgoingServices:
+          - name: {{ .Values.cdagentname }}
+            type: argocd
+            enabled: true
+            config:
+              url: http://{{ .Release.Name }}-argocd-server:80
+              insecure: true
+              credentials:
+                type: bearer
+                token: xxxx
+            annotations:
+              description: argocd via agent
+              {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
+              uiUrl: https://{{ .Values.global.argocd.host }}
+              {{- else }}
+              {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
+              uiUrl: http://{{ .Values.global.argocd.host }}
+              {{- else }}
+              uiUrl: http://localhost:8099
+              {{- end }}
+              {{- end }}
+    EOF
     wait_period=0
     while true
     do
@@ -169,7 +201,7 @@ data:
          ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
          ## Adding the agent service configmap with added arocd token
-         kubectl get cm opsmx-services-isd-argo-agent -o yaml > /tmp/agent-cm.yaml
+         #kubectl get cm opsmx-services-isd-argo-agent -o yaml > /tmp/agent-cm.yaml
          sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/agent-cm.yaml
          ## Apply the yamls
          kubectl replace --force -f /tmp/agent-cm.yaml
