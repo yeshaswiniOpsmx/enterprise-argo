@@ -1,8 +1,8 @@
 # Optionally override the fully qualified name
-fullnameOverride: ""
+fullnameOverride: "keycloack"
 
 # Optionally override the name
-nameOverride: ""
+nameOverride: "keycloack"
 
 # The number of replicas to create (has no effect if autoscaling enabled)
 replicas: 1
