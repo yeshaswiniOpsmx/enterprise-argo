@@ -27,6 +27,14 @@ spec:
 {{- end }}
     spec:
       volumes:
+        - name: certs-volume
+          secret:
+            defaultMode: 420
+            secretName: oes-control-secret
+        - name: ca-certs-volume
+          secret:
+            defaultMode: 420
+            secretName: ca-secret
         - name: autopilot-config-volume
           secret:
             secretName: oes-autopilot-config
@@ -100,6 +108,15 @@ spec:
               name: metricfetcher
               protocol: TCP
           volumeMounts:
+          - mountPath: /opsmx/conf/controller/ca.crt
+            name: ca-certs-volume
+            subPath: tls.crt
+          - mountPath: /opsmx/conf/controller/tls.crt
+            name: certs-volume
+            subPath: tls.crt
+          - mountPath: /opsmx/conf/controller/tls.key
+            name: certs-volume
+            subPath: tls.key
           - name: autopilot-config-volume
             mountPath: /opsmx/conf/autopilot.properties
             subPath: autopilot.properties
