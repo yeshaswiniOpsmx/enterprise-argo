@@ -1,6 +1,5 @@
 {{- if or .Values.autoconfigurecarina .Values.autoconfigureagent }}
-{{- if (eq .Values.installationMode "OEA-AP") }}
-{{- if and .Values.installArgoCD .Release.IsInstall }}
+{{- if and (eq .Values.installationMode "OEA-AP") (.Values.installArgoCD) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -222,6 +221,5 @@ data:
       fi
     fi
     done
-{{- end }}
 {{- end }}
 {{- end }}

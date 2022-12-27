@@ -1,4 +1,4 @@
-{{- if and .Values.installArgoCD .Release.IsInstall }}
+{{- if .Values.installArgoCD }}
 apiVersion: argoproj.io/v1alpha1
 kind: ArgoCDExtension
 metadata:
