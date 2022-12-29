@@ -17,7 +17,7 @@ spec:
             while true
             do
             kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
-            KEYCLOACK=$(grep keycloack /tmp/inst.status | awk '{print $2}')
+            KEYCLOACK=$(grep keycloack-0 /tmp/inst.status | awk '{print $2}')
             wait_period=$(($wait_period+10))
             if [ "$KEYCLOACK" == "true" ];
             then
