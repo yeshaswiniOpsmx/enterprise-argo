@@ -102,9 +102,9 @@ spec:
                   key: postgresql-password
             {{- end }}
             - name: KEYCLOAK_USER
-              value: "keycloack"
+              value: "keycloak"
             - name: KEYCLOAK_PASSWORD
-              value: "keycloack123"
+              value: "keycloak123"
             {{- with .Values.extraEnv }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
