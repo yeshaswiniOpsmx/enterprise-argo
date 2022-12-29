@@ -5,46 +5,69 @@ metadata:
   annotations:
     "helm.sh/hook": "post-install"
     "helm.sh/hook-delete-policy": "before-hook-creation"
-    "helm.sh/hook-weight": "2"
-  name: keycloak-configure
+  name: keycloack-configure
 spec:
   template:
     spec:
       containers:
       - args:
           - |-
-            set -x
-            admuser="keycloack"
-            admpass="keycloack123"
-            group="{{ .Values.global.saporgate.config.adminGroups }}"
-            realm="master"
-            user="admin"
-            userpass="opsmxadmin123"
-            clientid="isd-client"
-            usermail="test23@opsmx.io"
-            isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}"
-            cd /tmp/keycloak-11.0.0/bin/
-            ## Login
-            ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm "$realm" --user $admuser --client admin-cli --password $admpass
-            ## Create Group and get ID
-            ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
-            groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
-            ## Create user and get ID
-            ./kcadm.sh create users -r $realm -s username="$user" -s enabled=true -s email="$usermail"
-            userid=$(./kcadm.sh get users -r $realm | jq -r '.[] | select(.username=="'$user'") | .id')
-            ## Create password for user  
-            ./kcadm.sh set-password -r $realm --username "$user" --new-password "$userpass"
-            ## Assign User with Group
-            ./kcadm.sh update users/$userid/groups/$groupid -r $realm -s realm=$realm -s userId=$userid -s groupId=$groupid -n
-            ## Create Client with Approiate permissions
-            ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="isdclient" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["$isdurl/login"]'
+            echo \"Waiting for Keycloack Services to come-up\"
+            wait_period=0
+            while true
+            do
+            kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
+            KEYCLOACK=$(grep keycloack /tmp/inst.status | awk '{print $2}')
+
+            wait_period=$(($wait_period+10))
+
+            if [ "$KEYCLOACK" == "true" ];
+            then
+              echo \"keycloackservices are Up and Ready..\"
+              set -x
+              admuser="keycloack"
+              admpass="keycloack123"
+              group="{{ .Values.global.saporgate.config.adminGroups }}"
+              realm="master"
+              user="admin"
+              userpass="opsmxadmin123"
+              clientid="isd-client"
+              usermail="keycloack.opsmx@opsmx.io"
+              isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}"
+              cd /tmp/keycloak-11.0.0/bin/
+              ## Login
+              ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm "$realm" --user $admuser --client admin-cli --password $admpass
+              ## Create Group and get ID
+              ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
+              groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
+              ## Create user and get ID
+              ./kcadm.sh create users -r $realm -s username="$user" -s enabled=true -s email="$usermail"
+              userid=$(./kcadm.sh get users -r $realm | jq -r '.[] | select(.username=="'$user'") | .id')
+              ## Create password for user  
+              ./kcadm.sh set-password -r $realm --username "$user" --new-password "$userpass"
+              ## Assign User with Group
+              ./kcadm.sh update users/$userid/groups/$groupid -r $realm -s realm=$realm -s userId=$userid -s groupId=$groupid -n
+              ## Create Client with Approiate permissions
+              ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="isdclient" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["$isdurl/login"]'
+              break
+            else
+              if [ $wait_period -gt 2000 ];
+              then
+                echo \"Script is timed out as the keycloack is not ready yet.......\"
+                break
+              else
+                echo \"Waiting for keycloack services to be ready\"
+                sleep 1m
+              fi
+            fi
+            done
         command:
           - /bin/bash
           - +x
           - '-c'
         image: opsmx11/java:keycloak
         imagePullPolicy: Always
-        name: keycloak-configure
+        name: keycloack-configure
       serviceAccountName: oes-auto-configure-{{ .Release.Namespace }}
       restartPolicy: Never
 {{- end }}
