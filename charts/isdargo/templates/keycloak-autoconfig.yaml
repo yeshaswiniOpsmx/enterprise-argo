@@ -12,7 +12,7 @@ spec:
       containers:
       - args:
           - |-
-            echo \"Waiting for Keycloack Services to come-up\"
+            echo "Waiting for Keycloack Services to come-up"
             wait_period=0
             while true
             do
@@ -21,7 +21,7 @@ spec:
             wait_period=$(($wait_period+10))
             if [ "$KEYCLOACK" == "true" ];
             then
-            echo \"keycloackservices are Up and Ready..\"
+            echo "keycloackservices are Up and Ready.."
             admuser="keycloack"
             admpass="keycloack123"
             group="{{ .Values.global.saporgate.config.adminGroups }}"
@@ -50,10 +50,10 @@ spec:
             else
             if [ $wait_period -gt 2000 ];
             then
-            echo \"Script is timed out as the keycloack is not ready yet.......\"
+            echo "Script is timed out as the keycloack is not ready yet......."
             break
             else
-            echo \"Waiting for keycloack services to be ready\"
+            echo "Waiting for keycloack services to be ready"
             sleep 1m
             fi
             fi
