@@ -47,8 +47,8 @@ spec:
             ## Create Client with Approiate permissions
             ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="$clientid" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["'$isdurl'"]'
             ##Get the clientID and secret
-            clientid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId,protocolMappers(id,name,protocol,protocolMapper)' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
-            clientsecret=$(./kcadm.sh get clients/"$clientid"/client-secret | jq '.value' -r)
+            clsid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId,protocolMappers(id,name,protocol,protocolMapper)' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
+            clientsecret=$(./kcadm.sh get clients/"$clsid"/client-secret | jq '.value' -r)
             break
             else
             if [ $wait_period -gt 2000 ];
