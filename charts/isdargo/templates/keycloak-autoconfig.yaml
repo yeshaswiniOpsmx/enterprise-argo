@@ -1,0 +1,82 @@
+{{- if .Values.installkeycloak }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+  name: keycloack-configure
+spec:
+  template:
+    spec:
+      containers:
+      - args:
+          - |-
+            echo "Waiting for Keycloack Services to come-up"
+            wait_period=0
+            while true
+            do
+            kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
+            KEYCLOACK=$(grep keycloack-0 /tmp/inst.status | awk '{print $2}')
+            wait_period=$(($wait_period+10))
+            if [ "$KEYCLOACK" == "true" ];
+            then
+            echo "keycloackservices are Up and Ready.."
+            admuser="keycloak"
+            admpass="keycloak123"
+            group="{{ .Values.global.saporgate.config.adminGroups }}"
+            realm="master"
+            user="admin"
+            userpass="opsmxadmin123"
+            clientid="isd-client"
+            usermail="keycloack.opsmx@opsmx.io"
+            isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}/login"
+            cd /tmp/keycloak-11.0.0/bin/
+            ## Login
+            ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm "$realm" --user $admuser --client admin-cli --password $admpass
+            ## Create Group and get ID
+            ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
+            groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
+            ## Create user and get ID
+            ./kcadm.sh create users -r $realm -s username="$user" -s enabled=true -s email="$usermail"
+            userid=$(./kcadm.sh get users -r $realm | jq -r '.[] | select(.username=="'$user'") | .id')
+            ## Create password for user
+            ./kcadm.sh set-password -r $realm --username "$user" --new-password "$userpass"
+            ## Assign User with Group
+            ./kcadm.sh update users/$userid/groups/$groupid -r $realm -s realm=$realm -s userId=$userid -s groupId=$groupid -n
+            ## Create Client with Approiate permissions
+            ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="$clientid" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["'$isdurl'"]'
+            ##Get the clientID and secret
+            clsid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId,protocolMappers(id,name,protocol,protocolMapper)' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
+            clientsecret=$(./kcadm.sh get clients/"$clsid"/client-secret | jq '.value' -r)
+            ## Getting the gate secret
+            kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
+            ## Updating the Client Secret
+            yq e '.security.oauth2.client.clientSecret = "'$clientsecret'"' /tmp/gate1.yml > /tmp/gate.yml
+            ## Deleting the Secret
+            kubectl delete secret oes-gate-config -n {{ .Release.Namespace }}
+            ## Creating the Secret with Client Secret Updated value and Deleting the pod
+            kubectl create secret generic oes-gate-config --from-file=/tmp/gate.yml -n {{ .Release.Namespace }}
+            kubectl delete po -l component=gate -n {{ .Release.Namespace }}
+            break
+            else
+            if [ $wait_period -gt 2000 ];
+            then
+            echo "Script is timed out as the keycloack is not ready yet......."
+            break
+            else
+            echo "Waiting for keycloack services to be ready"
+            sleep 10
+            fi
+            fi
+            done
+        command:
+          - /bin/bash
+          - +x
+          - '-c'
+        image: opsmx11/java:keycloak
+        imagePullPolicy: Always
+        name: keycloack-configure
+      serviceAccountName: oes-auto-configure-{{ .Release.Namespace }}
+      restartPolicy: Never
+{{- end }}

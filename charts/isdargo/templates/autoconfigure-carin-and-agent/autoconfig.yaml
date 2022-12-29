@@ -140,7 +140,7 @@ data:
          {{- end }}
          {{- if .Values.autoconfigureagent }}
          {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
-         ### Create Datasource 
+         ### Create Datasource
        ## create Elasticsearch datasource
        curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
