@@ -1,0 +1,50 @@
+{{- if .Values.installkeycloak }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+    "helm.sh/hook-weight": "2"
+  name: keycloak-configure
+spec:
+  template:
+    spec:
+      containers:
+      - args:
+          - |-
+            set -x
+            admuser="keycloack"
+            admpass="keycloack123"
+            group="{{ .Values.global.saporgate.config.adminGroups }}"
+            realm="master"
+            user="admin"
+            userpass="opsmxadmin123"
+            clientid="isd-client"
+            usermail="test23@opsmx.io"
+            isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}"
+            cd /tmp/keycloak-11.0.0/bin/
+            ## Login
+            ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm "$realm" --user $admuser --client admin-cli --password $admpass
+            ## Create Group and get ID
+            ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
+            groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
+            ## Create user and get ID
+            ./kcadm.sh create users -r $realm -s username="$user" -s enabled=true -s email="$usermail"
+            userid=$(./kcadm.sh get users -r $realm | jq -r '.[] | select(.username=="'$user'") | .id')
+            ## Create password for user  
+            ./kcadm.sh set-password -r $realm --username "$user" --new-password "$userpass"
+            ## Assign User with Group
+            ./kcadm.sh update users/$userid/groups/$groupid -r $realm -s realm=$realm -s userId=$userid -s groupId=$groupid -n
+            ## Create Client with Approiate permissions
+            ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="isdclient" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["$isdurl/login"]'
+        command:
+          - /bin/bash
+          - +x
+          - '-c'
+        image: opsmx11/java:keycloak
+        imagePullPolicy: Always
+        name: keycloak-configure
+      serviceAccountName: oes-auto-configure-{{ .Release.Namespace }}
+      restartPolicy: Never
+{{- end }}
