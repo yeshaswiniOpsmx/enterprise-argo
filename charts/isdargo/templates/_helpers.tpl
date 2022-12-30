@@ -183,3 +183,12 @@ Redis base URL for Spinnaker
 {{- end }}
 {{- end }}
 
+{{/*
+Return the proper Drupal image name
+*/}}
+{{- define "agent.hostname" -}}
+{{- $svc := default "agent-grpc" -}}
+{{- $relns := .Release.Namespace -}}
+{{- $value := default "svc.cluster.local" -}}
+{{- printf "%s.%s.%s" $svc $relns $value -}}
+{{- end -}}

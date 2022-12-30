@@ -1744,7 +1744,8 @@ vault:
 secretStore: db
 ###################################
 forwarder:
-  externalName: agent-grpc   # This hostname should reach agent-grpc service from the agent
+  # Update the externalName if only ISD and Argo running in different cluster with DNS if not leave as it is
+  externalName:
   enabled: true
   agent:
     image: quay.io/opsmxpublic/forwarder-agent:v3.5.7
