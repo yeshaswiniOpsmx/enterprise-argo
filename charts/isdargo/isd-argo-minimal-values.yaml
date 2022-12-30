@@ -23,7 +23,7 @@ autoconfigureagent: true
 cdagentname: argocd
 #######################################################################################
 forwarder:
-  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
+  externalName: agent-grpc.namespace.svc.cluster.local ## specify the controller URL in order to connect with external agent
   agent:
     image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
   image:

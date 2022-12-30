@@ -10,8 +10,13 @@ metadata:
 data:
   configFile: |
     serviceHostname: opsmx-controller-controller1
+    {{- if not .Values.global.createIngress }}
+    agentHostname: agent-grpc
+    remoteCommandHostname: agent-grpc
+    {{- else }}
     agentHostname: {{ .Values.forwarder.externalName }}
     remoteCommandHostname: {{ .Values.forwarder.externalName }}
+    {{- end }}
     controlHostname: opsmx-controller-controller1
     #agentAdvertisePort: "443"
     serviceAuth:
