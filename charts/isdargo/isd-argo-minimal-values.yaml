@@ -23,7 +23,8 @@ autoconfigureagent: true
 cdagentname: argocd
 #######################################################################################
 forwarder:
-  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
+  # Update the externalName(i.e controller URL) in order to connect to external agent (i.e ISD and Argo running in different cluster with DNS else leave as it is)
+  externalName:
   agent:
     image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
   image:
