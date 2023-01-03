@@ -1,0 +1,37 @@
+{{- if and (.Values.global.createIngress) (eq .Values.installationMode "OEA-AP") }}
+{{- if .Values.installkeycloak }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{- if .Values.global.certManager.installed }}
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: letsencrypt-{{ .Release.Namespace }}-oes
+    kubernetes.io/tls-acme: "true"
+{{- end }}
+{{- if .Values.global.keycloak.ingress.annotations }}
+{{ tpl (toYaml .Values.global.keycloak.ingress.annotations) . | indent 4 }}
+{{- end }}
+  labels:
+  name: keycloack-ingress
+spec:
+  rules:
+  - host: keycloak-kc.isd-qa.opsmx.net
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloack-http
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+{{- if .Values.global.ssl.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.global.keycloak.host }}
+{{ toYaml .Values.global.keycloak.ingress.tls | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -211,11 +211,11 @@ security:
     client:
       clientId: isd-client ### This is the client id created in keycloak
       clientSecret: xxx ### The client secret which will be present under the Credentials tab
-      accessTokenUri: http://keycloack-http:80/auth/realms/master/protocol/openid-connect/token ### Under realm settings -> Endpoints
-      userAuthorizationUri: http://keycloack-http:80/auth/realms/master/protocol/openid-connect/auth ### Under realm settings -> Endpoints
+      accessTokenUri: http://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/token ### Under realm settings -> Endpoints
+      userAuthorizationUri: http://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/auth ### Under realm settings -> Endpoints
       scope: openid, profile, roles ### These are default values
     resource:
-      userInfoUri: http://keycloack-http:80/auth/realms/master/protocol/openid-connect/userinfo ### Under realm settings -> Endpoints
+      userInfoUri: http://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/userinfo ### Under realm settings -> Endpoints
     userInfoMapping:
       email: email
       firstName: ''
