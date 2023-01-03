@@ -49,8 +49,10 @@ spec:
             ## Create Client with Approiate permissions
             ./kcadm.sh create clients -r $realm -s clientId=$clientid -s enabled=true -s name="$clientid" -s protocol=openid-connect -s directAccessGrantsEnabled=true -s publicClient=false -s standardFlowEnabled=true -s 'redirectUris=["'$isdurl'"]'
             ##Get the clientID and secret
-            clsid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId,protocolMappers(id,name,protocol,protocolMapper)' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
+            clsid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
             clientsecret=$(./kcadm.sh get clients/"$clsid"/client-secret | jq '.value' -r)
+            ## Create mapper for client
+            ./kcadm.sh create clients/"$clsid"/protocol-mappers/models -r $realm -s protocol=openid-connect -s 'config."full.path"=true' -s 'config."id.token.claim"=true' -s 'config."access.token.claim"=true' -s 'config."userinfo.token.claim"=true' -s 'config."claim.name"=isd-claim-token' -s name=isd-mapper -s protocolMapper=oidc-group-membership-mapper -s 'config."claim.name"=group_membership' -s 'config."jsonType.label"=String'
             ## Getting the gate secret
             kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
             ## Updating the Client Secret
