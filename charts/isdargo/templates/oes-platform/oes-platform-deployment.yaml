@@ -36,6 +36,10 @@ spec:
       containers:
       - image: {{ template "platform.image" . }}
         name: oes-platform
+        env:  
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
         ports:
         - containerPort: 8095
           protocol: TCP

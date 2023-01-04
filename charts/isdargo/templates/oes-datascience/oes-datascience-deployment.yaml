@@ -30,6 +30,10 @@ spec:
       - image: {{ template "datascience.image" . }}
         imagePullPolicy: IfNotPresent
         name: oes-datascience
+        env:
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
         ports:
         - containerPort: 5005
           name: backend

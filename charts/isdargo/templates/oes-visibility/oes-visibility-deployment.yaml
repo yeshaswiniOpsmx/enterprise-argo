@@ -35,6 +35,10 @@ spec:
       containers:
       - image: {{ template "visibility.image" . }}
         name: oes-visibility
+        env:
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
         ports:
         - containerPort: 8096
           protocol: TCP

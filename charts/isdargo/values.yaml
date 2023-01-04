@@ -25,6 +25,11 @@ installationMode: OEA-AP
 ########################################################################################
 k8sServiceType: ClusterIP
 ########################################################################################
+#  Env variables will be abblied to all ISD sevices
+extraEnvVars:
+  - name: JAVA_OPTS
+    value: -Xmx512m
+########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
   repoUrl: https://quay.io/
