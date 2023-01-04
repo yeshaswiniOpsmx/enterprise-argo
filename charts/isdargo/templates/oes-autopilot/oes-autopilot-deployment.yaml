@@ -99,8 +99,6 @@ spec:
           imagePullPolicy: {{ .Values.autopilot.image.pullPolicy }}
           name: oes-autopilot
           env:
-          - name: spring_profiles_active
-            value: vault,local
           {{- if .Values.extraEnvVars }}
           {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 10 }}
           {{- end }}
