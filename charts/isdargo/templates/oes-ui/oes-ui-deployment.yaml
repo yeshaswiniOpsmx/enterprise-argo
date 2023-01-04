@@ -45,6 +45,12 @@ spec:
       containers:
       - image: {{ template "ui.image" . }}
         name: oes-ui
+        env:
+        - name: spring_profiles_active
+          value: vault,local
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
         ports:
         - containerPort: 8080
           protocol: TCP

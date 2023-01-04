@@ -30,6 +30,12 @@ spec:
       - image: {{ template "auditservice.image" . }}
         imagePullPolicy: IfNotPresent
         name: oes-audit
+        env:
+        - name: spring_profiles_active
+          value: vault,local
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
         ports:
         - containerPort: 8097
           name: backend

@@ -36,6 +36,8 @@ spec:
       - image: {{ template "sapor.image" . }}
         name: oes-sapor
         env:
+        - name: spring_profiles_active
+          value: vault,local  
        {{- if .Values.extraEnvVars }}
        {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
        {{- end }}
