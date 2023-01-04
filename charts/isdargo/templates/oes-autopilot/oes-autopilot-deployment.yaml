@@ -95,55 +95,55 @@ spec:
         command: ['/bin/bash', '-c', "sleep 30;echo Waiting for oes-db to be up and running; pg_isready -h oes-db -p 5432 && echo PostgreSQL DB is ready to receive connections"]
       {{- end }}
       containers:
-        - image: {{ template "autopilot.image" . }}
-          imagePullPolicy: {{ .Values.autopilot.image.pullPolicy }}
-          name: oes-autopilot
-          env:
-          {{- if .Values.extraEnvVars }}
-          {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 10 }}
-          {{- end }}
-          resources:
+      - image: {{ template "autopilot.image" . }}
+        imagePullPolicy: {{ .Values.autopilot.image.pullPolicy }}
+        name: oes-autopilot
+        env:
+       {{- if .Values.extraEnvVars }}
+       {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
+       {{- end }}
+        resources:
 {{ toYaml .Values.autopilot.resources | indent 12 }}
-          ports:
-            - containerPort: 8090
-              name: backend
-              protocol: TCP
-            - containerPort: 9090
-              name: metricfetcher
-              protocol: TCP
-          volumeMounts:
-          - mountPath: /opsmx/conf/controller/ca.crt
-            name: ca-certs-volume
-            subPath: tls.crt
-          - mountPath: /opsmx/conf/controller/tls.crt
-            name: certs-volume
-            subPath: tls.crt
-          - mountPath: /opsmx/conf/controller/tls.key
-            name: certs-volume
-            subPath: tls.key
-          - name: autopilot-config-volume
-            mountPath: /opsmx/conf/autopilot.properties
-            subPath: autopilot.properties
-          - mountPath: /opsmx/conf/bootstrap.yml
-            name: bootstrap-config-volume
-            subPath: bootstrap.yml
-          - mountPath: /opsmx/conf/standard-error-code.csv
-            name: standard-error-conf
-            subPath: standard-error-codes.csv
-          {{- if .Values.global.customCerts.enabled }}
-          - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
-            subPath: cacerts
-            name: cacerts
-          {{- end }}
-          readinessProbe:
-            tcpSocket:
-              port: 8090
-            initialDelaySeconds: 60
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /mgmt/health
-              port: 8090
-            initialDelaySeconds: 120
-            periodSeconds: 60
+        ports:
+        - containerPort: 8090
+          name: backend
+          protocol: TCP
+        - containerPort: 9090
+          name: metricfetcher
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /opsmx/conf/controller/ca.crt
+          name: ca-certs-volume
+          subPath: tls.crt
+        - mountPath: /opsmx/conf/controller/tls.crt
+          name: certs-volume
+          subPath: tls.crt
+        - mountPath: /opsmx/conf/controller/tls.key
+          name: certs-volume
+          subPath: tls.key
+        - name: autopilot-config-volume
+          mountPath: /opsmx/conf/autopilot.properties
+          subPath: autopilot.properties
+        - mountPath: /opsmx/conf/bootstrap.yml
+          name: bootstrap-config-volume
+          subPath: bootstrap.yml
+        - mountPath: /opsmx/conf/standard-error-code.csv
+          name: standard-error-conf
+          subPath: standard-error-codes.csv
+        {{- if .Values.global.customCerts.enabled }}
+        - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
+          subPath: cacerts
+          name: cacerts
+        {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: 8090
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /mgmt/health
+            port: 8090
+          initialDelaySeconds: 120
+          periodSeconds: 60
 {{- end -}}
