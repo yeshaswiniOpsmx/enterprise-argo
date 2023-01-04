@@ -43,7 +43,7 @@ imageCredentials:
 global:
   argocd:
     # Please below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
-    host: "argo-test4.argo.opsmx.net"
+    host: "argo-test4.ninja-test.opsmx.net"
 
   argoworkflows:
     # Please below string for all occurences in this file with proper dns entry to access the ArgoWorkflows UI eg:argoworkflow.example.ops.com
@@ -51,11 +51,11 @@ global:
 
   argorollouts:
     # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
-    host: "rollouts-test4.argo.opsmx.net"
+    host: "rollouts-test4.ninja-test.opsmx.net"
 
   oesUI:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
-    host: isd-test4.argo.opsmx.net
+    host: isd-test4.ninja-test.opsmx.net
 
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
@@ -80,7 +80,7 @@ argo-cd:
   configs:
     cm:
       # Argo CD's externally facing base URL. Required when configuring SSO
-      url: "https://argo-test4.argo.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      url: "https://argo-test4.ninja-test.opsmx.net" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
       # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
       admin.enabled: "true"
       accounts.admin: apiKey
@@ -150,7 +150,7 @@ argo-cd:
       server.x.frame.options: ' '
   notifications:
     enabled: true
-    argocdUrl: "argo-test4.argo.opsmx.net"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+    argocdUrl: "argo-test4.ninja-test.opsmx.net"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
 
 ###################################################
 # argo-workflows configuration
@@ -162,7 +162,7 @@ argo-workflows:
       - --auth-mode=sso
     sso:
      #issuerAlias: http://argocd.ninja-test.opsmx.net/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
-      issuer: https://argo-test4.argo.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: https://argo-test4.ninja-test.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
       # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
       sessionExpiry: 240h
       clientId:
