@@ -1,8 +1,10 @@
+{{- if (eq .Values.secretStore "db") }}
 spring:
   datasource:
     url: {{ .Values.db.url }}/auditdb
     username: '{{ .Values.db.username }}'
     password: '{{ .Values.db.password }}'
+{{- end }}
 logging:
     level:
       com.opsmx.auditservice: INFO

@@ -14,11 +14,13 @@ OBJECT_STORAGE:
       ENDPOINT: http://{{ .Release.Name }}-minio:9000
       BUCKET_NAME: autopilot
 POSTGRES:
+      {{- if (eq .Values.secretStore "db") }}
       USERNAME: '{{ .Values.db.username }}'
       PASSWORD: '{{ .Values.db.password }}'
       HOST: {{ (split ":" (split "//" .Values.db.url)._1)._0 }}
       PORT: 5432
       DB: autopilotqueue
+      {{- end }}
 
 RABBITMQ:
       USERNAME: '{{ .Values.rabbitmq.username }}'
