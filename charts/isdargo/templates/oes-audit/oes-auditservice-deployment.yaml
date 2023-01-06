@@ -2,46 +2,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
   labels:
     app: oes
-    component: auditclient
+    component: auditservice
 {{ include "oes.standard-labels" . | indent 4 }}
-  name: oes-audit-client
+  name: oes-audit-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: oes
-      component: auditclient
+      component: auditservice
   template:
     metadata:
       annotations:
-        configmap/checksum: {{ (.Files.Glob "config/oes-audit/audit-client-local.yml").AsConfig | sha256sum }}
-{{- if .Values.auditClient.annotations -}}
-        {{ toYaml .Values.auditClient.annotations | nindent 8 }}
+        configmap/checksum: {{ (.Files.Glob "config/oes-audit/audit-local.yml").AsConfig | sha256sum }}
+{{- if .Values.audit.annotations -}}
+        {{ toYaml .Values.audit.annotations | nindent 8 }}
 {{- end }}
       labels:
         app: oes
-        component: auditclient
+        component: auditservice
 {{ include "oes.standard-labels" . | indent 8 }}
     spec:
+      {{- if .Values.db.enabled }}
+      initContainers:
+      - name: db-check
+        image: {{ .Values.global.customImages.registry }}/postgres:9.6.5
+        command: ['/bin/bash', '-c', "sleep 30;echo Waiting for oes-db to be up and running; pg_isready -h oes-db -p 5432 && echo PostgreSQL DB is ready to receive connections"]
+      {{- end }}
       containers:
-      - image: {{ template "auditclient.image" . }}
+      - image: {{ template "auditservice.image" . }}
         imagePullPolicy: IfNotPresent
-        name: oes-audit-client
+        name: oes-audit
         env:
        {{- if .Values.extraEnvVars }}
        {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
        {{- end }}
         ports:
-        - containerPort: 8098
+        - containerPort: 8097
           name: backend
           protocol: TCP
         livenessProbe:
           failureThreshold: 3
           httpGet:
             path: /mgmt/health
-            port: 8098
+            port: 8097
             scheme: HTTP
           initialDelaySeconds: 60
           periodSeconds: 60
@@ -53,9 +60,10 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           tcpSocket:
-            port: 8098
+            port: 8097
+          timeoutSeconds: 1
         volumeMounts:
-        - mountPath: /opsmx/conf/audit-client-local.yml
+        - mountPath: /opsmx/conf/audit-service-local.yml
           name: audit-config-volume
           subPath: audit-local.yml
         - mountPath: /opsmx/conf/bootstrap.yml
@@ -102,11 +110,12 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
+      volumes:
       - secret:
           items:
           - key: audit-local.yml
             path: audit-local.yml
-          secretName: oes-audit-client-config
+          secretName: oes-audit-service-config
         name: audit-config-volume
       - name: bootstrap-config-volume
         secret:
