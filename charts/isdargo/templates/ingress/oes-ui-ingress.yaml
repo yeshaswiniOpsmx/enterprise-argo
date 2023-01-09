@@ -22,7 +22,7 @@ spec:
           service:
             name: oes-ui
             port:
-              number: 8080
+              number: 8093
         path: /
         pathType: ImplementationSpecific
 {{- if .Values.global.ssl.enabled }}

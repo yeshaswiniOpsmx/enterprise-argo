@@ -68,13 +68,13 @@ spec:
           {{- end }}
         readinessProbe:
           tcpSocket:
-            port: 8080
+            port: 8093
           initialDelaySeconds: 15
           periodSeconds: 5
         livenessProbe:
           httpGet:
             path: /ui/indexl.html
-            port: 8080
+            port: 8093
           initialDelaySeconds: 15
           periodSeconds: 5
       {{- if .Values.imagePullSecret}}
