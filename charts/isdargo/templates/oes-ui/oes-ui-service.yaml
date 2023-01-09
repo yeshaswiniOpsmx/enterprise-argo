@@ -16,12 +16,12 @@ spec:
   ports:
   - name: "https"
     port: 443
-    targetPort: 8080
+    targetPort: 8093
   - name: "http"
-    port: 8080
-    targetPort: 8080
+    port: 8093
+    targetPort: 8093
     {{- if eq .Values.k8sServiceType "NodePort" }}
-    nodePort: 8080
+    nodePort: 8093
     {{- end }}
   selector:
     app: oes

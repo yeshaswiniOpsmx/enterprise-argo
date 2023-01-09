@@ -477,6 +477,22 @@
         "TOOLTIP": "Metric template for the verification run",
         "VALIDATION_MESSAGE": {}
       },
+      "LOG_BASELINE" :{
+        "TOOLTIP": "Filter keys values to collect log data for Baseline",
+        "VALIDATION_MESSAGE" :{}
+      },
+      "METRIC_BASELINE" :{
+        "TOOLTIP": "Filter keys values to collect metric data for Baseline ",
+        "VALIDATION_MESSAGE" :{}
+      },
+      "LOG_NEW_RELEASE" :{
+        "TOOLTIP": "Filter keys values to collect log data for New Release",
+        "VALIDATION_MESSAGE" :{}
+      },
+      "METRIC_NEW_RELEASE" :{
+        "TOOLTIP": "Filter keys values to collect metric data for New Release",
+        "VALIDATION_MESSAGE" :{}
+      },
       "LOG_BASELINE_START_TIME": {
         "TOOLTIP": "Start time of the canary analysis for Baseline",
         "VALIDATION_MESSAGE": {}
@@ -546,7 +562,7 @@
         "VALIDATION_MESSAGE": {}
       },
       "INTERVAL_MINUTES": {
-        "TOOLTIP": "The Lifetime hours in minutes",
+        "TOOLTIP": "The duration of the interval in minutes",
         "VALIDATION_MESSAGE": {}
       },
       "REGULAR_EXPRESSION": {
