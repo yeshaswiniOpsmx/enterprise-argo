@@ -22,6 +22,8 @@ spec:
             if [ "$KEYCLOACK" == "true" ];
             then
             echo "keycloackservices are Up and Ready.."
+            kubectl cp /tmp/OpsMx/ keycloack-0:/opt/jboss/keycloak/themes/OpsMx
+            sleep 5
             admuser="keycloak"
             admpass="keycloak123"
             group="{{ .Values.global.saporgate.config.adminGroups }}"
@@ -53,10 +55,14 @@ spec:
             clientsecret=$(./kcadm.sh get -r $realm clients/"$clsid"/client-secret | jq '.value' -r)
             ## Create mapper for client
             ./kcadm.sh create clients/"$clsid"/protocol-mappers/models -r $realm -s protocol=openid-connect -s 'config."full.path"=true' -s 'config."id.token.claim"=true' -s 'config."access.token.claim"=true' -s 'config."userinfo.token.claim"=true' -s 'config."claim.name"=isd-claim-token' -s name=isd-mapper -s protocolMapper=oidc-group-membership-mapper -s 'config."claim.name"=group_membership' -s 'config."jsonType.label"=String'
+            ## Updating the OpsMx theme in KeyCloak
+            ./kcadm.sh update realms/$realm -s "loginTheme=OpsMx"
             ## Getting the gate secret
             kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
             ## Updating the Client Secret
-            yq e '.security.oauth2.client.clientSecret = "'$clientsecret'"' /tmp/gate1.yml > /tmp/gate.yml
+            yq e '.security.oauth2.client.clientSecret = "'$clientsecret'"' /tmp/gate1.yml > /tmp/gate2.yml
+            yq e '.ldap.enabled = false' /tmp/gate2.yml > /tmp/gate3.yml
+            mv /tmp/gate3.yml /tmp/gate.yml
             ## Deleting the Secret
             kubectl delete secret oes-gate-config -n {{ .Release.Namespace }}
             ## Creating the Secret with Client Secret Updated value and Deleting the pod
