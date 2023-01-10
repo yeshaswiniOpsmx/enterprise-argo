@@ -1,23 +1,75 @@
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: true
+
+# install ingress-nginx if not installed in the cluster
+ingressnginx: false
+
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+
+############################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: OEA-AP
+
 #######################################################################################
-# Update it to host url (FQDN) that agents to connect to
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: true
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
+# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
+cdagentname: argocd
 #######################################################################################
 forwarder:
-  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
+  # Update the externalName(i.e controller URL) in order to connect to external agent (i.e ISD and Argo running in different cluster with DNS else leave as it is)
+  externalName:
+  agent:
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
+  image:
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.5.9
+########################################################################################
+## Info related to registry where OEA images are stored
+imageCredentials:
+  repoUrl: https://quay.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: quay.io/opsmxpublic
 #####################################################
 # Global Configuration
 ######################
 
 global:
-  oesUI:
-    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM  # e. Please replace this string for all occurences in this file
-
   argocd:
-    host: ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM  # Please replace this string for all occurences in this file
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
+    host: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"
+
+  argoworkflows:
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoWorkflows UI eg:argoworkflow.example.ops.com
+    host: "WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   argorollouts:
-    #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
-    host: ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM  # Please replace this string for all occurences in this file
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
+    host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
+  oesUI:
+    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
+    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: true
+
+  ## ldap configuration used for authentication and authorization
+  ldap:
+    enabled: true
+    url: ldap://openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org
 
 ###################################################
 # argo-cd configuration
@@ -42,7 +94,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+            - https://WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
         connectors:
         - type: ldap
@@ -72,6 +124,7 @@ argo-cd:
               userAttr: cn
               groupAttr: cn
               nameAttr: cn
+        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
 
     ################# groups and user permission in argcd-rbac-cm configmap configuration ################
     # -- Argo CD rbac config ([Argo CD RBAC policy])
@@ -98,6 +151,7 @@ argo-cd:
   notifications:
     enabled: true
     argocdUrl: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+
 ###################################################
 # argo-workflows configuration
 #######################
@@ -117,7 +171,7 @@ argo-workflows:
       clientSecret:
         name: argo-workflows-sso
         key: client-secret
-      redirectUrl: https://argoworkflows1.ninja-test.opsmx.net/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      redirectUrl: https://WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
       scopes:
         - groups
         - email
@@ -126,6 +180,7 @@ argo-workflows:
 ###################################################
 # argo-events configuration
 #######################
+
 argo-events:
   crds:
     # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
@@ -142,81 +197,57 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.0
+    tag: v4.1.2-rc5
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.0
-####################################################
-# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
-installArgoCD: true
-
-# install ingress-nginx if not installed in the cluster
-ingressnginx: false
-
-# installArgoRollouts enable true will install argo-rollouts
-installArgoRollouts: true
-
-# installArgoWorkflows enable true will install argo-workflows
-installArgoWorkflows: false
-
-# installArgoEvents enable true will install argo-events
-installArgoEvents: false
-
-# installArgoImageupdater enable true will install argocd-image-updater
-installArgoImageupdater: false
-
-############################################################################
-#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
-installationMode: OEA-AP
-
-#######################################################################################
-# If installed ArgoCD set to true it will installdemoapps
-# Set to false if no applications to be displayed in ArgoCD as part of default installation
-installdemoapps: true
-#######################################################################################
-# Set to true if ISD needs to connect to ArgoCD using agent service
-autoconfigureagent: true
-
-
+    tag: v4.1.2-rc5
+#####################################################
+carina:
+  image:
+    tag: v1.9.1
+#####################################################
+rabbitmq:
+  image:
+    repository: 3.11.4-management
