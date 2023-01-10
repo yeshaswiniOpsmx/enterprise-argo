@@ -1,3 +1,26 @@
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: true
+
+# install ingress-nginx if not installed in the cluster
+ingressnginx: false
+
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+
+############################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: OEA-AP
+
+#######################################################################################
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: true
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
+# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
+cdagentname: argocd
 #######################################################################################
 forwarder:
   # Update the externalName(i.e controller URL) in order to connect to external agent (i.e ISD and Argo running in different cluster with DNS else leave as it is)
@@ -7,6 +30,168 @@ forwarder:
   image:
     repository: quay.io/opsmxpublic/forwarder-controller
     tag: v3.5.9
+########################################################################################
+## Info related to registry where OEA images are stored
+imageCredentials:
+  repoUrl: https://quay.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: quay.io/opsmxpublic
+#####################################################
+# Global Configuration
+######################
+
+global:
+  argocd:
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
+    host: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"
+
+  argoworkflows:
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoWorkflows UI eg:argoworkflow.example.ops.com
+    host: "WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
+
+  argorollouts:
+    # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
+    host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
+
+  oesUI:
+    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
+    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: true
+
+  ## ldap configuration used for authentication and authorization
+  ldap:
+    enabled: true
+    url: ldap://openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org
+
+###################################################
+# argo-cd configuration
+#######################
+argo-cd:
+  crds:
+    install: true
+  configs:
+    cm:
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "https://ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      admin.enabled: "true"
+      accounts.admin: apiKey
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
+      dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        connectors:
+        - type: ldap
+          name: opsmx-openldap
+          id: ldap
+          config:
+            host: "openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+             # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbac:
+      create: true
+      # -- The name of the default role which Argo CD will falls back to, when authorizing API requests (optional).
+      # If omitted or empty, users may be still be able to login, but will see no apps, projects, etc...
+      #policy.csv |
+      #  p, role:org-admin, applications, *, */*, allow
+      #  p, role:org-admin, clusters, get, *, allow
+      #  p, role:org-admin, repositories, *, *, allow
+      #  p, role:org-admin, logs, get, *, allow
+      #  p, role:org-admin, exec, create, */*, allow
+      #  g, your-github-org:your-team, role:org-admin
+      # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
+      # The scope value can be a string, or a list of strings.
+      # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
+      # The scope value can be a string, or a list of strings.
+      scopes: "[groups]"
+
+    params:
+      server.content.security.policy: default-src * 'unsafe-inline'
+      server.x.frame.options: ' '
+  notifications:
+    enabled: true
+    argocdUrl: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+
+###################################################
+# argo-workflows configuration
+#######################
+
+argo-workflows:
+  server:
+    extraArgs:
+      - --auth-mode=sso
+    sso:
+     #issuerAlias: http://argocd.ninja-test.opsmx.net/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: https://ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+      sessionExpiry: 240h
+      clientId:
+        name: argo-workflows-sso
+        key: client-id
+      clientSecret:
+        name: argo-workflows-sso
+        key: client-secret
+      redirectUrl: https://WORKFLOWS.REPLACE.THIS.WITH.YOURCOMPANY.COM/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      scopes:
+        - groups
+        - email
+      rbac:
+        enabled: false
+###################################################
+# argo-events configuration
+#######################
+
+argo-events:
+  crds:
+    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+    install: true
+
+###################################################
+# argo-rollouts configuration
+#######################
+argo-rollouts:
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
 
 ####################################################
 auditClient:
