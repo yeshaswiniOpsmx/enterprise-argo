@@ -17,13 +17,13 @@ spec:
             while true
             do
             kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
-            KEYCLOACK=$(grep keycloack-0 /tmp/inst.status | awk '{print $2}')
+            KEYCLOAKPOD=$(kubectl get po -n {{ .Release.Namespace }} | grep "keycloak-" | awk '{print $1}')
+            KEYCLOACK=$(grep $KEYCLOAKPOD /tmp/inst.status | awk '{print $2}')
             wait_period=$(($wait_period+10))
             if [ "$KEYCLOACK" == "true" ];
             then
             echo "keycloackservices are Up and Ready.."
-            kubectl cp /tmp/OpsMx/ keycloack-0:/opt/jboss/keycloak/themes/OpsMx
-            sleep 5
+            sleep 10
             admuser="keycloak"
             admpass="keycloak123"
             group="{{ .Values.global.saporgate.config.adminGroups }}"
@@ -35,7 +35,7 @@ spec:
             isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}/login"
             cd /tmp/keycloak-11.0.0/bin/
             ## Login
-            ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm master --user $admuser --client admin-cli --password $admpass
+            ./kcadm.sh config credentials --server http://keycloak:8080 --realm master --user $admuser --client admin-cli --password $admpass
             ## Create a Realme
             ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o
             ## Create Group and get ID
@@ -57,6 +57,12 @@ spec:
             ./kcadm.sh create clients/"$clsid"/protocol-mappers/models -r $realm -s protocol=openid-connect -s 'config."full.path"=true' -s 'config."id.token.claim"=true' -s 'config."access.token.claim"=true' -s 'config."userinfo.token.claim"=true' -s 'config."claim.name"=isd-claim-token' -s name=isd-mapper -s protocolMapper=oidc-group-membership-mapper -s 'config."claim.name"=group_membership' -s 'config."jsonType.label"=String'
             ## Updating the OpsMx theme in KeyCloak
             ./kcadm.sh update realms/$realm -s "loginTheme=OpsMx"
+            ## Adding extra roles to user
+            ./kcadm.sh add-roles -r $realm --uusername $user --cclientid realm-management --rolename view-users --rolename view-clients --rolename view-realm --rolename create-client --rolename manage-clients --rolename manage-events --rolename manage-identity-providers --rolename manage-events --rolename query-users --rolename realm-admin --rolename view-events --rolename impersonation --rolename query-clients --rolename query-groups --rolename query-realms --rolename manage-users --rolename manage-realm --rolename manage-authorization --rolename view-authorization --rolename view-identity-providers
+            ## Adding extra roles user
+            ./kcadm.sh add-roles -r $realm --uusername $user --cclientid account --rolename view-profile --rolename view-applications --rolename view-consent --rolename manage-consent --rolename manage-account-links --rolename manage-account --rolename delete-account --rolename view-groups
+            ## Adding extra roles to user
+            ./kcadm.sh add-roles -r $realm --uusername $user --cclientid broker --rolename read-token
             ## Getting the gate secret
             kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
             ## Updating the Client Secret
