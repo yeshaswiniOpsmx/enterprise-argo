@@ -11,5 +11,5 @@ metadata:
 spec:
   sources:
   - web:
-      url: https://github.com/OpsMx/rollout-extension/releases/download/v0.3.7/extension.tar
+      url: https://github.com/OpsMx/rollout-extension/releases/download/v0.3.11/extension.tar
 {{- end }}
