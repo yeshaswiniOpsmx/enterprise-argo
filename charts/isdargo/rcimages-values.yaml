@@ -124,7 +124,6 @@ argo-cd:
               userAttr: cn
               groupAttr: cn
               nameAttr: cn
-        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
 
     ################# groups and user permission in argcd-rbac-cm configmap configuration ################
     # -- Argo CD rbac config ([Argo CD RBAC policy])
@@ -197,57 +196,54 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.2-rc5
+    tag: v4.1.2-rc7
 #####################################################
 carina:
   image:
-    tag: v1.9.1
+    tag: v1.9.4
 #####################################################
-rabbitmq:
-  image:
-    repository: 3.11.4-management

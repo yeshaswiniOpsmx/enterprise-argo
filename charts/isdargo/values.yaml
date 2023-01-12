@@ -1742,7 +1742,7 @@ rabbitmq:
   password: Networks123
   image:
     registry: quay.io/opsmxpublic/rabbitmq
-    repository: 3-management
+    repository: 3.11.4-management
 
   serviceAnnotations: {}
 
