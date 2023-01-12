@@ -47,6 +47,11 @@ spec:
         - mountPath: /opsmx/conf/standard-error-code.csv
           name: standard-error-conf
           subPath: standard-error-codes.csv
+          {{- if .Values.installkeycloak }}
+          mountPath: /opsmx/conf/feature.yml
+          name: oes-feature-flag
+          subPath: feature.yml
+          {{- end }}
         {{- if .Values.global.customCerts.enabled }}
         - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
           subPath: cacerts
@@ -102,6 +107,15 @@ spec:
           items:
           - key: cacerts
             path: cacerts
+      {{- end }}
+      {{- if .Values.installkeycloak }}
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: feature.yml
+            path: feature.yml
+          name: oes-feature-flag-config
+        name: oes-feature-flag
       {{- end }}
       - name: dashboard-config
         configMap:

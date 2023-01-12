@@ -1,0 +1,15 @@
+{{- if .Values.installkeycloak }}
+apiVersion: v1
+data:
+  feature.yml: |
+     feature:
+       auth-provider:
+         flag: true
+         jira: OP-18050
+kind: ConfigMap
+metadata:
+  labels:
+    app: oes
+  name: oes-feature-flag-config
+{{- end }}
+

@@ -100,7 +100,7 @@ data:
       {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
       argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web --insecure
       {{- else }}
-      argocd login --insecure --port-forward --port-forward-namespace=opsmx-argo --plaintext --username=admin --password=$argopassword
+      argocd login --insecure --port-forward --port-forward-namespace={{ .Release.Namespace }} --plaintext --username=admin --password=$argopassword
       {{- end }}
       {{- end }}
 
@@ -110,7 +110,7 @@ data:
       {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
       token=$(argocd account generate-token --insecure)
       {{- else }}
-      token=$(argocd account generate-token --insecure --port-forward --port-forward-namespace=opsmx-argo)
+      token=$(argocd account generate-token --insecure --port-forward --port-forward-namespace={{ .Release.Namespace }})
       {{- end }}
       {{- end }}
       wait=0

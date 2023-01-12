@@ -224,6 +224,382 @@ security:
     provider: isd-client ### This is the client id
 {{- end }}
 
+
+{{- if .Values.installkeycloak }}
+keycloak:
+  realmName: isd
+  ldapName: ldap
+  samlName: saml
+  clientId: isd-client
+  serverUrl: https://{{ .Values.global.keycloak.host }}/
+  username: admin
+  password: opsmxadmin123
+  ldap:
+    props:
+      connectionTimeout: ""
+      customUserSearchFilter: ""
+      readTimeout: ""
+      batchSizeForSync: ""
+      startTls: "false"
+      useTruststoreSpi: "never"
+      connectionPooling: "false"
+      searchScope: ""
+      pagination: "false"
+      importEnabled: "true"
+      syncRegistrations: "true"
+      allowKerberosAuthentication: "false"
+      useKerberosForPasswordAuthentication: "false"
+      cachePolicy: "DEFAULT"
+      usePasswordModifyExtendedOp: "false"
+      validatePasswordPolicy: "false"
+      trustEmail: "false"
+      changedSyncPeriod: "-1"
+      fullSyncPeriod: "-1"
+  auth:
+    providers:
+      - name: ldap
+        display: LDAP
+        type: label
+        helpText: LDAP
+        sections:
+          - name: toggleSettings
+            display:
+            type:
+            helpText:
+            inputparameters:
+              - name: enabled
+                display: Enabled
+                inputType: toggle
+                required: true
+                helpText: Enabled
+                readonly: false
+                placeholder:
+                defaultValue: false
+                loadValues: []
+
+          - name: connectionSettings
+            display: Connection Settings
+            type: label
+            helpText: Connection Settings
+            inputparameters:
+              - name: vendor
+                display: Vendor
+                inputType: dropdown
+                required: true
+                helpText: LDAP vendor (provider)
+                readonly: false
+                placeholder:
+                defaultValue:
+                loadValues:
+                  - Active Directory
+                  - Red Hat Directory Server
+                  - Tivoli
+                  - Novell eDirectory
+                  - Other
+
+              - name: connectionUrl
+                display: Connection URL
+                inputType: url
+                required: true
+                helpText: Connection URL to your LDAP server
+                readonly: false
+                placeholder: LDAP connection URL
+                defaultValue:
+                loadValues: []
+
+              - name: authType
+                display: Bind Type
+                inputType: dropdown
+                required: true
+                helpText: Type of the Authentication Method used during LDAP Bind operation.It is used in most of the requests sent to the LDAP server.Currently 'none' (Anonymous LDAP Authentication) or 'simple' (Bind credential + Bind password authentication) mechanisms are avilable.
+                readonly: false
+                placeholder:
+                defaultValue: simple
+                loadValues:
+                  - none
+                  - simple
+
+              - name: bindDn
+                display: Bind DN
+                inputType: text
+                required: true
+                helpText: DN of lDAP admin which will be used by keycloak to access LDAP server
+                readonly: false
+                placeholder: LDAP Bind DN
+                defaultValue:
+                loadValues: []
+
+              - name: bindCredential
+                display: Bind Credential
+                inputType: password
+                required: true
+                helpText: Password of LDAP admin. This field is able to obtains its value from vault, use ${vault.ID} format
+                readonly: false
+                placeholder: xxxxxxx
+                defaultValue:
+                loadValues: []
+
+          - name: userSearchSettings
+            display: User Search Settings
+            type: label
+            helpText: User Search Settings
+            inputparameters:
+              - name: userObjectClasses
+                display: User Object Classes
+                inputType: text
+                required: true
+                helpText: User Object Classes
+                readonly: false
+                placeholder: LDAP User Object Classes (div. by comma)
+                defaultValue:
+                loadValues: []
+
+              - name: usersDn
+                display: Users DN
+                inputType: text
+                required: true
+                helpText: Users DN
+                readonly: false
+                placeholder: LDAP Users DN
+                defaultValue:
+                loadValues: []
+
+            nestedSections:
+              - name: advancedOptions
+                display: Advanced Options
+                type: accordian
+                helpText: Advanced Options
+                inputparameters:
+                  - name: editMode
+                    display: Edit Mode
+                    inputType: dropdown
+                    required: true
+                    helpText: Edit Mode
+                    readonly: false
+                    placeholder:
+                    defaultValue: READ_ONLY
+                    loadValues:
+                      - READ_ONLY
+
+              - name: usernameLDAPAttribute
+                display: Username LDAP attribute
+                inputType: text
+                required: true
+                helpText: Username LDAP attribute
+                readonly: false
+                placeholder: LDAP attribute name for username
+                defaultValue:
+                loadValues: []
+
+              - name: rdnLDAPAttribute
+                display: RDN LDAP attribute
+                inputType: text
+                required: true
+                helpText: RDN LDAP attribute
+                readonly: false
+                placeholder: LDAP attribute name for user RDN
+                defaultValue:
+                loadValues: []
+
+              - name: uuidLDAPAttribute
+                display: UUID LDAP attribute
+                inputType: text
+                required: true
+                helpText: UUID LDAP attribute
+                readonly: false
+                placeholder: LDAP attribute name for UUID
+                defaultValue:
+                loadValues: []
+
+          - name: groupSearchSettings
+            display: Group Search Settings
+            type: label
+            helpText: Group Search Settings
+            inputparameters:
+              - name: groupsDn
+                display: Group DN
+                inputType: text
+                required: true
+                helpText: Group DN
+                readonly: false
+                placeholder:
+                defaultValue:
+                loadValues: []
+
+              - name: membershipLdapAttribute
+                display: Group Search Filter
+                inputType: text
+                required: true
+                helpText: Group Search Filter
+                readonly: false
+                placeholder:
+                defaultValue: member
+                loadValues: []
+
+              - name: groupNameLdapAttribute
+                display: Group Role Name Attribute
+                inputType: text
+                required: true
+                helpText: Group Role Name Attribute
+                readonly: false
+                placeholder:
+                defaultValue: cn
+                loadValues: []
+
+            nestedSections:
+              - name: advancedOptions
+                display: Advanced Options
+                type: accordian
+                helpText: Advanced Options
+                inputparameters:
+                  - name: groupObjectClasses
+                    display: Group Object Classes
+                    inputType: text
+                    required: false
+                    helpText: Group Object Classes
+                    readonly: false
+                    placeholder:
+                    defaultValue: groupOfNames
+                    loadValues: []
+
+                  - name: membershipUserLdapAttribute
+                    display: Membership User LDAP Attribute
+                    inputType: text
+                    required: false
+                    helpText: Membership User LDAP Attribute
+                    readonly: false
+                    placeholder:
+                    defaultValue: uid
+                    loadValues: []
+
+                  - name: membershipAttributeType
+                    display: Membership Attribute Type
+                    inputType: dropdown
+                    required: false
+                    helpText: Membership User LDAP Attribute
+                    readonly: false
+                    placeholder:
+                    defaultValue: DN
+                    loadValues:
+                      - DN
+                      - UID
+
+                  - name: mode
+                    display: Mode
+                    inputType: dropdown
+                    required: false
+                    helpText: Mode
+                    readonly: false
+                    placeholder:
+                    defaultValue: READ_ONLY
+                    loadValues:
+                      - READ_ONLY
+                      - LDAP_ONLY
+                      - IMPORT
+
+                  - name: userRolesRetrieveStrategy
+                    display: User Groups Retrieve Strategy
+                    inputType: dropdown
+                    required: false
+                    helpText: User Groups Retrieve Strategy
+                    readonly: false
+                    placeholder:
+                    defaultValue: LOAD_GROUPS_BY_MEMBER_ATTRIBUTE
+                    loadValues:
+                      - LOAD_GROUPS_BY_MEMBER_ATTRIBUTE
+                      - GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE
+
+                  - name: memberofLdapAttribute
+                    display: Member-Of LDAP Attribute
+                    inputType: text
+                    required: false
+                    helpText: Member-Of LDAP Attribute
+                    readonly: false
+                    placeholder:
+                    defaultValue: memberOf
+                    loadValues: []
+
+      - name: saml
+        display: SAML
+        type: label
+        helpText: SAML
+        sections:
+          - name: toggleSettings
+            display:
+            type:
+            helpText:
+            inputparameters:
+              - name: enabled
+                display: Enabled
+                inputType: toggle
+                required: true
+                helpText: Enabled
+                readonly: false
+                placeholder:
+                defaultValue: false
+                loadValues: []
+
+          - name: idpSettings
+            display:
+            type:
+            helpText:
+            inputparameters:
+              - name: redirectURI
+                display: Redirect URI
+                inputType: url
+                required: true
+                helpText: The redirect ui to use when confuiguring the identity provider
+                readonly: true
+                placeholder:
+                defaultValue: https://{{ .Values.global.keycloak.host }}/realms/isd/broker/saml/endpoint
+                loadValues: []
+
+          - name: identityProviderMetadata
+            display: Identity Provider Metadata
+            type: label
+            helpText: Identity Provider Metadata
+            inputparameters:
+              - name: importFromFile
+                display: Import from file
+                inputType: file
+                required: false
+                helpText: Import from file
+                readonly: false
+                placeholder:
+                defaultValue:
+                loadValues: []
+
+              - name: serviceProviderEntityId
+                display: Service Provider Entity ID
+                inputType: url
+                required: true
+                helpText: Service Provider Entity ID
+                readonly: false
+                placeholder:
+                defaultValue: https://{{ .Values.global.keycloak.host }}/realms/isd
+                loadValues: []
+
+              - name: singleSignOnServiceUrl
+                display: Single Sign-On Service URL
+                inputType: url
+                required: true
+                helpText: The url that must be used to send authentication requests (SAML AuthnRequest).
+                readonly: true
+                placeholder:
+                defaultValue:
+                loadValues: []
+
+              - name: groupAttribute
+                display: Group Attribute
+                inputType: text
+                required: false
+                helpText: Group Attribute
+                readonly: false
+                placeholder:
+                defaultValue: memberOf
+                loadValues: []
+{{- end }}
+
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:
   extensibility:
