@@ -110,18 +110,6 @@
         "required": "File cannot be empty"
       }
     },
-    "READ": {
-      "TOOLTIP": "A user must have at least one of these roles in order to view this account’s cloud resources.",
-      "VALIDATION_MESSAGE": {
-        "cannotContainSpace": "Read Permissions cannot contain space"
-      }
-    },
-    "WRITE": {
-      "TOOLTIP": "A user must have at least one of these roles in order to make changes to this account’s cloud resources",
-      "VALIDATION_MESSAGE": {
-        "cannotContainSpace": "Write Permissions cannot contain space"
-      }
-    },
     "EXECUTE": {
       "TOOLTIP": "",
       "VALIDATION_MESSAGE": {
