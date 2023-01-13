@@ -381,35 +381,35 @@ keycloak:
                     loadValues:
                       - READ_ONLY
 
-              - name: usernameLDAPAttribute
-                display: Username LDAP attribute
-                inputType: text
-                required: true
-                helpText: Username LDAP attribute
-                readonly: false
-                placeholder: LDAP attribute name for username
-                defaultValue:
-                loadValues: []
+                  - name: usernameLDAPAttribute
+                    display: Username LDAP attribute
+                    inputType: text
+                    required: true
+                    helpText: Username LDAP attribute
+                    readonly: false
+                    placeholder: LDAP attribute name for username
+                    defaultValue:
+                    loadValues: []
 
-              - name: rdnLDAPAttribute
-                display: RDN LDAP attribute
-                inputType: text
-                required: true
-                helpText: RDN LDAP attribute
-                readonly: false
-                placeholder: LDAP attribute name for user RDN
-                defaultValue:
-                loadValues: []
+                  - name: rdnLDAPAttribute
+                    display: RDN LDAP attribute
+                    inputType: text
+                    required: true
+                    helpText: RDN LDAP attribute
+                    readonly: false
+                    placeholder: LDAP attribute name for user RDN
+                    defaultValue:
+                    loadValues: []
 
-              - name: uuidLDAPAttribute
-                display: UUID LDAP attribute
-                inputType: text
-                required: true
-                helpText: UUID LDAP attribute
-                readonly: false
-                placeholder: LDAP attribute name for UUID
-                defaultValue:
-                loadValues: []
+                  - name: uuidLDAPAttribute
+                    display: UUID LDAP attribute
+                    inputType: text
+                    required: true
+                    helpText: UUID LDAP attribute
+                    readonly: false
+                    placeholder: LDAP attribute name for UUID
+                    defaultValue:
+                    loadValues: []
 
           - name: groupSearchSettings
             display: Group Search Settings

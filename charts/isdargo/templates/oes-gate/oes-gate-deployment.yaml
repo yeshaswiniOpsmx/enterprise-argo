@@ -77,11 +77,11 @@ spec:
           subPath: cacerts
           name: cacerts
         {{- end }}
-          {{- if .Values.installkeycloak }}
-          mountPath: /opt/spinnaker/config/feature.yml
-          name: oes-feature-flag
+        {{- if .Values.installkeycloak }}
+        - mountPath: /opt/spinnaker/config/feature.yml
+          name: oes-feature-flag-conf
           subPath: feature.yml
-          {{- end }}
+        {{- end }}
         readinessProbe:
           tcpSocket:
             port: 8084
@@ -146,7 +146,7 @@ spec:
           - key: feature.yml
             path: feature.yml
           name: oes-feature-flag-config
-        name: oes-feature-flag
+        name: oes-feature-flag-conf
       {{- end }}
       {{- if .Values.global.autoConfiguration.enabled }}
       - secret:

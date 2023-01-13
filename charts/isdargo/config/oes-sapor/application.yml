@@ -23,6 +23,9 @@ argo:
     newArgoAgentTemplate: newargoagentmanifest.template
     existingArgoAgentTemplate: existingargoagentmanifest.template
     newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
+    existingArgoAgentWithoutUrlTemplate: existingargoagentmanifestwithouturl.template
+    newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
+    newArgoAgentWithoutRolloutsWithoutUrlTemplate: newargoagentwithoutrolloutswithouturl.template
 
 secretManagement:
   source:

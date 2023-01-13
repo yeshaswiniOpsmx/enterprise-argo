@@ -7,6 +7,7 @@ ingressnginx: false
 # installArgoRollouts enable true will install argo-rollouts
 installArgoRollouts: true
 
+installkeycloak: false
 ############################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
@@ -70,6 +71,10 @@ global:
     groupSearchFilter: member={0}
     groupRoleAttributes: cn
     userDnPattern: cn={0},dc=example,dc=org
+
+  keycloak:
+    enabled: false
+    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
 ###################################################
 # argo-cd configuration
