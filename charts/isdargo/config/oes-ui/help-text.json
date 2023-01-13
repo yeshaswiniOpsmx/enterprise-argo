@@ -1048,6 +1048,7 @@
     "HEADER": "No Users found",
     "BODY": ""
   },
+
   "APPLICATION_DEPLOYMENT": {
     "DEPLOYMENT_GRID_SYNC": {
       "TOOLTIP": "When the cluster deployment matches with the latest pipeline execution it is 'In Sync'; if not, it is 'Out of Sync'"
@@ -1568,6 +1569,7 @@
   "DEPLOYMENT":{
     "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
     "VALIDATION_MESSAGE":{
+    
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -2091,6 +2093,7 @@
       "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
       "VALIDATION_MESSAGE":{}
     }
+    
   },
   "SERVICENOW":{
     "HEADER": "Service Now",
@@ -2883,7 +2886,7 @@
       "QUERY_NAME": {
         "TOOLTIP": "A meaningful name given to a query or a group of similar queries ",
         "VALIDATION_MESSAGE": {
-          "exist": "Query Name already exists",
+          "exist":"Query Name already exists",
           "required": "Query Name cannot be empty"
         }
       },
@@ -3034,7 +3037,152 @@
           "required": "Atleast one feature has to be enabled"
         }
       }
+    },
+"AUTHPROVIDER":{
+  "LDAP":{
+    "HEADER": "LDAP Provider",
+    "BODY": "<p>In this page, you can  define & manage LDAP",
+    "EDITMODE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Edit Mode cannot be empty"
+      }
+  },
+    "VENDOR":{
+      "VALIDATION_MESSAGE": {
+        "required":"Vendor cannot be empty"
+      }
+    },
+    "USERNAMELDAPATTRIBUTE":{
+      "VALIDATION_MESSAGE": {
+       "required":"Username LDAP attribute cannot be empty"
+      }
+    },
+    "RDNLDAPATTRIBUTE":{
+    "VALIDATION_MESSAGE": {
+      "required":"RDN LDAP attribute cannot be empty"
+      }
+    },
+    "UUIDLDAPATTRIBUTE":{
+      "VALIDATION_MESSAGE": {
+        "required":"UUID LDAP attribute cannot be empty"
+      }
+    },
+    "USEROBJECTCLASSES":{
+      "VALIDATION_MESSAGE": {
+        "required":"User Object Classes cannot be empty"
+      }
+    },
+    "CONNECTIONURL":{
+      "VALIDATION_MESSAGE": {
+        "required":"Connection Url cannot be empty"
+      }
+    },
+    "USERDN":{
+      "VALIDATION_MESSAGE": {
+        "required":"Users Dn cannot be empty"
+      }
+    },
+    "AUTHTYPE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Bind Type cannot be empty"
+      }
+    },
+    "BINDDN":{
+      "VALIDATION_MESSAGE": {
+        "required":"Bind Dn cannot be empty"
+      }
+    },
+    "BINDCREDENTIAL":{
+      "VALIDATION_MESSAGE": {
+        "required":"Bind Credential cannot be empty"
+      }
+    },
+    "GROUPSDN":{
+      "VALIDATION_MESSAGE": {
+        "required":"Groups DN cannot be empty"
+      }
+    },
+    "GROUPSEARCHFILTER":{
+      "VALIDATION_MESSAGE": {
+        "required":"Group Search Filter cannot be empty"
+      }
+    },
+    "GROUPROLENAMEATTRIBUTES":{
+      "VALIDATION_MESSAGE": {
+        "required":"Group Role Name Attributes cannot be empty"
+      }
+    },
+    "GROUPOBJECTCLASSES":{
+      "VALIDATION_MESSAGE": {
+        "required":"Group Object Classes cannot be empty"
+      }
+    },
+    "MEMBERSHIPUSERLDAPATTRIBUTE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Membership User Ldap Attribute cannot be empty"
+      }
+    },
+    "MEMBERSHIPATTRIBUTETYPE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Membership Attribute DN cannot be empty"
+      }
+    },
+   "MODE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Mode cannot be empty"
+      }
+    },
+    "USERGROUPSRETRIEVESTRATEGY":{
+      "VALIDATION_MESSAGE": {
+        "required":"User Groups Retrieve Strategy cannot be empty"
+      }
+    },
+    "MEMBEROFLDAPATTRIBUTE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Member of Ldap Attribute cannot be empty"
+      }
     }
+  },
+ "SAML":{
+   "HEADER": "SAML Provider",
+    "BODY": "<p>In this page, you can  define & manage SAML",
+    "PROVIDER":{
+     "VALIDATION_MESSAGE": {
+        "required":"Provider cannot be empty"
+      }
+    },
+    "REDIRECTURI":{
+      "VALIDATION_MESSAGE": {
+        "required":"Redirect URI cannot be empty"
+      }
+    },
+    "SERVICEPROVIDERENTITYID":{
+      "VALIDATION_MESSAGE": {
+        "required":"Service Provider Entity cannot be empty"
+      }
+    },
+    "SINGLESIGNONSERVICEURL":{
+    "VALIDATION_MESSAGE": {
+      "required":"Single Sign-On Service Url cannot be empty"
+      }
+    },
+    "IMPORTFROMURL":{
+      "VALIDATION_MESSAGE": {
+        "required":"Import from URL cannot be empty"
+      }
+    },
+    "IMPORTFROMFILE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Import from File cannot be empty"
+      }
+    },
+    "GROUPATTRIBUTE":{
+      "VALIDATION_MESSAGE": {
+        "required":"Group Attribute cannot be empty"
+      }
+   }
+  }
+}
   },
   "LOG_TEMPLATE": {
     "STRING_PATTERN": {
