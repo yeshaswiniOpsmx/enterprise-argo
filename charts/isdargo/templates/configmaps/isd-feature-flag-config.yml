@@ -1,4 +1,4 @@
-{{- if .Values.installkeycloak }}
+{{- if (eq .Values.installationMode "OEA-AP") }}
 apiVersion: v1
 data:
   feature.yml: |
@@ -10,6 +10,5 @@ kind: ConfigMap
 metadata:
   labels:
     app: oes
-  name: oes-feature-flag-config
+  name: isd-feature-flag-config
 {{- end }}
-

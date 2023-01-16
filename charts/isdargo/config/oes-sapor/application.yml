@@ -21,8 +21,8 @@ standardErrorCodes:
 argo:
   manifest:
     newArgoAgentTemplate: newargoagentmanifest.template
+    newArgoAgentWithoutUrlTemplate: newargoagentmanifestwithouturl.template
     existingArgoAgentTemplate: existingargoagentmanifest.template
-    newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
     existingArgoAgentWithoutUrlTemplate: existingargoagentmanifestwithouturl.template
     newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
     newArgoAgentWithoutRolloutsWithoutUrlTemplate: newargoagentwithoutrolloutswithouturl.template
