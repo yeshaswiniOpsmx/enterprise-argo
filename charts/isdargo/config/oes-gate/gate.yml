@@ -138,7 +138,7 @@ cors:
   allowed-origins-pattern: ^https?://(?:localhost|{{ .Values.global.oesUI.host }}|opsmx.com)(?::[1-9]\d*)?/?
   {{- end }}
 ldap:
-{{- if .Values.global.installOpenLdap }}
+{{- if and (.Values.global.installOpenLdap) (not .Values.installkeycloak) }}
   enabled: true
   url: ldap://openldap:389
   managerDn: cn=admin,dc=example,dc=org
@@ -148,10 +148,14 @@ ldap:
   groupRoleAttributes: cn
   userDnPattern: cn={0},dc=example,dc=org
 {{ else }}
+{{- if and (.Values.global.installOpenLdap) (.Values.installkeycloak) }}
+  enabled: false
+{{ else }}
 {{- if .Values.global.ldap.enabled }}
 {{ toYaml .Values.global.ldap | indent 2 }}
 {{ else }}
   enabled: false
+{{- end }}
 {{- end }}
 {{- end }}
 {{- if .Values.gate.config.saml.enabled }}
@@ -225,7 +229,6 @@ security:
 {{- end }}
 
 
-{{- if .Values.installkeycloak }}
 keycloak:
   realmName: isd
   ldapName: ldap
@@ -598,7 +601,6 @@ keycloak:
                 placeholder:
                 defaultValue: memberOf
                 loadValues: []
-{{- end }}
 
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:

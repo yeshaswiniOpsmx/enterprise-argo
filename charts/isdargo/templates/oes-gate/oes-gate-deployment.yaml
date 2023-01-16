@@ -64,6 +64,9 @@ spec:
         - mountPath: /opt/spinnaker/config/bootstrap.yml
           name: bootstrap-volume
           subPath: bootstrap.yml
+        - mountPath: /opt/spinnaker/config/feature.yml
+          name: isd-feature-flag-conf
+          subPath: feature.yml
         {{- if .Values.gate.config.saml.enabled }}
         - mountPath: {{ .Values.gate.config.saml.keyStore }}
           name: saml-jks
@@ -76,11 +79,6 @@ spec:
         - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
           subPath: cacerts
           name: cacerts
-        {{- end }}
-        {{- if .Values.installkeycloak }}
-        - mountPath: /opt/spinnaker/config/feature.yml
-          name: oes-feature-flag-conf
-          subPath: feature.yml
         {{- end }}
         readinessProbe:
           tcpSocket:
@@ -139,15 +137,13 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      {{- if .Values.installkeycloak }}
       - configMap:
           defaultMode: 420
           items:
           - key: feature.yml
             path: feature.yml
-          name: oes-feature-flag-config
-        name: oes-feature-flag-conf
-      {{- end }}
+          name: isd-feature-flag-config
+        name: isd-feature-flag-conf
       {{- if .Values.global.autoConfiguration.enabled }}
       - secret:
           secretName: oes-gate-config

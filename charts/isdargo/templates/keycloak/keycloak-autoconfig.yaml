@@ -67,8 +67,7 @@ spec:
             kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
             ## Updating the Client Secret
             yq e '.security.oauth2.client.clientSecret = "'$clientsecret'"' /tmp/gate1.yml > /tmp/gate2.yml
-            yq e '.ldap.enabled = false' /tmp/gate2.yml > /tmp/gate3.yml
-            mv /tmp/gate3.yml /tmp/gate.yml
+            mv /tmp/gate2.yml /tmp/gate.yml
             ## Deleting the Secret
             kubectl delete secret oes-gate-config -n {{ .Release.Namespace }}
             ## Creating the Secret with Client Secret Updated value and Deleting the pod
