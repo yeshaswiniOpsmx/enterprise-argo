@@ -635,8 +635,8 @@ jwt:
   secret: argo_navis
   token:
     durationInSeconds: 36000
-  vela:
-    bounceUrl: http://vela-service/bounce
+vela:
+  bounceUrl: http://vela-service/bounce
 
 logging:
   level:
