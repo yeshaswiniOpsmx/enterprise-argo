@@ -4,24 +4,24 @@ kind: Service
 metadata:
   labels:
     app: oes
-    component: carina
+    component: carina-instance
 {{ include "oes.standard-labels" . | indent 4 }}
-{{- if .Values.carina.serviceAnnotations }}
+{{- if .Values.carinainstance.serviceAnnotations }}
   annotations:
-{{ toYaml .Values.carina.serviceAnnotations | indent 4 }}
+{{ toYaml .Values.carinainstance.serviceAnnotations | indent 4 }}
 {{- end }}
-  name: oes-carina
+  name: carina-instance
 spec:
   ports:
-  - name: carina
-    port: 8091
+  - name: carina-instance
+    port: 8090
     protocol: TCP
-    targetPort: 8091
+    targetPort: 8090
     {{- if eq .Values.k8sServiceType "NodePort" }}
-    nodePort: 8091
+    nodePort: 8090
     {{- end }}
   selector:
     app: oes
-    component: carina
+    component: carina-instance
   type: {{ .Values.k8sServiceType }}
 {{- end }}

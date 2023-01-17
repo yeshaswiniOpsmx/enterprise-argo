@@ -1309,7 +1309,7 @@ kibana:
 
 ##################################################################################################################
 #
-carina:
+carinamanager:
   ## Image specific details
   ##
   image:
@@ -1323,6 +1323,19 @@ carina:
 
   resources: {}
   config: {}
+
+#######################################################################################################################
+carinainstance:
+  image:
+    repository: carina-instance
+    tag: v1.9.2
+    pullPolicy: IfNotPresent
+  
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
 
 #######################################################################################################################
 # Values of OEA Database

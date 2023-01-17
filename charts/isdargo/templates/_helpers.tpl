@@ -146,14 +146,26 @@ Return the proper Autopilot image name
 {{- end -}}
 
 {{/*
-Return the proper Autopilot image name
+Return the proper Carina Manager image name
 */}}
-{{- define "carina.image" -}}
+{{- define "carinamanager.image" -}}
 {{- $registryName := .Values.imageCredentials.registry -}}
-{{- $repositoryName := .Values.carina.image.repository -}}
-{{- $tag := .Values.carina.image.tag | toString -}}
+{{- $repositoryName := .Values.carinamanager.image.repository -}}
+{{- $tag := .Values.carinamanager.image.tag | toString -}}
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
+
+
+{{/*
+Return the proper Carina Instance image name
+*/}}
+{{- define "carinainstance.image" -}}
+{{- $registryName := .Values.imageCredentials.registry -}}
+{{- $repositoryName := .Values.carinainstance.image.repository -}}
+{{- $tag := .Values.carinainstance.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
+
 
 
 {{/* vim: set filetype=mustache: */}}
