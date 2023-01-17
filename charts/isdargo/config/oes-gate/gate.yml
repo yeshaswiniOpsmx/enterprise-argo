@@ -631,6 +631,13 @@ allowUnauthenticatedAccess:
   agentAPI: {{ .Values.gate.config.agentAPI }}
   webhooks: {{ .Values.gate.config.webhooks }}
 
+jwt:
+  secret: argo_navis
+  token:
+    durationInSeconds: 36000
+  vela:
+    bounceUrl: http://vela-service/bounce
+
 logging:
   level:
     com.netflix.spinnaker.gate.security: INFO
