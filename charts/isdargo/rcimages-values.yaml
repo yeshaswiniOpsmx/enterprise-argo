@@ -248,7 +248,10 @@ visibility:
     repository: ubi8-oes-visibility
     tag: v4.1.2-rc8
 #####################################################
-carina:
+carinamanager:
   image:
-    tag: v1.9.4
+    tag: v1.9.2
 #####################################################
+carinainstance:
+  image:
+    tag: v1.9.2

@@ -6,14 +6,21 @@ metadata:
     app: oes
     component: carina
 {{ include "oes.standard-labels" . | indent 4 }}
-{{- if .Values.carina.serviceAnnotations }}
+{{- if .Values.carinamanager.serviceAnnotations }}
   annotations:
-{{ toYaml .Values.carina.serviceAnnotations | indent 4 }}
+{{ toYaml .Values.carinamanager.serviceAnnotations | indent 4 }}
 {{- end }}
   name: oes-carina
 spec:
   ports:
   - name: carina
+    port: 8091
+    protocol: TCP
+    targetPort: 8091
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8091
+    {{- end }}
+  - name: carina-rbac
     port: 8091
     protocol: TCP
     targetPort: 8091

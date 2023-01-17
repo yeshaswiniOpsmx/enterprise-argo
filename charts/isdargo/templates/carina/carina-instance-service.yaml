@@ -1,0 +1,27 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oes
+    component: carina-instance
+{{ include "oes.standard-labels" . | indent 4 }}
+{{- if .Values.carinainstance.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.carinainstance.serviceAnnotations | indent 4 }}
+{{- end }}
+  name: oes-carina
+spec:
+  ports:
+  - name: carina-instance
+    port: 8090
+    protocol: TCP
+    targetPort: 8090
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8090
+    {{- end }}
+  selector:
+    app: oes
+    component: carina-instance
+  type: {{ .Values.k8sServiceType }}
+{{- end }}
