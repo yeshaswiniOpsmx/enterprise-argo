@@ -21,11 +21,11 @@ spec:
     nodePort: 8091
     {{- end }}
   - name: carina-rbac
-    port: 8091
+    port: 8092
     protocol: TCP
-    targetPort: 8091
+    targetPort: 8092
     {{- if eq .Values.k8sServiceType "NodePort" }}
-    nodePort: 8091
+    nodePort: 8092
     {{- end }}
   selector:
     app: oes

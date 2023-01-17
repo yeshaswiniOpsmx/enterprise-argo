@@ -63,7 +63,7 @@ oes:
   gate:
     url: http://oes-gate:8084
   carinamanager:
-    url: "http://oes-carina:8091"
+    url: "http://oes-carina:8092"
   approvalGate:
     apiUrl: {{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}/gate/visibilityservice/v5/approvalGates/{id}/trigger
 
