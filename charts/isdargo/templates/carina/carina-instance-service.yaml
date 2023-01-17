@@ -10,7 +10,7 @@ metadata:
   annotations:
 {{ toYaml .Values.carinainstance.serviceAnnotations | indent 4 }}
 {{- end }}
-  name: oes-carina
+  name: carina-instance
 spec:
   ports:
   - name: carina-instance
