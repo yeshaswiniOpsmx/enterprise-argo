@@ -12,7 +12,9 @@ argos:
     {{- end }}
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 {{- end }}
-httpListenPort: 8090
+httpListenPort: 8091
+rbac:
+  httpListenPort: 8092
 controller:
   url: 'https://opsmx-controller-controller1:9003'
   caPath: /app/secrets/controller-ca.crt
