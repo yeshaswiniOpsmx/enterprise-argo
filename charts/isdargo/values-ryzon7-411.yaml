@@ -1,0 +1,194 @@
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: true
+# install ingress-nginx if not installed in the cluster
+ingressnginx: false
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+# installArgoWorkflows enable true will install argo-workflows
+installArgoWorkflows: false
+# installArgoEvents enable true will install argo-events
+installArgoEvents: false
+# installArgoImageupdater enable true will install argocd-image-updater
+installArgoImageupdater: false
+############################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: OEA-AP
+#######################################################################################
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: true
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
+# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
+cdagentname: argocd
+#######################################################################################
+forwarder:
+  externalName: agent-grpc ## specify the controller URL in order to connect with external agent
+########################################################################################
+## Info related to registry where OEA images are stored
+imageCredentials:
+  repoUrl: https://quay.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: quay.io/opsmxpublic
+#####################################################
+# Global Configuration
+######################
+
+global:
+  argocd:
+    host: cd.ryzon7-argo.opsmx.org
+
+  argoworkflows:
+    #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
+    host: workflow.ryzon7-argo22.opsmx.org
+
+  argorollouts:
+    #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
+    host: rollouts.ryzon7-argo.opsmx.org
+
+  oesUI:
+    host: oea.ryzon7-argo.opsmx.org
+  enableCentralMonitoring: true
+###################################################
+# argo-cd configuration
+#######################
+enableCentralLogging: true
+argo-cd:
+  server:
+    extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
+      - --insecure
+    ### To use LDAP enable config 
+    configEnabled: true
+    ########   ldap argc-cm configmap configuration     #######
+    config:
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "https://cd.ryzon7-argo.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      accounts.admin: apiKey
+      admin.enabled: "true"
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
+      dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://argoworkflows1.ninja-test.opsmx.net/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        connectors:
+        - type: ldap
+          name: opsmx-openldap
+          id: ldap
+          config:
+            host: "openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+            # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbacConfig:
+      {}
+      # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
+      # Policy rules are in the form:
+      #   p, subject, resource, action, object, effect
+      # Role definitions and bindings are in the form:
+      #   g, subject, inherited-subject
+  notifications:
+    enabled: true
+    argocdUrl: cd.ryzon7-argo.opsmx.org
+
+###################################################
+# argo-workflows configuration
+#######################
+
+argo-workflows:
+  server:
+    extraArgs:
+      - --auth-mode=sso
+    sso:
+     #issuerAlias: http://argocd.ninja-test.opsmx.net/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: https://argocd1.ninja-test.opsmx.net/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+      sessionExpiry: 240h
+      clientId:
+        name: argo-workflows-sso
+        key: client-id
+      clientSecret:
+        name: argo-workflows-sso
+        key: client-secret
+      redirectUrl: https://argoworkflows1.ninja-test.opsmx.net/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      scopes:
+        - groups
+        - email
+      rbac:
+        enabled: false
+###################################################
+# argo-events configuration
+#######################
+
+argo-events:
+  crds:
+    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+    install: true
+
+###################################################
+# argo-rollouts configuration
+#######################
+argo-rollouts:
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
+
+  imagePullSecrets: []
+  controller:
+    image:
+      registry: quay.io/opsmxpublic
+      # -- Repository to use
+      repository: argo-isd-metric-provider
+      # -- Overrides the image tag (default is the chart appVersion)
+      tag: "v20"
+
+#######################################################
+argocd-image-updater:
+  config:
+    argocd:
+      # -- Use the gRPC-web protocol to connect to the Argo CD API
+      grpcWeb: true
+      # -- Connect to the Argo CD API server at server address
+      serverAddress: ""
+      # -- If specified, the certificate of the Argo CD API server is not verified.
+      insecure: false
+      # -- If specified, use an unencrypted HTTP connection to the ArgoCD API instead of TLS.
+      plaintext: false
+      # -- If specified, the secret with ArgoCD API key will be created.
+      token: ""
+    # -- Username to use for Git commits
+    gitCommitUser: ""
+    # -- E-Mail address to use for Git commits
+    gitCommitMail: ""
+    # -- Changing the Git commit message
+    gitCommitTemplate: ""
