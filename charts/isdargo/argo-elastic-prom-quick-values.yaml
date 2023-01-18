@@ -6,6 +6,13 @@ global:
   createIngress: false
   enableCentralMonitoring: true
 ########################################################################
+forwarder:
+  agent:
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
+  image:
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.5.9
+########################################################################
 enableCentralLogging: true
 
 elasticsearch:
