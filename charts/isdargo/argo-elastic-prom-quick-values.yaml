@@ -1,0 +1,77 @@
+global:
+  ssl:
+    enabled: false
+  certManager:
+    installed: false
+  createIngress: false
+  enableCentralMonitoring: true
+########################################################################
+enableCentralLogging: true
+
+elasticsearch:
+  replicas: 2
+  minimumMasterNodes: 1
+  antiAffinity: "soft"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "500Mi"
+####################################################
+auditClient:
+  image:
+    repository: ubi8-oes-audit-client
+    tag: v4.1.2-rc8
+###################################################
+gate:
+  image:
+    repository: ubi8-gate
+    tag: v4.1.2-rc8
+##################################################
+sapor:
+  image:
+    repository: ubi8-oes-sapor
+    tag: v4.1.2-rc8
+###################################################
+platform:
+  image:
+    repository: ubi8-oes-platform
+    tag: v4.1.2-rc8
+###################################################
+autopilot:
+  image:
+    repository: ubi8-oes-autopilot
+    tag: v4.1.2-rc8
+###################################################
+ui:
+  image:
+    repository: ubi8-oes-ui
+    tag: v4.1.2-rc8
+###################################################
+dashboard:
+  image:
+    repository: ubi8-oes-dashboard
+    tag: v4.1.2-rc8
+#####################################################
+datascience:
+  image:
+    repository: ubi8-oes-datascience
+    tag: v4.1.2-rc8
+#####################################################
+audit:
+  image:
+    repository: ubi8-oes-audit-service
+    tag: v4.1.2-rc8
+######################################################
+visibility:
+  image:
+    repository: ubi8-oes-visibility
+    tag: v4.1.2-rc8
+####################################################
+carinamanager:
+  image:
+    tag: v1.9.2
+#####################################################
+carinainstance:
+  image:
+    tag: v1.9.2
+

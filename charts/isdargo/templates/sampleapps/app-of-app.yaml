@@ -6,15 +6,15 @@ metadata:
     "helm.sh/hook": "post-install"
     "helm.sh/hook-delete-policy": "before-hook-creation"
     "helm.sh/hook-weight": "13"
-  name: app-of-apps
+  name: app-of-app
 spec:
   destination:
     name: in-cluster
     namespace: {{ .Release.Namespace }}
     server: ''
   source:
-    path: sampleapps-opsmxproj
-    repoURL: 'git@github.com:OpsMx/argo-sample-apps.git'
+    path: sampleapps
+    repoURL: 'https://github.com/opsmx/isd-sample-apps.git'
     targetRevision: HEAD
   project: opsmxproj
   syncPolicy:
