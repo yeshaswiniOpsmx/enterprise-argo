@@ -69,7 +69,7 @@ data:
     OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
     OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
     {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
-    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
+    ELASTICSEARCH=$(grep elasticsearch-master-0 /tmp/live.status | awk '{print $2}')
     KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
     {{- else if .Values.global.enableCentralMonitoring }}
@@ -79,7 +79,15 @@ data:
     KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     {{- end }}
     wait_period=$(($wait_period+10))
-    if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
+      if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- else if .Values.enableCentralLogging }}
+      if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- else if .Values.global.enableCentralMonitoring }}
+      if [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- else }}
+      if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+    {{- end }}
     then
       echo \"ArgocdServer is  Up and Ready..\"
       while true
