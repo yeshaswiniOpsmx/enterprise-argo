@@ -22,9 +22,9 @@ spec:
       paths:
       - backend:
           service:
-            name: keycloak
+            name: keycloack-http
             port:
-              number: 8080
+              number: 80
         path: /
         pathType: ImplementationSpecific
 {{- if .Values.global.ssl.enabled }}
