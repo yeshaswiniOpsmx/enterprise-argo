@@ -815,7 +815,8 @@ argo-rollouts:
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
   keepCRDs: true
-
+  controller:
+    replicas: 1
   notifications:
     secret:
       # -- Whether to create notifications secret
