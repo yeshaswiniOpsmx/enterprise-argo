@@ -215,11 +215,11 @@ security:
     client:
       clientId: isd-client ### This is the client id created in keycloak
       clientSecret: xxx ### The client secret which will be present under the Credentials tab
-      accessTokenUri: https://{{ .Values.global.keycloak.host }}/realms/isd/protocol/openid-connect/token ### Under realm settings -> Endpoints
-      userAuthorizationUri: https://{{ .Values.global.keycloak.host }}/realms/isd/protocol/openid-connect/auth ### Under realm settings -> Endpoints
+      accessTokenUri: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/token ### Under realm settings -> Endpoints
+      userAuthorizationUri: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/auth ### Under realm settings -> Endpoints
       scope: openid, profile, roles ### These are default values
     resource:
-      userInfoUri: https://{{ .Values.global.keycloak.host }}/realms/isd/protocol/openid-connect/userinfo ### Under realm settings -> Endpoints
+      userInfoUri: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/protocol/openid-connect/userinfo ### Under realm settings -> Endpoints
     userInfoMapping:
       email: email
       firstName: ''
@@ -234,7 +234,7 @@ keycloak:
   ldapName: ldap
   samlName: saml
   clientId: isd-client
-  serverUrl: https://{{ .Values.global.keycloak.host }}/
+  serverUrl: https://{{ .Values.global.keycloak.host }}/auth/
   username: admin
   password: opsmxadmin123
   ldap:
@@ -554,7 +554,7 @@ keycloak:
                 helpText: The redirect ui to use when confuiguring the identity provider
                 readonly: true
                 placeholder:
-                defaultValue: https://{{ .Values.global.keycloak.host }}/realms/isd/broker/saml/endpoint
+                defaultValue: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/broker/saml/endpoint
                 loadValues: []
 
           - name: identityProviderMetadata
@@ -579,7 +579,7 @@ keycloak:
                 helpText: Service Provider Entity ID
                 readonly: false
                 placeholder:
-                defaultValue: https://{{ .Values.global.keycloak.host }}/realms/isd
+                defaultValue: https://{{ .Values.global.keycloak.host }}/auth/realms/isd
                 loadValues: []
 
               - name: singleSignOnServiceUrl

@@ -17,8 +17,9 @@ spec:
             while true
             do
             kubectl get po -n {{ .Release.Namespace }} -o jsonpath='{range .items[*]}{..metadata.name}{"\t"}{..containerStatuses..ready}{"\n"}{end}' > /tmp/inst.status
-            KEYCLOAKPOD=$(kubectl get po -n {{ .Release.Namespace }} | grep "keycloak-" | awk '{print $1}')
-            KEYCLOACK=$(grep $KEYCLOAKPOD /tmp/inst.status | awk '{print $2}')
+            KEYCLOACK=$(grep keycloack-0 /tmp/inst.status | awk '{print $2}')
+            #KEYCLOAKPOD=$(kubectl get po -n {{ .Release.Namespace }} | grep "keycloack-0" | awk '{print $1}')
+            #KEYCLOACK=$(grep $KEYCLOAKPOD /tmp/inst.status | awk '{print $2}')
             wait_period=$(($wait_period+10))
             if [ "$KEYCLOACK" == "true" ];
             then
@@ -35,7 +36,7 @@ spec:
             isdurl="{{ .Values.global.oesUI.protocol }}://{{ .Values.global.oesUI.host }}/login"
             cd /tmp/keycloak-11.0.0/bin/
             ## Login
-            ./kcadm.sh config credentials --server http://keycloak:8080 --realm master --user $admuser --client admin-cli --password $admpass
+            ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm master --user $admuser --client admin-cli --password $admpass
             ## Create a Realme
             ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o
             ## Create Group and get ID
@@ -60,7 +61,7 @@ spec:
             ## Adding extra roles to user
             ./kcadm.sh add-roles -r $realm --uusername $user --cclientid realm-management --rolename view-users --rolename view-clients --rolename view-realm --rolename create-client --rolename manage-clients --rolename manage-events --rolename manage-identity-providers --rolename manage-events --rolename query-users --rolename realm-admin --rolename view-events --rolename impersonation --rolename query-clients --rolename query-groups --rolename query-realms --rolename manage-users --rolename manage-realm --rolename manage-authorization --rolename view-authorization --rolename view-identity-providers
             ## Adding extra roles user
-            ./kcadm.sh add-roles -r $realm --uusername $user --cclientid account --rolename view-profile --rolename view-applications --rolename view-consent --rolename manage-consent --rolename manage-account-links --rolename manage-account --rolename delete-account --rolename view-groups
+            ./kcadm.sh add-roles -r $realm --uusername $user --cclientid account --rolename view-profile --rolename view-applications --rolename view-consent --rolename manage-consent --rolename manage-account-links --rolename manage-account --rolename delete-account
             ## Adding extra roles to user
             ./kcadm.sh add-roles -r $realm --uusername $user --cclientid broker --rolename read-token
             ## Getting the gate secret
