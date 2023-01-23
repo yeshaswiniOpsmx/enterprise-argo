@@ -219,6 +219,12 @@ data:
          ## Apply the yamls
          kubectl replace --force -f /tmp/agent-cm.yaml
          kubectl apply -f /tmp/yamls/
+         echo "------------------------------"
+         echo "*** SECURITY ISSUE, please delete this pod after noting down the password ***"
+         echo "------------------------------"
+         echo "Username: admin"
+         echo "Password: $argopassword"
+         echo "------------------------------"
          break
          {{- end }}
       fi
