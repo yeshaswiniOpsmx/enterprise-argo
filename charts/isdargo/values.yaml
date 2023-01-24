@@ -1786,6 +1786,9 @@ forwarder:
     repository: quay.io/opsmxpublic/forwarder-controller
     tag: v3.5.7
     pullPolicy: IfNotPresent
+  serverNames:
+    - agent-grpc
+
   serviceAnnotations: {}
 
 ################################################################################################
