@@ -110,6 +110,18 @@
         "required": "File cannot be empty"
       }
     },
+    "READ": {
+      "TOOLTIP": "A user must have at least one of these roles in order to view this account’s cloud resources.",
+      "VALIDATION_MESSAGE": {
+        "cannotContainSpace": "Read Permissions cannot contain space"
+      }
+    },
+    "WRITE": {
+      "TOOLTIP": "A user must have at least one of these roles in order to make changes to this account’s cloud resources",
+      "VALIDATION_MESSAGE": {
+        "cannotContainSpace": "Write Permissions cannot contain space"
+      }
+    },
     "EXECUTE": {
       "TOOLTIP": "",
       "VALIDATION_MESSAGE": {
@@ -215,7 +227,7 @@
   },
   "SPINNAKER_LISTING": {
    "HEADER": "No CD Integration found!",
-    "BODY": "<div><p>Use this page to connect an existing Argo CD or to Create a new Argo CD instance.</p><strong>Existing Argo CD</strong><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></ul><p><strong>Create New Argo CD</strong></p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li><li><strong> Argo Rollouts URL</strong>: URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li><li>argorolloutsurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></div>",
+    "BODY": "<div><p>Use this page to connect ISD to an existing Argo CD or to install new OpsMx Enterprise for Argo - a security validated release of Argo from OpsMx</p><strong>Existing Argo CD</strong><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance, providing this is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest in the same namespace where Argo CD Is installed</p><ul><li>Download the Agent Manifest.</li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Apply the agent manifest in the same namespace where Argo CD Is installed</li></ul><p><strong>Create New Argo CD</strong></p><p>This installs OpsMx Enterprise for Argo (OEA - a security validated release of Argo from OpsMx) in the given namespace and automatically connects it with ISD.</p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. You should create this namespace in your cluster.</li><li><strong> Argo CD URL</strong>: URL for your new Argo CD Instance. We will be creating an ngnix ingress with the provided url. This field is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest</p></div>",
     "CDTOOL_ERROR": "Unable to connect to CD Tool"
   },
   "SPINNAKER_SETUP": {
@@ -1036,7 +1048,6 @@
     "HEADER": "No Users found",
     "BODY": ""
   },
-
   "APPLICATION_DEPLOYMENT": {
     "DEPLOYMENT_GRID_SYNC": {
       "TOOLTIP": "When the cluster deployment matches with the latest pipeline execution it is 'In Sync'; if not, it is 'Out of Sync'"
@@ -1557,7 +1568,6 @@
   "DEPLOYMENT":{
     "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
     "VALIDATION_MESSAGE":{
-    
     }
   },
   "AUTHENTICATIONTYPE":{
@@ -2081,7 +2091,6 @@
       "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
       "VALIDATION_MESSAGE":{}
     }
-    
   },
   "SERVICENOW":{
     "HEADER": "Service Now",
@@ -3029,7 +3038,7 @@
 "AUTHPROVIDER":{
   "LDAP":{
     "HEADER": "LDAP Provider",
-    "BODY": "<p>In this page, you can  define & manage LDAP",
+    "BODY": "<p>This page allows you to configure LDAP Authentication providers such as Active Directory and OpenLDAP.Once this is enabled, ISD will import all users and groups from your LDAP and users will be able to login to ISD using their LDAP user id and password. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable LDAP Provider.</p>  <p>- Select your LDAP Vendor, enter your LDAP Connection URL and click on <b>Test Connection</b> to verify the connectivity between ISD and LDAP</p> <p>- Select the Bind Type, enter Bind DN, Credential (Password) and click on <b>Test Authentication</b></p> <p>- The details you enter in the User Search Settings and Group Search Settings sections will be used to search for users and groups in your LDAP</p> <p>- Most of the values are auto-populated based on the selected Provider.</p> <p> - Click on the <b>Enabled</b> toggle and click the Save button at the bottom.</p>",
     "EDITMODE":{
       "VALIDATION_MESSAGE": {
         "required":"Edit Mode cannot be empty"
@@ -3133,7 +3142,7 @@
   },
  "SAML":{
    "HEADER": "SAML Provider",
-    "BODY": "<p>In this page, you can  define & manage SAML",
+    "BODY": "<p>This page allows you to configure SAML Authentication providers such as Okta and Azure.</p> <p>Once this is enabled, the <b>Sign in with SAML</b> option will be available on the ISD login screen. All users configured in your SAML authentication provider will be able to access ISD. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable SAML Provider.</p> <p> - Copy and Use the redirect URI as the ACS URL of the ISD application and Service Provider (Entity ID) while configuring your Identity Provider</p> <p> - Download the metadata XML from your Identity Provider and import it to ISD</p> <p>-  Single Sign-On service URL will get auto-populated from the metadata XML</p><p> - The group attribute helps ISD to identify the groups the user belongs to. You can add group attribute statements to the SAML assertion shared with ISD from your Identity Provider. The value entered here should match the name of the group attribute on your IDP. By default it's memberOf.</p> <p> - Click on the <b>Enabled</b> toggle and Save button at the bottom to enable the provider.</p>",
     "PROVIDER":{
      "VALIDATION_MESSAGE": {
         "required":"Provider cannot be empty"
@@ -3370,7 +3379,7 @@
   "CDINTEGRATION":{
   "NEW_ARGOCD":{
     "HEADER": "Create New Argo CD Instance",
-    "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li><li><strong> Argo Rollouts URL</strong>: URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li><li>argorolloutsurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></span>",
+    "BODY": "<span><p>This installs OpsMx Enterprise for Argo (OEA - a security validated release of Argo from OpsMx) in the given namespace and automatically connects it with ISD.</p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. You should create this namespace in your cluster.</li><li><strong> Argo CD URL</strong>: URL for your new Argo CD Instance. We will be creating an ngnix ingress with the provided url. This field is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest</p></span>",
     "ARGOCD_NAME": {
       "TOOLTIP" :"User Defined Name for this CD integration.",
       "VALIDATION_MESSAGE" : {
@@ -3379,16 +3388,12 @@
     },
     "ARGOCD_NAMESPACE": {
       "TOOLTIP" :"Namespace where argocd needs to be installed. You should create this namespace in your target cluster.",
-      "VALIDATION_MESSAGE" : {
-      }
+        "VALIDATION_MESSAGE" : {
+          "required":"Namespace cannot be empty"
+        }
     },
     "ARGOCD_URL": {
-      "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
-      "VALIDATION_MESSAGE" : {
-      }
-    },
-    "ARGOCD_ROLLOUTSURL": {
-      "TOOLTIP" :"URL of your Argo Rollouts instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
+      "TOOLTIP" :"URL for your new ArgoCD instance. Providing this is optional",
       "VALIDATION_MESSAGE" : {
       }
     },
@@ -3400,7 +3405,7 @@
   },
   "EXISTING_ARGOCD":{
     "HEADER": "Connect An Existing Argo CD to ISD",
-      "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.</li></ul><p><strong>step 2</strong>: If required, Modify the Manifest and Apply it to the target Cluster</p><ul><li>Download the Agent Manifest.</li><li>(Optional) Replace the following parameters with appropriate values. You can skip this if you have already given them in the first step.<div><ul><li>agentnamespace</li><li>argocdurl</li></ul></div></li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Run the agent in the same cluster where argo cd is installed</li></ul></span>",
+      "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance, providing this is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest in the same namespace where Argo CD Is installed</p><ul><li>Download the Agent Manifest.</li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Apply the agent manifest in the same namespace where Argo CD Is installed</li></ul></span>",
       "ARGOCD_NAME": {
         "TOOLTIP" :"User Defined Name for this CD integration.",
         "VALIDATION_MESSAGE" : {
@@ -3410,10 +3415,11 @@
       "ARGOCD_NAMESPACE": {
         "TOOLTIP" :"Namespace where argocd is installed. Usually it is 'argocd'",
         "VALIDATION_MESSAGE" : {
+          "required":"Namespace cannot be empty"
         }
       },
       "ARGOCD_URL": {
-        "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optional. You can replace this value after downloading the agent manifest in the next step.",
+        "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optiona",
         "VALIDATION_MESSAGE" : {
         }
       },
@@ -3425,3 +3431,4 @@
     }
   }
 }
+
