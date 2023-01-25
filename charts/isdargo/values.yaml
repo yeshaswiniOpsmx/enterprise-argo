@@ -113,6 +113,20 @@ global:
       tls:
         secretName: spin-deck-ingress
 
+  vela:
+    protocol: http
+    host: vela.example.ops.com
+    #port: 31464
+
+    serviceAnnotations: {}
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: vela-ingress
+
   #### If ingress required for elasticsearch and kibana enable enableCentralLogging: "ture" and define URL's
   elasticsearch:
     enabled: false
@@ -1309,7 +1323,7 @@ kibana:
             curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
 
 ##################################################################################################################
-#
+# Values of Carina Manager
 carinamanager:
   ## Image specific details
   ##
@@ -1326,6 +1340,7 @@ carinamanager:
   config: {}
 
 #######################################################################################################################
+# Values of Carina Instance
 carinainstance:
   image:
     repository: carina-instance
@@ -1339,7 +1354,21 @@ carinainstance:
   resources: {}
 
 #######################################################################################################################
-# Values of OEA Database
+# Values of Carina Instance
+vela:
+  image:
+    repository: vela-api
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+
+#######################################################################################################################
+# Values of OES Database
 db:
   ## Set it to false if any external database is to be used
   enabled: true

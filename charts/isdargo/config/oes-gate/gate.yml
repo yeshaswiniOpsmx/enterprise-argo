@@ -419,6 +419,16 @@ keycloak:
                     defaultValue:
                     loadValues: []
 
+                  - name: customUserSearchFilter
+                    display: User LDAP Filter
+                    inputType: text
+                    required: false
+                    helpText: Additional LDAP filter for filtering searched users. Leave this empty if you don't need an additional filter. Make sure that it starts with '(' and ends with ')'.
+                    readonly: false
+                    placeholder:
+                    defaultValue:
+                    loadValues: []
+
           - name: groupSearchSettings
             display: Group Search Settings
             type: label
@@ -432,16 +442,6 @@ keycloak:
                 readonly: false
                 placeholder: ou=groups,dc=example,dc=org
                 defaultValue:
-                loadValues: []
-
-              - name: membershipLdapAttribute
-                display: Group Search Filter
-                inputType: text
-                required: true
-                helpText: Name of LDAP attribute on group, which is used for membership mappings. Usually it will be 'member' .However when 'Membership Attribute Type' is 'UID' then 'Membership LDAP Attribute' could be typically 'memberUid'
-                readonly: false
-                placeholder:
-                defaultValue: member
                 loadValues: []
 
               - name: groupNameLdapAttribute
@@ -460,6 +460,16 @@ keycloak:
                 type: accordian
                 helpText: Advanced Options
                 inputparameters:
+                  - name: membershipLdapAttribute
+                    display: Membership LDAP Attribute
+                    inputType: text
+                    required: true
+                    helpText: Name of LDAP attribute on group, which is used for membership mappings. Usually it will be 'member' .However when 'Membership Attribute Type' is 'UID' then 'Membership LDAP Attribute' could be typically 'memberUid'
+                    readonly: false
+                    placeholder:
+                    defaultValue: member
+                    loadValues: []
+
                   - name: groupObjectClasses
                     display: Group Object Classes
                     inputType: text
@@ -521,10 +531,20 @@ keycloak:
                     display: Member-Of LDAP Attribute
                     inputType: text
                     required: false
-                    helpText: Member-Of LDAP Attribute
+                    helpText: "Used just when 'User Roles Retrieve Strategy' is GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE . It specifies the name of the LDAP attribute on the LDAP user, which contains the groups, which the user is member of. Usually it will be 'memberOf' and that's also the default value."
                     readonly: false
                     placeholder:
                     defaultValue: memberOf
+                    loadValues: []
+
+                  - name: groupsLdapFilter
+                    display: LDAP Filter
+                    inputType: text
+                    required: false
+                    helpText: LDAP Filter adds additional custom filter to the whole query for retrieve LDAP groups. Leave this empty if no additional filtering is needed and you want to retrieve all groups from LDAP. Otherwise make sure that filter starts with '(' and ends with ')'
+                    readonly: false
+                    placeholder:
+                    defaultValue:
                     loadValues: []
 
       - name: saml
@@ -657,7 +677,7 @@ jwt:
   token:
     durationInSeconds: 36000
 vela:
-  bounceUrl: http://vela-service/bounce
+  bounceUrl: https://{{ .Values.global.vela.host }}/bounce
 
 logging:
   level:
