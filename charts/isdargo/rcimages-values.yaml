@@ -76,6 +76,9 @@ global:
     enabled: false
     host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
+  vela:
+    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
 ###################################################
 # argo-cd configuration
 #######################

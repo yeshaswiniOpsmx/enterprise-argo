@@ -38,6 +38,9 @@ global:
     enabled: false
     host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
+  vela:
+    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
 
