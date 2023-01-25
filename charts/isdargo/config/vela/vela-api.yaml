@@ -1,3 +1,4 @@
 httpListenPort: 8092
 hostName: http://oes-carina:8090/
 directHostname: http://oes-carina:8090/
+jwtSecret: argo_navis
