@@ -1,4 +1,4 @@
-{{- if and (.Values.installArgoCD) (.Values.autoconfigureagent) -}}
+{{- if or (.Values.installArgoCD) (.Values.autoconfigureagent) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,7 +26,6 @@ spec:
         component: carina-instance
 {{ include "oes.standard-labels" . | indent 8 }}
       annotations:
-        checksum/secret: {{ (.Files.Glob "config/carina/carina-manager.yaml").AsConfig | sha256sum }}
 {{- if .Values.carinainstance.annotations -}}
         {{ toYaml .Values.carinainstance.annotations | nindent 8 }}
 {{- end }}

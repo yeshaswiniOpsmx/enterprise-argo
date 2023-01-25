@@ -1,4 +1,4 @@
-{{- if and (.Values.installArgoCD) (.Values.autoconfigureagent) -}}
+{{- if or (.Values.installArgoCD) (.Values.autoconfigureagent) -}}
 apiVersion: v1
 kind: Service
 metadata:
