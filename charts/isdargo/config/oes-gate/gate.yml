@@ -673,7 +673,7 @@ allowUnauthenticatedAccess:
   webhooks: {{ .Values.gate.config.webhooks }}
 
 jwt:
-  secret: argo_navis
+  secret: YXJnb19uYXZpcw==
   token:
     durationInSeconds: 36000
 vela:
