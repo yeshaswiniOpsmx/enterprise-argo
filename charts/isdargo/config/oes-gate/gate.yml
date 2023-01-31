@@ -403,7 +403,7 @@ keycloak:
                     display: RDN LDAP attribute
                     inputType: text
                     required: true
-                    helpText: Name of the LDAP attribute, which is used as a unique object identifier (UUID) for objects in LDAP. For many LDAP server vendors, it is 'entryUUID'; however some are different. For example, for Active directory it should be 'objectGUID'. If your LDAP server does not support the notion of UUID, you can use any other attribute that is supposed to be unique among LDAP users in tree. For example 'uid' or 'entryDN'.
+                    helpText: Name of the LDAP attribute, which is used as RDN (top attribute) of typical user DN. Usually it's the same as the Username LDAP attribute, however it is not required. For example for Active directory, it is common to use 'cn' as RDN attribute when username attribute might be 'sAMAccountName'.
                     readonly: false
                     placeholder: LDAP attribute name for user RDN
                     defaultValue:
@@ -413,7 +413,7 @@ keycloak:
                     display: UUID LDAP attribute
                     inputType: text
                     required: true
-                    helpText: UUID LDAP attribute
+                    helpText: Name of the LDAP attribute, which is used as a unique object identifier (UUID) for objects in LDAP. For many LDAP server vendors, it is 'entryUUID'; however some are different. For example, for Active directory it should be 'objectGUID'. If your LDAP server does not support the notion of UUID, you can use any other attribute that is supposed to be unique among LDAP users in tree. For example 'uid' or 'entryDN'.
                     readonly: false
                     placeholder: LDAP attribute name for UUID
                     defaultValue:
@@ -588,21 +588,6 @@ keycloak:
                 defaultValue: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/broker/saml/endpoint
                 loadValues: []
 
-          - name: identityProviderMetadata
-            display: Identity Provider Metadata
-            type: label
-            helpText: Identity Provider Metadata
-            inputparameters:
-              - name: importFromFile
-                display: Import from file
-                inputType: file
-                required: false
-                helpText: Import from file
-                readonly: false
-                placeholder:
-                defaultValue:
-                loadValues: []
-
               - name: serviceProviderEntityId
                 display: Service Provider Entity ID
                 inputType: url
@@ -627,7 +612,7 @@ keycloak:
                 display: Single Sign-On Service URL
                 inputType: url
                 required: true
-                helpText: The url that must be used to send authentication requests (SAML AuthnRequest).
+                helpText: The Url that must be used to send authentication requests (SAML AuthnRequest).
                 readonly: true
                 placeholder:
                 defaultValue:
