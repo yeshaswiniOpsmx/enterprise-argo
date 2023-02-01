@@ -1,13 +1,10 @@
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: true
 
-# install ingress-nginx if not installed in the cluster
-ingressnginx: false
-
 # installArgoRollouts enable true will install argo-rollouts
 installArgoRollouts: true
 
-installkeycloak: false
+installkeycloak: true
 ############################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
@@ -73,7 +70,7 @@ global:
     userDnPattern: cn={0},dc=example,dc=org
 
   keycloak:
-    enabled: false
+    enabled: true
     host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   vela:
@@ -185,15 +182,6 @@ argo-workflows:
       rbac:
         enabled: false
 ###################################################
-# argo-events configuration
-#######################
-
-argo-events:
-  crds:
-    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-    install: true
-
-###################################################
 # argo-rollouts configuration
 #######################
 argo-rollouts:
@@ -204,52 +192,52 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.2-rc10
+    tag: v4.1.2-rc11
 #####################################################
 carinamanager:
   image:
@@ -258,3 +246,7 @@ carinamanager:
 carinainstance:
   image:
     tag: v1.9.6
+#####################################################
+vela:
+  image:
+    tag: v1.0.5

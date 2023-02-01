@@ -17,7 +17,7 @@ installArgoEvents: false
 # installArgoImageupdater enable true will install argocd-image-updater
 installArgoImageupdater: false
 
-installkeycloak: false
+installkeycloak: true
 
 ###########################################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
@@ -159,8 +159,8 @@ global:
         secretName: prometheus-ingress
 
   keycloak:
-    enabled: false
-    host: oes.example.ops.com
+    enabled: true
+    host: keycloak.example.ops.com
 
     ingress:
       annotations:
