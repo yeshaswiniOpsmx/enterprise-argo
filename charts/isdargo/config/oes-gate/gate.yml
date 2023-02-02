@@ -662,7 +662,7 @@ jwt:
   token:
     durationInSeconds: 36000
 vela:
-  bounceUrl: https://{{ .Values.global.vela.host }}/bounce
+  bounceUrl: https://isd.{{ .Values.global.vela.host }}/bounce
 
 logging:
   level:

@@ -1295,12 +1295,13 @@ openldap:
 enableCentralLogging: false
 
 elasticsearch:
-  replicas: 1
+  replicas: 2
   minimumMasterNodes: 1
+  antiAffinity: "soft"
   resources:
     requests:
       cpu: "100m"
-      memory: "1Gi"
+      memory: "500Mi"
 
 kibana:
   service:
