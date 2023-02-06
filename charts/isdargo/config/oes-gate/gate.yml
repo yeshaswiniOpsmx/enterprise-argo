@@ -228,7 +228,7 @@ security:
     provider: isd-client ### This is the client id
 {{- end }}
 
-
+{{- if .Values.installkeycloak }}
 keycloak:
   realmName: isd
   ldapName: ldap
@@ -627,7 +627,7 @@ keycloak:
                 placeholder:
                 defaultValue: memberOf
                 loadValues: []
-
+{{- end }}
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:
   extensibility:
