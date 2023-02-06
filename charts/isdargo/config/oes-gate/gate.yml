@@ -628,6 +628,7 @@ keycloak:
                 defaultValue: memberOf
                 loadValues: []
 {{- end }}
+
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:
   extensibility:
