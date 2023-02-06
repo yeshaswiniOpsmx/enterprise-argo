@@ -1,16 +1,18 @@
 {{- if (eq .Values.installationMode "OEA-AP") }}
-{{- if .Values.installkeycloak.enabled }}
 apiVersion: v1
 data:
   feature.yml: |
      feature:
        auth-provider:
+         {{- if .Values.installkeycloak }}
          flag: true
+         {{- else }}
+         flag: false
+         {{- end }}
          jira: OP-18050
 kind: ConfigMap
 metadata:
   labels:
     app: oes
   name: isd-feature-flag-config
-{{- end }}
 {{- end }}
