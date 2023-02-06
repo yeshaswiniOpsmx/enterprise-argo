@@ -1,0 +1,33 @@
+######################################################################################
+installArgoCD: false
+######################################################################################
+installArgoRollouts: false
+#######################################################################################
+installkeycloak: true
+#######################################################################################
+# Global Configuration
+######################
+global:
+
+  oesUI:
+    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
+    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  keycloak:
+    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  vela:
+    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: true
+
+  ldap:
+    enabled: true
+    url: ldap://openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org

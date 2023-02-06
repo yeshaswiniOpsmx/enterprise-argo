@@ -1,0 +1,13 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+data:
+  vela-api.yaml: |
+    {{- tpl (.Files.Get "config/vela/vela-api.yaml") . | nindent 4 }}
+kind: ConfigMap
+metadata:
+  name: vela-config
+  labels:
+    app: oes
+    component: vela
+{{ include "oes.standard-labels" . | indent 4 }}
+{{- end -}}

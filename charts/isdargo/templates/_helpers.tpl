@@ -166,6 +166,15 @@ Return the proper Carina Instance image name
 {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 
+{{/*
+Return the proper Vela image name
+*/}}$
+{{- define "vela.image" -}}
+{{- $registryName := .Values.imageCredentials.registry -}}
+{{- $repositoryName := .Values.vela.image.repository -}}
+{{- $tag := .Values.vela.image.tag | toString -}}
+{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- end -}}
 
 
 {{/* vim: set filetype=mustache: */}}
@@ -183,7 +192,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Redis base URL for Spinnaker
+Redis base URL for Autopilot
 */}}
 {{- define "oes.redisBaseURL" -}}
 {{- if .Values.installRedis }}
@@ -196,7 +205,7 @@ Redis base URL for Spinnaker
 {{- end }}
 
 {{/*
-Return the proper Drupal image name
+Return the Agent Host Name
 */}}
 {{- define "agent.hostname" -}}
 {{- $svc := default "agent-grpc" -}}

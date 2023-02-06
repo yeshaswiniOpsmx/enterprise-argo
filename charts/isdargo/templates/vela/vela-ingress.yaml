@@ -1,0 +1,32 @@
+{{- $host := .Values.global.vela.host }}
+{{- if and (.Values.global.createIngress) (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+{{- if .Values.global.certManager.installed }}
+    kubernetes.io/tls-acme: "true"
+{{- end }}
+{{- if .Values.global.vela.ingress.annotations }}
+{{ tpl (toYaml .Values.global.vela.ingress.annotations) . | indent 4 }}
+{{- end }}
+  name: vela-ingress
+spec:
+  rules:
+  - host: '*.{{ $host }}'
+    http:
+      paths:
+      - backend:
+          service:
+            name: vela
+            port:
+              number: 8092
+        path: /
+        pathType: ImplementationSpecific
+{{- if .Values.global.ssl.enabled }}
+  tls:
+  - hosts:
+    - '*.{{ $host }}'
+{{ toYaml .Values.global.vela.ingress.tls | indent 4 }}
+{{- end }}
+{{- end }}

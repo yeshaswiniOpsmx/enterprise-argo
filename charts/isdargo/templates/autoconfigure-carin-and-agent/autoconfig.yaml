@@ -31,11 +31,6 @@ data:
               credentials:
                 type: bearer
                 token: xxxx
-          - name: {{ .Values.cdagentname }}
-            type: carinainstance
-            enabled: true
-            config:
-              url: http://carina-instance:8090
             annotations:
               description: argocd via agent
               {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
@@ -47,6 +42,11 @@ data:
               uiUrl: http://localhost:8099
               {{- end }}
               {{- end }}
+          - name: {{ .Values.cdagentname }}
+            type: carinainstance
+            enabled: true
+            config:
+              url: http://carina-instance:8090
     EOF
     wait_period=0
     while true

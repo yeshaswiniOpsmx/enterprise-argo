@@ -1,8 +1,3 @@
-# Set to true if user want to install KeyCloak
-installkeycloak: false
-#######################################################################################
-# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
-cdagentname: argocd
 #######################################################################################
 forwarder:
   # Update the externalName(i.e controller URL) in order to connect to external agent (i.e ISD and Argo running in different cluster with DNS else leave as it is)
@@ -35,8 +30,10 @@ global:
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   keycloak:
-    enabled: false
     host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+  vela:
+    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true

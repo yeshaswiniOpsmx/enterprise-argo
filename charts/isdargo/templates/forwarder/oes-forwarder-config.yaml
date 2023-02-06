@@ -15,7 +15,9 @@ data:
     controlHostname: opsmx-controller-controller1
     #agentAdvertisePort: "443"
     serverNames:
-      - agent-grpc
+    {{- range .Values.forwarder.serverNames }}
+      - {{ . }}
+    {{- end }}
     serviceAuth:
       currentKeyName: "public.pem"
       headerMutationKeyName: "public.pem"

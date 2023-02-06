@@ -4,7 +4,11 @@ data:
   feature.yml: |
      feature:
        auth-provider:
+         {{- if .Values.installkeycloak }}
          flag: true
+         {{- else }}
+         flag: false
+         {{- end }}
          jira: OP-18050
 kind: ConfigMap
 metadata:

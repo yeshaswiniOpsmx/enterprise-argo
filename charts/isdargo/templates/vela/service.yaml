@@ -1,0 +1,27 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oes
+    component: vela
+{{ include "oes.standard-labels" . | indent 4 }}
+{{- if .Values.carinamanager.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.carinamanager.serviceAnnotations | indent 4 }}
+{{- end }}
+  name: vela
+spec:
+  ports:
+  - name: vela
+    port: 8092
+    protocol: TCP
+    targetPort: 8092
+    {{- if eq .Values.k8sServiceType "NodePort" }}
+    nodePort: 8092
+    {{- end }}
+  selector:
+    app: oes
+    component: vela
+  type: {{ .Values.k8sServiceType }}
+{{- end }}

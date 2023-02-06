@@ -228,7 +228,7 @@ security:
     provider: isd-client ### This is the client id
 {{- end }}
 
-
+{{- if .Values.installkeycloak }}
 keycloak:
   realmName: isd
   ldapName: ldap
@@ -263,7 +263,12 @@ keycloak:
       - name: ldap
         display: LDAP
         type: label
-        helpText: LDAP
+        helpText: "This page allows you to configure LDAP Authentication providers such as Active Directory and OpenLDAP. Once this is enabled, ISD will import all users and groups from your LDAP and users will be able to login to ISD using their LDAP user id and password. Super admin users will continue to be able to log in using their current user id and password.Follow the below steps to enable LDAP Provider.
+        - Select your LDAP Vendor, enter your LDAP Connection URL and click on 'Test Connection' to verify the connectivity between ISD and LDAP
+        - Select the Bind Type, enter Bind DN, Credential (Password) and click on 'Test Authentication'
+        - The details you enter in the User Search Settings and Group Search Settings sections will be used to search for users and groups in your LDAP
+        - Most of the values are auto-populated based on the selected Provider.
+        - Click on the 'Enabled' toggle and click the Save button at the bottom."
         sections:
           - name: toggleSettings
             display:
@@ -286,10 +291,10 @@ keycloak:
             helpText: Connection Settings
             inputparameters:
               - name: vendor
-                display: Vendor
+                display: LDAP Provider
                 inputType: dropdown
                 required: true
-                helpText: LDAP vendor (provider)
+                helpText: Choose your LDAP Vendor (Provider)
                 readonly: false
                 placeholder:
                 defaultValue:
@@ -301,10 +306,10 @@ keycloak:
                   - Other
 
               - name: connectionUrl
-                display: Connection URL
+                display: LDAP Provider URL
                 inputType: url
                 required: true
-                helpText: Connection URL to your LDAP server
+                helpText: Connection URL to your LDAP Server
                 readonly: false
                 placeholder: LDAP connection URL
                 defaultValue:
@@ -314,7 +319,7 @@ keycloak:
                 display: Bind Type
                 inputType: dropdown
                 required: true
-                helpText: Type of the Authentication Method used during LDAP Bind operation.It is used in most of the requests sent to the LDAP server.Currently 'none' (Anonymous LDAP Authentication) or 'simple' (Bind credential + Bind password authentication) mechanisms are avilable.
+                helpText: Type of the authentication method used during LDAP bind operation. It is used in most of the requests sent to the LDAP server. Currently only 'none' (anonymous LDAP authentication) or 'simple' (bind credential + bind password authentication) mechanisms are available
                 readonly: false
                 placeholder:
                 defaultValue: simple
@@ -326,9 +331,9 @@ keycloak:
                 display: Bind DN
                 inputType: text
                 required: true
-                helpText: DN of lDAP admin which will be used by keycloak to access LDAP server
+                helpText: Distinguished Name of the LDAP admin, which will be used by ISD to access LDAP server
                 readonly: false
-                placeholder: LDAP Bind DN
+                placeholder: cn=Administrator,CN=Users,DC=example,DC=com
                 defaultValue:
                 loadValues: []
 
@@ -336,9 +341,9 @@ keycloak:
                 display: Bind Credential
                 inputType: password
                 required: true
-                helpText: Password of LDAP admin. This field is able to obtains its value from vault, use ${vault.ID} format
+                helpText: Password of LDAP admin.
                 readonly: false
-                placeholder: xxxxxxx
+                placeholder: Password associated with the Bind DN
                 defaultValue:
                 loadValues: []
 
@@ -351,9 +356,9 @@ keycloak:
                 display: User Object Classes
                 inputType: text
                 required: true
-                helpText: User Object Classes
+                helpText: "All values of LDAP objectClass attribute for users in LDAP, divided by commas. For example: 'inetOrgPerson, organizationalPerson'. LDAP user records are found just if they contain all those object classes."
                 readonly: false
-                placeholder: LDAP User Object Classes (div. by comma)
+                placeholder: inetOrgPerson, organizationalPerson
                 defaultValue:
                 loadValues: []
 
@@ -361,9 +366,9 @@ keycloak:
                 display: Users DN
                 inputType: text
                 required: true
-                helpText: Users DN
+                helpText: Full DN of LDAP tree where your users are. This DN is the parent of LDAP users. It could be for example 'ou=users,dc=example,dc=com' assuming that your typical user will have DN like 'uid='john',ou=users,dc=example,dc=com
                 readonly: false
-                placeholder: LDAP Users DN
+                placeholder: ou=users,dc=example,dc=com
                 defaultValue:
                 loadValues: []
 
@@ -377,7 +382,7 @@ keycloak:
                     display: Edit Mode
                     inputType: dropdown
                     required: true
-                    helpText: Edit Mode
+                    helpText: The mode of communication between ISD and LDAP. This is always READ_ONLY.
                     readonly: false
                     placeholder:
                     defaultValue: READ_ONLY
@@ -388,7 +393,7 @@ keycloak:
                     display: Username LDAP attribute
                     inputType: text
                     required: true
-                    helpText: Username LDAP attribute
+                    helpText: Name of the LDAP attribute, which is mapped as ISD username. For many LDAP server vendors it can be 'uid'. For Active directory it can be 'sAMAccountName' or 'cn'. The attribute should be filled for all LDAP user records you want to import from LDAP.
                     readonly: false
                     placeholder: LDAP attribute name for username
                     defaultValue:
@@ -398,7 +403,7 @@ keycloak:
                     display: RDN LDAP attribute
                     inputType: text
                     required: true
-                    helpText: RDN LDAP attribute
+                    helpText: Name of the LDAP attribute, which is used as RDN (top attribute) of typical user DN. Usually it's the same as the Username LDAP attribute, however it is not required. For example for Active directory, it is common to use 'cn' as RDN attribute when username attribute might be 'sAMAccountName'.
                     readonly: false
                     placeholder: LDAP attribute name for user RDN
                     defaultValue:
@@ -408,9 +413,19 @@ keycloak:
                     display: UUID LDAP attribute
                     inputType: text
                     required: true
-                    helpText: UUID LDAP attribute
+                    helpText: Name of the LDAP attribute, which is used as a unique object identifier (UUID) for objects in LDAP. For many LDAP server vendors, it is 'entryUUID'; however some are different. For example, for Active directory it should be 'objectGUID'. If your LDAP server does not support the notion of UUID, you can use any other attribute that is supposed to be unique among LDAP users in tree. For example 'uid' or 'entryDN'.
                     readonly: false
                     placeholder: LDAP attribute name for UUID
+                    defaultValue:
+                    loadValues: []
+
+                  - name: customUserSearchFilter
+                    display: User LDAP Filter
+                    inputType: text
+                    required: false
+                    helpText: Additional LDAP filter for filtering searched users. Leave this empty if you don't need an additional filter. Make sure that it starts with '(' and ends with ')'.
+                    readonly: false
+                    placeholder:
                     defaultValue:
                     loadValues: []
 
@@ -423,27 +438,17 @@ keycloak:
                 display: Group DN
                 inputType: text
                 required: true
-                helpText: Group DN
+                helpText: LDAP DN where are groups of this tree saved. For example 'ou=groups,dc=example,dc=org'
                 readonly: false
-                placeholder:
+                placeholder: ou=groups,dc=example,dc=org
                 defaultValue:
-                loadValues: []
-
-              - name: membershipLdapAttribute
-                display: Group Search Filter
-                inputType: text
-                required: true
-                helpText: Group Search Filter
-                readonly: false
-                placeholder:
-                defaultValue: member
                 loadValues: []
 
               - name: groupNameLdapAttribute
                 display: Group Role Name Attribute
                 inputType: text
                 required: true
-                helpText: Group Role Name Attribute
+                helpText: Name of LDAP attribute, which is used in group objects for name and RDN of group. Usually it will be 'cn' . In this case typical group/role object may have DN like 'cn=Group1,ou=groups,dc=example,dc=org'
                 readonly: false
                 placeholder:
                 defaultValue: cn
@@ -455,11 +460,21 @@ keycloak:
                 type: accordian
                 helpText: Advanced Options
                 inputparameters:
+                  - name: membershipLdapAttribute
+                    display: Membership LDAP Attribute
+                    inputType: text
+                    required: true
+                    helpText: Name of LDAP attribute on group, which is used for membership mappings. Usually it will be 'member' .However when 'Membership Attribute Type' is 'UID' then 'Membership LDAP Attribute' could be typically 'memberUid'
+                    readonly: false
+                    placeholder:
+                    defaultValue: member
+                    loadValues: []
+
                   - name: groupObjectClasses
                     display: Group Object Classes
                     inputType: text
                     required: false
-                    helpText: Group Object Classes
+                    helpText: Object class (or classes) of the group object. It's divided by comma if more classes needed. In typical LDAP deployment it could be 'groupOfNames' . In Active Directory it's usually 'group'
                     readonly: false
                     placeholder:
                     defaultValue: groupOfNames
@@ -469,7 +484,7 @@ keycloak:
                     display: Membership User LDAP Attribute
                     inputType: text
                     required: false
-                    helpText: Membership User LDAP Attribute
+                    helpText: "Used just if Membership Attribute Type is UID. It is name of LDAP attribute on user, which is used for membership mappings. Usually it will be 'uid' . For example if value of 'Membership User LDAP Attribute' is 'uid' and LDAP group has 'memberUid: john', then it is expected that particular LDAP user will have attribute 'uid: john' ."
                     readonly: false
                     placeholder:
                     defaultValue: uid
@@ -479,7 +494,7 @@ keycloak:
                     display: Membership Attribute Type
                     inputType: dropdown
                     required: false
-                    helpText: Membership User LDAP Attribute
+                    helpText: "DN means that LDAP group has it's members declared in form of their full DN. For example 'member: uid=john,ou=users,dc=example,dc=com' . UID means that LDAP group has it's members declared in form of pure user uids. For example 'memberUid: john'"
                     readonly: false
                     placeholder:
                     defaultValue: DN
@@ -491,7 +506,7 @@ keycloak:
                     display: Mode
                     inputType: dropdown
                     required: false
-                    helpText: Mode
+                    helpText: LDAP_ONLY means that all group mappings of users are retrieved from LDAP and saved into LDAP. READ_ONLY is Read-only LDAP mode where group mappings are retrieved from both LDAP and DB and merged together. New group joins are not saved to LDAP but to DB. IMPORT is Read-only LDAP mode where group mappings are retrieved from LDAP just at the time when user is imported from LDAP and then they are saved to local ISD DB.
                     readonly: false
                     placeholder:
                     defaultValue: READ_ONLY
@@ -504,7 +519,7 @@ keycloak:
                     display: User Groups Retrieve Strategy
                     inputType: dropdown
                     required: false
-                    helpText: User Groups Retrieve Strategy
+                    helpText: Specify how to retrieve groups of user. LOAD_GROUPS_BY_MEMBER_ATTRIBUTE means that roles of user will be retrieved by sending LDAP query to retrieve all groups where 'member' is our user. GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE means that groups of user will be retrieved from 'memberOf' attribute of our user. Or from the other attribute specified by 'Member-Of LDAP Attribute' .
                     readonly: false
                     placeholder:
                     defaultValue: LOAD_GROUPS_BY_MEMBER_ATTRIBUTE
@@ -516,16 +531,32 @@ keycloak:
                     display: Member-Of LDAP Attribute
                     inputType: text
                     required: false
-                    helpText: Member-Of LDAP Attribute
+                    helpText: "Used just when 'User Roles Retrieve Strategy' is GET_GROUPS_FROM_USER_MEMBEROF_ATTRIBUTE . It specifies the name of the LDAP attribute on the LDAP user, which contains the groups, which the user is member of. Usually it will be 'memberOf' and that's also the default value."
                     readonly: false
                     placeholder:
                     defaultValue: memberOf
                     loadValues: []
 
+                  - name: groupsLdapFilter
+                    display: LDAP Filter
+                    inputType: text
+                    required: false
+                    helpText: LDAP Filter adds additional custom filter to the whole query for retrieve LDAP groups. Leave this empty if no additional filtering is needed and you want to retrieve all groups from LDAP. Otherwise make sure that filter starts with '(' and ends with ')'
+                    readonly: false
+                    placeholder:
+                    defaultValue:
+                    loadValues: []
+
       - name: saml
         display: SAML
         type: label
-        helpText: SAML
+        helpText: "This page allows you to configure SAML Authentication providers such as Okta and Azure. Once this is enabled, the 'Sign in with SAML' option will be available on the ISD login screen. All users configured in your SAML authentication provider will be able to access ISD. Super admin users will continue to be able to log in using their current user id and password.
+        Follow the below steps to enable SAML Provider. 
+        - Copy and Use the redirect URI as the ACS URL of the ISD application and Service Provider (Entity ID) while configuring your Identity Provider
+        - Download the metadata XML from your Identity Provider and import it to ISD
+        - Single Sign-On service URL will get auto-populated from the metadata XML
+        - The group attribute helps ISD to identify the groups the user belongs to. You can add group attribute statements to the SAML assertion shared with ISD from your Identity Provider. The value entered here should match the name of the group attribute on your IDP. By default it's memberOf
+        - Click on the 'Enabled' toggle and Save button at the bottom to enable the provider."
         sections:
           - name: toggleSettings
             display:
@@ -551,42 +582,37 @@ keycloak:
                 display: Redirect URI
                 inputType: url
                 required: true
-                helpText: The redirect ui to use when confuiguring the identity provider
+                helpText: The redirect uri to use when configuring the identity provider.
                 readonly: true
                 placeholder:
                 defaultValue: https://{{ .Values.global.keycloak.host }}/auth/realms/isd/broker/saml/endpoint
-                loadValues: []
-
-          - name: identityProviderMetadata
-            display: Identity Provider Metadata
-            type: label
-            helpText: Identity Provider Metadata
-            inputparameters:
-              - name: importFromFile
-                display: Import from file
-                inputType: file
-                required: false
-                helpText: Import from file
-                readonly: false
-                placeholder:
-                defaultValue:
                 loadValues: []
 
               - name: serviceProviderEntityId
                 display: Service Provider Entity ID
                 inputType: url
                 required: true
-                helpText: Service Provider Entity ID
+                helpText: The Entity ID that will be used by your IDP to uniquely identify this SAML Service Provider (ISD).
                 readonly: false
                 placeholder:
                 defaultValue: https://{{ .Values.global.keycloak.host }}/auth/realms/isd
+                loadValues: []
+
+              - name: importFromFile
+                display: Import Identity Provider Metadata
+                inputType: file
+                required: false
+                helpText: Upload Metadata XML From the Identity Provider
+                readonly: false
+                placeholder:
+                defaultValue:
                 loadValues: []
 
               - name: singleSignOnServiceUrl
                 display: Single Sign-On Service URL
                 inputType: url
                 required: true
-                helpText: The url that must be used to send authentication requests (SAML AuthnRequest).
+                helpText: The Url that must be used to send authentication requests (SAML AuthnRequest).
                 readonly: true
                 placeholder:
                 defaultValue:
@@ -596,11 +622,12 @@ keycloak:
                 display: Group Attribute
                 inputType: text
                 required: false
-                helpText: Group Attribute
+                helpText: The group attribute helps ISD to identify the groups the user belongs to. You can add group attribute statements to the SAML assertion shared with ISD from your Identity Provider. The value entered here should match the name of the group attribute on your IDP. By default it's memberOf.
                 readonly: false
                 placeholder:
                 defaultValue: memberOf
                 loadValues: []
+{{- end }}
 
 {{- if .Values.global.commonGate.enabled }}
 spinnaker:
@@ -632,11 +659,11 @@ allowUnauthenticatedAccess:
   webhooks: {{ .Values.gate.config.webhooks }}
 
 jwt:
-  secret: argo_navis
+  secret: YXJnb19uYXZpcw==
   token:
     durationInSeconds: 36000
 vela:
-  bounceUrl: http://vela-service/bounce
+  bounceUrl: https://isd.{{ .Values.global.vela.host }}/bounce
 
 logging:
   level:
