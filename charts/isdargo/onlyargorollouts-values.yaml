@@ -1,30 +1,17 @@
+##### This file can be used for Installing Only Argo Rollouts ###############################
+##################################################
+argo-rollouts:
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
 ####################################################
-# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
-installArgoCD: false
 
-# installArgoRollouts enable true will install argo-rollouts
-installArgoRollouts: true
-###########################################################################################
-#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
-installationMode: None
-
-######################
 global:
-  # when this flag is set to false; UI will be accessible over http instead of https
-  ssl:
-    enabled: true
+  argorollouts:
+    host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
-  # Else, the TLS secrets will need to created manually
-  certManager:
-    installed: true
-
-  createIngress: true
-
+  #####User doesn't need to change the below flags let it be the default one######################
   minio:
     enabled: false
-
-  argorollouts:
-    host: "rollouts.ryzon7-argo22.opsmx.org"
 
   ###############################################################################
   # Set it to false if own LDAP is to be configured
@@ -34,24 +21,17 @@ global:
   ldap:
     enabled: false
 
-###################################################
-# argo-rollouts configuration
-#######################
-
-argo-rollouts:
-  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
-  installCRDs: true
-  #Set to false if crds to be deleted as part of helm uninstall
-  keepCRDs: false
 #######################################################################################################################
-# Values of OEA Database
-db:
-  enabled: false
-###############################################################################################################################
-forwarder:
-  enabled: false
-################################################################################################
 ## Redis configuration
-## Set it to false only if OES needs to be configured with external redis
 installRedis: false
-##########################################################################
+####################################################
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: false
+###########################################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: None
+
+# installkeycloak enable true if user need to keycloak
+installkeycloak: false
+
+autoconfigureagent: false

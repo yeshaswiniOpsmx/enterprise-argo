@@ -1808,13 +1808,13 @@ forwarder:
   externalName:
   enabled: true
   agent:
-    image: quay.io/opsmxpublic/forwarder-agent:v3.5.7
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
     serviceType: LoadBalancer
     # Value is also used in sapor configuration for kubernetes.agent.serverHostName
     host: opsmx-controller-controller1
   image:
     repository: quay.io/opsmxpublic/forwarder-controller
-    tag: v3.5.7
+    tag: v3.5.9
     pullPolicy: IfNotPresent
   serverNames:
     - agent-grpc

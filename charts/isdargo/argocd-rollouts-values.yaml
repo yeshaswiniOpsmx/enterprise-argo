@@ -1,28 +1,19 @@
-##### This file can be used for Installing ISD,Argo CD and Argo Rollouts ###############################
+#### This file can be used for installing the Argo Components(Argo CD and Argo Rollouts) ##########################
+#####################################################
 global:
   argocd:
     # Update the below string for all occurences in this file with proper dns entry to access the Argo CD UI eg: argocd.example.ops.com
     host: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   argorollouts:
-    # Update the below string with proper dns entry to access the Argo Rollouts UI eg: argorollouts.example.ops.com
+    # Update the below string with proper dns entry to access the Argo Rollouts Url eg: argorollouts.example.ops.com
     host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
-
-  oesUI:
-    # Update the below string with proper dns entry to access the ISD UI eg: isdui.example.ops.com
-    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
-  keycloak:
-    # Update the below string with proper dns entry to access the keycloak UI eg: keycloak.example.ops.com
-    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
-  vela:
-    # Update the below entry for establishing communication for ISD and Argo CD
-    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
 
+  minio:
+    enabled: false
 ###################################################
 # argo-cd configuration
 #######################
@@ -100,3 +91,13 @@ argo-cd:
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
+
+#####User doesn't need to change the below flags let it be the default one######################
+installkeycloak: false
+#######################################################################################################################
+## Redis configuration
+installRedis: false
+
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: None
+
