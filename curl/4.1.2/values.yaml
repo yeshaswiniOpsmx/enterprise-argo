@@ -159,7 +159,7 @@ global:
         secretName: prometheus-ingress
 
   keycloak:
-    enabled: true
+    enabled: false
     host: keycloak.example.ops.com
 
     ingress:
