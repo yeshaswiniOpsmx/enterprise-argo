@@ -11,16 +11,6 @@ global:
     # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
     host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
-  oesUI:
-    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
-    host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
-  keycloak:
-    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
-  vela:
-    host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
 
@@ -35,6 +25,8 @@ global:
     groupRoleAttributes: cn
     userDnPattern: cn={0},dc=example,dc=org
 
+  minio:
+    enabled: false
 ###################################################
 # argo-cd configuration
 #######################
@@ -112,3 +104,13 @@ argo-cd:
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
+
+#####User doesn't need to change the below flags let it be the default one######################
+installkeycloak: false
+#######################################################################################################################
+## Redis configuration
+installRedis: false
+
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: None
+

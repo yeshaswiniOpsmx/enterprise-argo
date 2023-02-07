@@ -149,9 +149,6 @@ argo-cd:
       # The scope value can be a string, or a list of strings.
       scopes: "[groups]"
 
-    params:
-      server.content.security.policy: default-src * 'unsafe-inline'
-      server.x.frame.options: ' '
   notifications:
     enabled: true
     argocdUrl: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net

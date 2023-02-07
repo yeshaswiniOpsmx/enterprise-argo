@@ -1,22 +1,14 @@
-######################################################################################
-installArgoCD: false
-######################################################################################
-installArgoRollouts: false
-#######################################################################################
-installkeycloak: true
-#######################################################################################
-# Global Configuration
-######################
 global:
-
   oesUI:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   keycloak:
+    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: keycloak.example.ops.com
     host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   vela:
+    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: keycloak.example.ops.com$
     host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   # Set it to false if own LDAP is to be configured
@@ -31,3 +23,20 @@ global:
     groupSearchFilter: member={0}
     groupRoleAttributes: cn
     userDnPattern: cn={0},dc=example,dc=org
+
+#######################################################################################################################
+# Values of OES Database
+db:
+  ## Set it to false if any external database is to be used
+  enabled: true
+  url: jdbc:postgresql://oes-db:5432
+  username: postgres
+  password: networks123
+
+#####User doesn't need to change the below flags let it be the default one######################
+installArgoCD: false
+######################################################################################
+installArgoRollouts: false
+#######################################################################################
+installkeycloak: true
+#######################################################################################

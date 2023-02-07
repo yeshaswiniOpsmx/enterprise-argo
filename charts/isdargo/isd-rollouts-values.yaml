@@ -1,53 +1,9 @@
-####################################################
-# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
-installArgoCD: false
-
-# installArgoRollouts enable true will install argo-rollouts
-installArgoRollouts: true
-
-########################################################################################
-## Info related to registry where OEA images are stored
-imageCredentials:
-  repoUrl: https://quay.io/
-  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
-  registry: quay.io/opsmxpublic
-
-#######################################################################################
-# If installed ArgoCD set to true it will installdemoapps
-# Set to false if no applications to be displayed in ArgoCD as part of default installation
-installdemoapps: false
-#######################################################################################
-# Set to true if ISD needs to connect to ArgoCD using agent service
-autoconfigureagent: false
-#######################################################################################
-# Global Configuration
-######################
-
 global:
-  # Custom Images registry where all the OSS and customized images used in the helm chart are stored
-  # Only update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
-  customImages:
-    registry: quay.io/opsmxpublic
-  # when this flag is set to false; UI will be accessible over http instead of https
-  ssl:
-    enabled: true
-
-  # If cert-manager is installed, TLS secrets will created automatically, as an 'Issuer' will be created
-  # Else, the TLS secrets will need to created manually
-  certManager:
-    installed: true
-
-  createIngress: true
-
   oesUI:
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   keycloak:
-    enabled: false
-    host: oes.example.ops.com
-
-  minio:
-    enabled: true
+    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
   argorollouts:
     #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
@@ -68,12 +24,10 @@ global:
     groupRoleAttributes: cn
     userDnPattern: cn={0},dc=example,dc=org
 
+#################################################################################
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
-  #Set to false if crds to be deleted as part of helm uninstall
-  keepCRDs: true
-
 #######################################################################################################################
 # Values of OEA Database
 db:
@@ -83,11 +37,33 @@ db:
   username: postgres
   password: networks123
 
-###################################
-forwarder:
-  enabled: true
 ################################################################################################
 ## Redis configuration
 ## Set it to false only if OES needs to be configured with external redis
 installRedis: true
 ##########################################################################
+redis:
+  ## Change this to custom URL if installRedis is set to false
+  url: redis://:password@{{ .Release.Name }}-redis-master
+  port: 6379
+  # External Redis option will be enabled if in-cluster redis is disabled
+  external:
+    host: "<EXTERNAL-REDIS-HOST-NAME>"
+    port: 6379
+
+#####User doesn't need to change the below flags let it be the default one######################
+################################################################################################
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: false
+
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+
+#######################################################################################
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: false
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: false
+#######################################################################################
