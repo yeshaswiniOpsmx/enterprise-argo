@@ -100,12 +100,12 @@ data:
 
       ##argocli login
       {{- if and (.Values.global.createIngress) (.Values.global.certManager.installed) }}
-      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web
+      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web > /dev/null
       {{- else }}
       {{- if and (.Values.global.createIngress) (not .Values.global.certManager.installed) }}
-      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web --insecure
+      argocd login {{ .Values.global.argocd.host }} --username=admin --password=$argopassword --grpc-web --insecure > /dev/null
       {{- else }}
-      argocd login --insecure --port-forward --port-forward-namespace={{ .Release.Namespace }} --plaintext --username=admin --password=$argopassword
+      argocd login --insecure --port-forward --port-forward-namespace={{ .Release.Namespace }} --plaintext --username=admin --password=$argopassword > /dev/null
       {{- end }}
       {{- end }}
 
@@ -147,42 +147,42 @@ data:
          {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
          ### Create Datasource
        ## create Elasticsearch datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
        ## Create prometheus datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
          sleep 10
          ## create LOG template
-       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
+       curl -s --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
        --header 'Content-Type: application/json' \
        --data-raw '{"templateName":"opsmx-logtemplate","monitoringProvider":"ELASTICSEARCH","scoringAlgorithm":"Canary","accountName":"opsmx-elasticsearch","index":"test_*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log,message","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":"","versionNo":"v1.0"}' > /dev/null
-       ## create metric template
-       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
+        # create metric template
+       curl -s --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
        --header "x-spinnaker-user:admin" \
        --header 'Content-Type: application/json' \
        --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
          ## End of datasources
          {{- else if .Values.global.enableCentralMonitoring }}
        ## Create prometheus datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"PROMETHEUS","name":"opsmx-prom","configurationFields":{"endPoint":"http://{{ .Release.Name }}-prometheus-server:80","username":"","password":""}}'
          sleep 10
        ## create metric template
-       curl --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
+       curl -s --location --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/metricTemplate' \
        --header "x-spinnaker-user:admin" \
        --header 'Content-Type: application/json' \
        --data-raw '{"filterKey":"${namespace_key},${container_key},${pod_key}","data":{"percent_diff_threshold":"hard","isNormalize":false,"groups":[{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_cpu_usage_seconds_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]) * 1000)","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"CPU Usage By ContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"avg(container_memory_working_set_bytes{namespace=\"${namespace_key}\", container=\"${container_key}\"})","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Memory workingset By Container Name Name"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_reads_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesysyem reads by Container"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_fs_writes_bytes_total{namespace=\"${namespace_key}\", container=\"${container_key}\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"filesystem writes by ContainerNMe"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_receive_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network  receiverd bytes byContainerName"},{"metrics":[{"metricType":"ADVANCED","metricWeight":1,"nanStrategy":"ReplaceWithZero","accountName":"opsmx-prom","riskDirection":"Higher","customThresholdHigher":70,"name":"sum(rate(container_network_transmit_bytes_total{namespace=\"${namespace_key}\", pod=~\"${pod_key}.*\"}[1m]))","criticality":"Normal","customThresholdLower":"10","watchlist":false}],"group":"Network transmitted bytes by ContainerName"}]},"templateName":"opsmx-metrictemplate","isEdit":true,"advancedProvider":"PROMETHEUS"}'
        {{- else if .Values.enableCentralLogging }}
        ## create Elasticsearch datasource
-       curl --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
+       curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
        --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
          ## create LOG template
-       curl --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
+       curl -s --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
        --header 'Content-Type: application/json' \
        --data-raw '{"templateName":"opsmx-logtemplate","monitoringProvider":"ELASTICSEARCH","scoringAlgorithm":"Canary","accountName":"opsmx-elasticsearch","index":"test_*","namespace":null,"regExFilter":false,"regExResponseKey":"","regularExpression":"","filterKey":"kubernetes.container_name","autoBaseline":false,"sensitivity":"high","tags":[],"errorTopics":[{"string":"OnOutOfMemoryError","topic":"CRITICAL","type":"default"},{"string":"StackOverflowError","topic":"CRITICAL","type":"default"},{"string":"ClassNotFoundException","topic":"CRITICAL","type":"default"},{"string":"FileNotFoundException","topic":"CRITICAL","type":"default"},{"string":"ArrayIndexOutOfBounds","topic":"CRITICAL","type":"default"},{"string":"NullPointerException","topic":"CRITICAL","type":"default"},{"string":"StringIndexOutOfBoundsException","topic":"CRITICAL","type":"default"},{"string":"FATAL","topic":"CRITICAL","type":"default"},{"string":"SEVERE","topic":"CRITICAL","type":"default"},{"string":"NoClassDefFoundError","topic":"ERROR","type":"default"},{"string":"NoSuchMethodFoundError","topic":"ERROR","type":"default"},{"string":"NumberFormatException","topic":"ERROR","type":"default"},{"string":"IllegalArgumentException","topic":"ERROR","type":"default"},{"string":"ParseException","topic":"ERROR","type":"default"},{"string":"SQLException","topic":"ERROR","type":"default"},{"string":"ArithmeticException","topic":"ERROR","type":"default"},{"string":"status=404","topic":"ERROR","type":"default"},{"string":"status=500","topic":"ERROR","type":"default"},{"string":"EXCEPTION","topic":"ERROR","type":"default"},{"string":"ERROR","topic":"ERROR","type":"default"},{"string":"WARN","topic":"WARN","type":"default"},{"string":"WARNING","topic":"WARN","type":"default"}],"responseKeywords":"log,message","logGroupName":"","logStreamName":"","region":"","verificationType":"VERIFICATION","testCaseKey":"","testSuiteKey":"","infoScoring":false,"contextualCluster":false,"contextualWindowSize":25,"tagEnabled":false,"streamId":"","timestampKey":"","applicationId":0,"applicationName":"","emailId":"","versionNo":"v1.0"}' > /dev/null
          {{- end }}
@@ -190,18 +190,20 @@ data:
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          sleep 20
-         curl --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
+         echo "Creatng the Agent in ISD ..."
+         curl -s --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
          sleep 20
          ## Download agent manifest file
-         curl --location --request GET 'http://oes-sapor:8085/oes/accountsConfig/agents/isd-argo-agent/manifest' --header 'x-spinnaker-user: admin' > /tmp/manifest.yaml
+         echo "Downloading the Agent from ISD ..."
+         curl -s --location --request GET 'http://oes-sapor:8085/oes/accountsConfig/agents/isd-argo-agent/manifest' --header 'x-spinnaker-user: admin' > /tmp/manifest.yaml
          cd /tmp/
          ## Download and install the kubectl-slice to split to manifest file that is download
-         wget https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz
-         tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         wget -q https://github.com/patrickdappollonio/kubectl-slice/releases/download/v1.2.3/kubectl-slice_1.2.3_linux_x86_64.tar.gz
+         tar -xvf /tmp/kubectl-slice_1.2.3_linux_x86_64.tar.gz > /dev/null
          cp /tmp/kubectl-slice /usr/local/bin/
          ## create a directory to place splited yamls from the manifest
          mkdir /tmp/yamls
-         kubectl-slice --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
+         kubectl-slice -q --input-file=/tmp/manifest.yaml --output-dir=/tmp/yamls/.
          ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
          ## Adding the agent service configmap with added arocd token
@@ -217,6 +219,7 @@ data:
          ## Agent replicaset
          yq e -i '.spec.replicas = 1' /tmp/yamls/deployment-opsmx-agent-isd-argo-agent.yaml
          ## Apply the yamls
+         echo "Applying the Agent files ..."
          kubectl replace --force -f /tmp/agent-cm.yaml
          kubectl apply -f /tmp/yamls/
          echo "------------------------------"
