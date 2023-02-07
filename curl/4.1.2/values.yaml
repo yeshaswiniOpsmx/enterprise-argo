@@ -17,11 +17,18 @@ installArgoEvents: false
 # installArgoImageupdater enable true will install argocd-image-updater
 installArgoImageupdater: false
 
+installkeycloak: false
+
 ###########################################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: OEA-AP
 ########################################################################################
 k8sServiceType: ClusterIP
+########################################################################################
+#  Env variables will be abblied to all ISD sevices
+extraEnvVars:
+  - name: JAVA_OPTS
+    value: -Xmx512m
 ########################################################################################
 ## Info related to registry where OEA images are stored
 imageCredentials:
@@ -106,6 +113,20 @@ global:
       tls:
         secretName: spin-deck-ingress
 
+  vela:
+    protocol: https
+    host: vela.example.ops.com
+    #port: 31464
+
+    serviceAnnotations: {}
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: vela-ingress
+
   #### If ingress required for elasticsearch and kibana enable enableCentralLogging: "ture" and define URL's
   elasticsearch:
     enabled: false
@@ -136,6 +157,17 @@ global:
         kubernetes.io/ingress.class: nginx
       tls:
         secretName: prometheus-ingress
+
+  keycloak:
+    enabled: true
+    host: keycloak.example.ops.com
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: keycloak-ingress
+
 
   autoConfiguration:
     # Set it to false if OES is being installed on restricted evnironment;
@@ -796,8 +828,9 @@ argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
-  keepCRDs: false
-
+  keepCRDs: true
+  controller:
+    replicas: 1
   notifications:
     secret:
       # -- Whether to create notifications secret
@@ -1262,12 +1295,13 @@ openldap:
 enableCentralLogging: false
 
 elasticsearch:
-  replicas: 1
+  replicas: 2
   minimumMasterNodes: 1
+  antiAffinity: "soft"
   resources:
     requests:
       cpu: "100m"
-      memory: "1Gi"
+      memory: "500Mi"
 
 kibana:
   service:
@@ -1290,13 +1324,13 @@ kibana:
             curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
 
 ##################################################################################################################
-#
-carina:
+# Values of Carina Manager
+carinamanager:
   ## Image specific details
   ##
   image:
     repository: carina-manager
-    tag: v1.4.2
+    tag: v1.9.6
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1307,7 +1341,35 @@ carina:
   config: {}
 
 #######################################################################################################################
-# Values of OEA Database
+# Values of Carina Instance
+carinainstance:
+  image:
+    repository: carina-instance
+    tag: v1.9.6
+    pullPolicy: IfNotPresent
+  
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+
+#######################################################################################################################
+# Values of Carina Instance
+vela:
+  image:
+    repository: vela-api
+    tag: v1.1.3
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+
+#######################################################################################################################
+# Values of OES Database
 db:
   ## Set it to false if any external database is to be used
   enabled: true
@@ -1344,7 +1406,7 @@ ui:
   ## Image specific details
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1360,7 +1422,7 @@ autopilot:
   ## Image specific details
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1392,7 +1454,7 @@ audit:
   ##
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1413,7 +1475,7 @@ auditClient:
   ##
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1434,7 +1496,7 @@ datascience:
   ##
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1452,7 +1514,7 @@ dashboard:
   ## Image specific details
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1485,7 +1547,7 @@ gate:
   ## Image specific details
   image:
     repository: ubi8-gate
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1561,7 +1623,7 @@ platform:
   ## Image specific details
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1601,7 +1663,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1661,7 +1723,7 @@ visibility:
   ## Image specific details
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.1
+    tag: v4.1.2
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1724,7 +1786,7 @@ rabbitmq:
   password: Networks123
   image:
     registry: quay.io/opsmxpublic/rabbitmq
-    repository: 3-management
+    repository: 3.11.4-management
 
   serviceAnnotations: {}
 
@@ -1742,17 +1804,21 @@ vault:
 secretStore: db
 ###################################
 forwarder:
-  externalName: agent-grpc   # This hostname should reach agent-grpc service from the agent
+  # Update the externalName if only ISD and Argo running in different cluster with DNS if not leave as it is
+  externalName:
   enabled: true
   agent:
-    image: quay.io/opsmxpublic/forwarder-agent:v3.5.7
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
     serviceType: LoadBalancer
     # Value is also used in sapor configuration for kubernetes.agent.serverHostName
     host: opsmx-controller-controller1
   image:
     repository: quay.io/opsmxpublic/forwarder-controller
-    tag: v3.5.7
+    tag: v3.5.9
     pullPolicy: IfNotPresent
+  serverNames:
+    - agent-grpc
+
   serviceAnnotations: {}
 
 ################################################################################################

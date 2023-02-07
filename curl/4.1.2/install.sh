@@ -73,8 +73,19 @@ while read isduiurl; do
   test "$isduiurl" != "" && break
   echo "              INFO: ANSWER CANNOT BE BLANK!"
   echo ""
-  echo -n "Your ISD-UI URL: "
+  echo -n "Your ISD-UI URL:"
 done
+## read vela ingress
+
+echo -n "Specify Vela URL: "
+while read vela; do
+  test "$vela" != "" && break
+  echo "              INFO: ANSWER CANNOT BE BLANK!"
+  echo ""
+  echo -n "Your Vela URL: "
+done
+
+
 }
 readargourls(){
 echo -n "Specify ArgoCD URL: "
@@ -82,7 +93,7 @@ while read argocdurl; do
   test "$argocdurl" != "" && break
   echo "              INFO: ANSWER CANNOT BE BLANK!"
   echo ""
-  echo -n "Your ArgoCD URL: : "
+  echo -n "Your ArgoCD URL:"
 done
 ## Read ArgoWorkflow url
 #echo -n "Specify ArgoWorkflow URL: "
@@ -99,7 +110,7 @@ while read argoroll; do
   test "$argoroll" != "" && break
   echo "              INFO: ANSWER CANNOT BE BLANK!"
   echo ""
-  echo -n "Your ArgoRollout URL: : "
+  echo -n "Your ArgoRollout URL:"
 done
 echo "---"
 }
@@ -153,8 +164,10 @@ isdmodevalues(){
 
 if [[ $OSTYPE == 'darwin'* ]]; then
    sed -i.bu "s/oes.example.ops.com/$isduiurl/g" values.yaml
+   sed -i.bu "s/vela.example.ops.com/$vela/g" values.yaml
 else
    sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
+   sed -i "s/vela.example.ops.com/$vela/g" values.yaml
 fi
 
 yq e -i '.installArgoCD = false' values.yaml
@@ -172,11 +185,13 @@ if [[ $OSTYPE == 'darwin'* ]]; then
    sed -i.bu "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
    #sed -i.bu "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
    sed -i.bu "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
+   sed -i.bu "s/vela.example.ops.com/$vela/g" values.yaml
 else
    sed -i "s/oes.example.ops.com/$isduiurl/g" values.yaml
    sed -i "s/cd.ryzon7-argo22.opsmx.org/$argocdurl/g" values.yaml
    #sed -i "s/workflow.ryzon7-argo22.opsmx.org/$argowrkurl/g" values.yaml
    sed -i "s/rollouts.ryzon7-argo22.opsmx.org/$argoroll/g" values.yaml
+   sed -i "s/vela.example.ops.com/$vela/g" values.yaml
 fi
 
 yq e -i '.cdagentname = "argocd"' values.yaml
