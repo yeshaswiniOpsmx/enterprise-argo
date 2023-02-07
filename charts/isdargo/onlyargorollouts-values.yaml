@@ -1,6 +1,5 @@
-###################################################
-# argo-rollouts configuration
-#######################
+##### This file can be used for Installing Only Argo Rollouts ###############################
+##################################################
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
@@ -28,9 +27,6 @@ installRedis: false
 ####################################################
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: false
-
-# installArgoRollouts enable true will install argo-rollouts
-installArgoRollouts: true
 ###########################################################################################
 #  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
 installationMode: None

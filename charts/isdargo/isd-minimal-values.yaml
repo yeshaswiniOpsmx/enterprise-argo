@@ -1,3 +1,4 @@
+##### This file can be used for Installing Only ISD Components ###############################
 global:
   oesUI:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
@@ -14,16 +15,6 @@ global:
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
 
-  ldap:
-    enabled: true
-    url: ldap://openldap:389
-    managerDn: cn=admin,dc=example,dc=org
-    managerPassword: opsmxadmin123
-    groupSearchBase: ou=groups,dc=example,dc=org
-    groupSearchFilter: member={0}
-    groupRoleAttributes: cn
-    userDnPattern: cn={0},dc=example,dc=org
-
 #######################################################################################################################
 # Values of OES Database
 db:
@@ -38,5 +29,6 @@ installArgoCD: false
 ######################################################################################
 installArgoRollouts: false
 #######################################################################################
-installkeycloak: true
+installdemoapps: false
 #######################################################################################
+autoconfigureagent: false

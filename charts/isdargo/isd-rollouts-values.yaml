@@ -1,3 +1,4 @@
+##### This file can be used for Installing ISD and Argo Rollouts ###############################
 global:
   oesUI:
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
@@ -12,17 +13,6 @@ global:
   ###############################################################################
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
-
-  ## ldap configuration used for authentication and authorization
-  ldap:
-    enabled: true
-    url: ldap://openldap:389
-    managerDn: cn=admin,dc=example,dc=org
-    managerPassword: opsmxadmin123
-    groupSearchBase: ou=groups,dc=example,dc=org
-    groupSearchFilter: member={0}
-    groupRoleAttributes: cn
-    userDnPattern: cn={0},dc=example,dc=org
 
 #################################################################################
 argo-rollouts:
@@ -55,10 +45,6 @@ redis:
 ################################################################################################
 # installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
 installArgoCD: false
-
-# installArgoRollouts enable true will install argo-rollouts
-installArgoRollouts: true
-
 #######################################################################################
 # If installed ArgoCD set to true it will installdemoapps
 # Set to false if no applications to be displayed in ArgoCD as part of default installation

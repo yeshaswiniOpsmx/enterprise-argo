@@ -1,29 +1,16 @@
+#### This file can be used for installing the Argo Components(Argo CD and Argo Rollouts) ##########################
 #####################################################
-# Global Configuration
-######################
-
 global:
   argocd:
-    # Please below string for all occurences in this file with proper dns entry to access the ArgoCD UI eg: argocd.example.ops.com
+    # Update the below string for all occurences in this file with proper dns entry to access the Argo CD UI eg: argocd.example.ops.com
     host: "ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   argorollouts:
-    # Please below string for all occurences in this file with proper dns entry to access the ArgoRollouts UI eg: argorollouts.example.ops.com
+    # Update the below string with proper dns entry to access the Argo Rollouts Url eg: argorollouts.example.ops.com
     host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
   # Set it to false if own LDAP is to be configured
   installOpenLdap: true
-
-  ## ldap configuration used for authentication and authorization
-  ldap:
-    enabled: true
-    url: ldap://openldap:389
-    managerDn: cn=admin,dc=example,dc=org
-    managerPassword: opsmxadmin123
-    groupSearchBase: ou=groups,dc=example,dc=org
-    groupSearchFilter: member={0}
-    groupRoleAttributes: cn
-    userDnPattern: cn={0},dc=example,dc=org
 
   minio:
     enabled: false
