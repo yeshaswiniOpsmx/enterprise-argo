@@ -190,6 +190,15 @@ else
   echo "CRD's analysisruns.argoproj.io not present will be installed..."
   yq e -i '.argo-rollouts.installCRDs = true' values.yaml
 fi
+kubectl get CustomResourceDefinition applications.argoproj.io  > /dev/null 2>&1
+if [ $? == 0 ];
+then
+  echo "Existing CRD's applications.argoproj.io"
+  yq e -i '.argo-cd.crds.install = false' values.yaml
+else
+  echo "CRD's applications.argoproj.io not present will be installed..."
+  yq e -i '.argo-cd.crds.install = true' values.yaml
+fi
 
 #kubectl get CustomResourceDefinition eventbus.argoproj.io  > /dev/null 2>&1
 #if [ $? == 0 ];
@@ -254,11 +263,11 @@ fi
 echo "Installing..."
 echo ""
 ###########################
-rm -rf enterprise-argo
-git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
-cd enterprise-argo/charts/isdargo
-helm install $argonamespace-isd . -f ../../../values.yaml --namespace $argonamespace
-#helm install isdargo-$argonamespace isdargo/isdargo -f values.yaml --version=$version --namespace $argonamespace
+#rm -rf enterprise-argo
+#git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
+#cd enterprise-argo/charts/isdargo
+#helm install $argonamespace-isd . -f ../../../values.yaml --namespace $argonamespace
+helm install isdargo-$argonamespace isdargo/isdargo -f values.yaml --version=$version --namespace $argonamespace --timeout=15m
 
 ####################
 }

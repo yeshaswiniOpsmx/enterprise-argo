@@ -33,7 +33,7 @@ getports(){
 ## Checking the available ports for ISD UI,ArgoCD and Argo Rollouts
 ARGOCD_PORT=$(assignPort 9000)
 #echo $ARGOCD_PORT
-ISDUI_PORT=8080
+ISDUI_PORT=8093
 #ISDUI_PORT=$(assignPort 8080)
 #echo $ISDUI_PORT
 ROLLOUT_PORT=$(assignPort 9100)

@@ -6,13 +6,6 @@
 
 For more information, visit https://www.opsmx.com
 
-## TL;DR;
-Install OpsMx Enterprise for Argo
-  ```console
-  $ helm repo add isdargo https://opsmx.github.io/enterprise-argo/
-  $ helm install <release-name> isdargo/isdargo --timeout 6m
-  ```
-
 ## Setup Instructions
 
 ### Prerequisites
@@ -20,7 +13,7 @@ Install OpsMx Enterprise for Argo
 - Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
 - Helm 3 is setup on the client system with 3.10.3 or later
   ```console
-  $ helm version
+  helm version
   ```
   If helm is not setup, follow <https://helm.sh/docs/intro/install/> to install helm.
 
@@ -29,13 +22,13 @@ Install OpsMx Enterprise for Argo
 - Add opsmx helm repo to your local machine
 
    ```console
-   $ helm repo add isdargo https://opsmx.github.io/enterprise-argo/
+   helm repo add isdargo https://opsmx.github.io/enterprise-argo/
    ```
 
   Note: If opsmx helm repo is already added, do a repo update before installing the chart
 
    ```console
-   $ helm repo update
+   helm repo update
    ```
 
 - Your Kubernetes cluster shall support persistent volumes
@@ -51,14 +44,22 @@ Install OpsMx Enterprise for Argo
 - Helm v3 expects the namespace to be present before helm install command is run. If it does not exists,
 
   ```console
-  $ kubectl create namespace mynamespace
+  kubectl create namespace opsmx-argo
   ```
+- There are different flavours for Installing ISD-ARGO
 
-- To install the chart with the release name `my-release`:
+    Values yamls    | Description 
+  --------------| ----------- 
+  isd-argo-minimal-values.yaml | This file is used for Installing ISD,Argo CD and Argo Rollouts 
+  isd-minimal-values.yaml | This file is used for Installing ISD without Argo CD and Argo Rollouts 
+  isd-rollouts-values.yaml | This file is used for Installing ISD and Argo Rollouts without Argo CD
+  onlyargorollouts-values.yaml | This file is used for Installing only Argo Rollouts without Argo CD and ISD
+  argocd-rollouts-values.yaml | This file is used for Installing Argo CD and Argo Rollouts without ISD
+ 
+- Use below command to install the helm chart:
 
-	Helm v3.x
   ```console
-  $ helm install my-release isdargo/isdargo [--namespace mynamespace] --timeout 6m
+  helm install isdargo isdargo/isdargo -f isd-argo-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
 
 The command deploys ISD-ARGO on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -67,9 +68,8 @@ The command deploys ISD-ARGO on the Kubernetes cluster in the default configurat
 
 ### Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the deployment:
 
-Helm v3.x
   ```console
-  $ helm uninstall my-release [--namespace mynamespace]
+  helm uninstall isdargo -n opsmx-argo
   ```

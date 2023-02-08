@@ -1,10 +1,10 @@
 dependencies:
 - name: argo-cd
   repository: ""
-  version: 4.10.5
+  version: 5.16.6
 - name: argo-rollouts
   repository: ""
-  version: 2.18.0
+  version: 2.21.1
 - name: argo-workflows
   repository: ""
   version: 0.16.8
@@ -38,5 +38,8 @@ dependencies:
 - name: minio
   repository: ""
   version: 8.0.9
-digest: sha256:36d781674188e506d6cc504a212d72658095e6d42417b2f517965860c44ca1ad
-generated: "2022-10-19T16:58:14.327775317+05:30"
+- name: keycloak
+  repository: ""
+  version: 18.4.0
+digest: sha256:7bab05f458d45d5318c65b68aac2ff81104a63778491a0a324abc63b36ff0d62
+generated: "2023-02-08T11:48:42.721867421+05:30"
