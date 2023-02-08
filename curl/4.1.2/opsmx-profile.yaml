@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: opsmx-profile
 stringData:
-  cd-integration: "true"
-  source-name: argocd-AGENTNAME
-  gate-url: "https://ISDURL"
+  cdIntegration: "true"
+  sourceName: argocd-AGENTNAME
+  opsmxIsdUrl: "https://ISDURL"
   user: "ISDUSERNAME"

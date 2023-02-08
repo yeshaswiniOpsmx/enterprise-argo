@@ -155,7 +155,7 @@ fi
 
 getvalues(){
 rm -rf values.yaml
-## Get the vaules.yaml
+## Get the values.yaml
 curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2/values.yaml 2> /dev/null
 }
 
@@ -265,13 +265,13 @@ fi
 echo "Installing..."
 echo ""
 ###########################
-rm -rf enterprise-argo
-git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
-cd enterprise-argo/charts/isdargo
-helm install $isdnamespace-isd . -f ../../../values.yaml --namespace $isdnamespace
+#rm -rf enterprise-argo
+#git clone https://github.com/OpsMx/enterprise-argo.git > /dev/null 2>&1
+#cd enterprise-argo/charts/isdargo
+#helm install $isdnamespace-isd . -f ../../../values.yaml --namespace $isdnamespace
 
 ####################
-#helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version=$version --namespace $isdnamespace
+helm install isdargo$isdnamespace isdargo/isdargo -f values.yaml --version=$version --namespace $isdnamespace --timeout=15m
 }
 isdargocheck() {
 if [ $? == 0 ];
