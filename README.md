@@ -46,7 +46,7 @@ For more information, visit https://www.opsmx.com
   ```console
   kubectl create namespace opsmx-argo
   ```
-- There are different flavours of Installing ISD-ARGO
+- There are different flavours for Installing ISD-ARGO
 
     Values yamls    | Description 
   --------------| ----------- 
