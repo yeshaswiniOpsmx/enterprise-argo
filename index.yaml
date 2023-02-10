@@ -3,6 +3,84 @@ entries:
   isdargo:
   - apiVersion: v2
     appVersion: 4.1.2
+    created: "2023-02-10T17:27:57.238379442Z"
+    dependencies:
+    - condition: installArgoCD
+      name: argo-cd
+      repository: ""
+      version: 5.16.6
+    - condition: installArgoRollouts
+      name: argo-rollouts
+      repository: ""
+      version: 2.21.1
+    - condition: installArgoWorkflows
+      name: argo-workflows
+      repository: ""
+      version: 0.16.8
+    - condition: installArgoEvents
+      name: argo-events
+      repository: ""
+      version: 2.0.3
+    - condition: installArgoImageupdater
+      name: argocd-image-updater
+      repository: ""
+      version: 0.8.0
+    - condition: global.installOpenLdap
+      name: openldap
+      repository: ""
+      version: 1.2.3
+    - condition: enableCentralLogging
+      name: elasticsearch
+      repository: ""
+      version: 7.5.0
+    - condition: enableCentralLogging
+      name: kibana
+      repository: ""
+      version: 7.5.0
+    - condition: enableCentralLogging
+      name: fluent-bit
+      repository: ""
+      version: 2.8.2
+    - condition: global.enableCentralMonitoring
+      name: prometheus
+      repository: ""
+      version: 11.16.2
+    - condition: ingressnginx
+      name: ingress-nginx
+      repository: ""
+      version: 4.1.4
+    - condition: installRedis
+      name: redis
+      repository: ""
+      version: 10.5.3
+    - condition: global.minio.enabled
+      name: minio
+      repository: ""
+      version: 8.0.9
+    - condition: installkeycloak
+      name: keycloak
+      repository: ""
+      version: 18.4.0
+    description: ISD-Argo with v2.5.4 with KeyCloak,RBAC features and Improvements of Kubernetes Job for Delivery Verification
+    digest: 8ea1d551ec6e0d5f64857d57d4e4259f3586c3edf5c803ff83ad1a97aa4aabb1
+    icon: https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/img/opsmx.png
+    keywords:
+    - OpsMx
+    - ISDARGO
+    - Autopilot
+    maintainers:
+    - email: srinivas@opsmx.io
+      name: ksrinimba
+    - email: mahesh.kota@opsmx.io
+      name: maheshopsmx
+    - email: saiteja.katabhatina@opsmx.io
+      name: saitejaopsmx
+    name: isdargo
+    urls:
+    - https://github.com/OpsMx/enterprise-argo/releases/download/isdargo-4.1.3/isdargo-4.1.3.tgz
+    version: 4.1.3
+  - apiVersion: v2
+    appVersion: 4.1.2
     created: "2023-02-08T12:45:28.809057203Z"
     dependencies:
     - condition: installArgoCD
