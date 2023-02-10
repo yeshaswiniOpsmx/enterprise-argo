@@ -70,19 +70,19 @@ data:
     OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
     {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
     ELASTICSEARCH=$(grep elasticsearch-master-0 /tmp/live.status | awk '{print $2}')
-    KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
+    #KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
     {{- else if .Values.global.enableCentralMonitoring }}
     PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
     {{- else if .Values.enableCentralLogging }}
-    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
-    KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
+    ELASTICSEARCH=$(grep elasticsearch-master-0 /tmp/live.status | awk '{print $2}')
+    #KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     {{- end }}
     wait_period=$(($wait_period+10))
     {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
-      if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+      if [ "$ELASTICSEARCH" == "true" ] && [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- else if .Values.enableCentralLogging }}
-      if [ "$ELASTICSEARCH" == "true" ] && [ "$KIBANA" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+      if [ "$ELASTICSEARCH" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- else if .Values.global.enableCentralMonitoring }}
       if [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- else }}
@@ -149,7 +149,7 @@ data:
        ## create Elasticsearch datasource
        curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
+       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"","kibanaUsername":"","kibanaPassword":""}}'
        ## Create prometheus datasource
        curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
@@ -180,7 +180,7 @@ data:
        ## create Elasticsearch datasource
        curl -s --location --request POST 'http://oes-platform:8095/platformservice/v6/datasource' \
        --header 'Content-Type: application/json' \
-       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"http://{{ .Release.Name }}-kibana:5601","kibanaUsername":"","kibanaPassword":""}}'
+       --data-raw '{"datasourceType":"ELASTICSEARCH","name":"opsmx-elastic","configurationFields":{"endPoint":"http://elasticsearch-master:9200","username":"","password":"","kibanaEndPoint":"","kibanaUsername":"","kibanaPassword":""}}'
          ## create LOG template
        curl -s --location --header "x-spinnaker-user:admin"  --request POST 'http://oes-autopilot:8090/autopilot/api/v5/global/logTemplate' \
        --header 'Content-Type: application/json' \
