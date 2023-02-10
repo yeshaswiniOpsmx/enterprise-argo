@@ -75,7 +75,7 @@ data:
     {{- else if .Values.global.enableCentralMonitoring }}
     PROMETHEUS=$(grep prometheus-server /tmp/live.status | awk '{print $2}')
     {{- else if .Values.enableCentralLogging }}
-    ELASTICSEARCH=$(grep elasticsearch-master /tmp/live.status | awk '{print $2}')
+    ELASTICSEARCH=$(grep elasticsearch-master-0 /tmp/live.status | awk '{print $2}')
     #KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
     {{- end }}
     wait_period=$(($wait_period+10))
