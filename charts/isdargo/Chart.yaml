@@ -1,6 +1,6 @@
 apiVersion: v2
 name: isdargo
-version: 4.1.2
+version: 4.1.3
 appVersion: 4.1.2
 description: "ISD-Argo with v2.5.4 with KeyCloak,RBAC features and Improvements of Kubernetes Job for Delivery Verification"
 icon: https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/img/opsmx.png

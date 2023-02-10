@@ -12,6 +12,30 @@ For more information, visit https://www.opsmx.com
 
 - Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
 - Helm 3 is setup on the client system with 3.10.3 or later
+- Ensure that this URLs(ISD,KeyCloak,Argo CD,Argo Rollouts,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.
+- Please use below steps:
+
+  	The IP address is the “ingress-nginx-controller” service external IP map them to the hostnames you defined for URLs
+
+	```console
+	Ip-address ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+	Ip-address KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+	Ip-address ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM
+
+	Ip-address ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM
+	```
+	`E.g.: isd.isd-argo.opsmx.com`
+
+- Vela Service requires the “Wild-card ingress” and “Wild-card TLS certificates to be provided to the ingress”
+
+  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress 
+  
+  https://www.linkedin.com/pulse/wildcard-certificates-using-lets-encrypt-certbot-pallavi-udhane/
+
+
+Use below command to check if helm is installed or not
   ```console
   helm version
   ```
@@ -55,7 +79,9 @@ For more information, visit https://www.opsmx.com
   isd-rollouts-values.yaml | This file is used for Installing ISD and Argo Rollouts without Argo CD
   onlyargorollouts-values.yaml | This file is used for Installing only Argo Rollouts without Argo CD and ISD
   argocd-rollouts-values.yaml | This file is used for Installing Argo CD and Argo Rollouts without ISD
- 
+
+**NOTE**: In all the values.yaml please read inline comments and update it accordingly.
+
 - Use below command to install the helm chart:
 
   ```console

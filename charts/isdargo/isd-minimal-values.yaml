@@ -12,9 +12,6 @@ global:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: keycloak.example.ops.com$
     host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
-  # Set it to false if own LDAP is to be configured
-  installOpenLdap: true
-
 #######################################################################################################################
 # Values of OES Database
 db:

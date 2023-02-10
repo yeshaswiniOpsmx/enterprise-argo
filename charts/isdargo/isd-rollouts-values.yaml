@@ -10,10 +10,6 @@ global:
     #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
     host: "ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM"
 
-  ###############################################################################
-  # Set it to false if own LDAP is to be configured
-  installOpenLdap: true
-
 #################################################################################
 argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs

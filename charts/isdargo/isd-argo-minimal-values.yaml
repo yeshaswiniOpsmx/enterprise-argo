@@ -20,9 +20,6 @@ global:
     # Update the below entry for establishing communication for ISD and Argo CD
     host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
-  # Set it to false if own LDAP is to be configured
-  installOpenLdap: true
-
 ###################################################
 # argo-cd configuration
 #######################
