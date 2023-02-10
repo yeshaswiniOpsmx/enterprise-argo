@@ -1664,7 +1664,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.2
+    tag: v4.1.2.1
     pullPolicy: IfNotPresent
 
   annotations:
