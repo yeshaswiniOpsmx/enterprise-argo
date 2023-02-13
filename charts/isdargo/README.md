@@ -5,7 +5,7 @@
 # OpsMx Enterprise for Argo
 
 For more information, visit https://www.opsmx.com
-
+isd-rollouts-values.yaml	
 ## Setup Instructions
 
 ### Prerequisites
@@ -32,9 +32,10 @@ For more information, visit https://www.opsmx.com
   Else please contact your certificate provider for the certificates for your URL equivalent for `"*.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM"`
 
 - Use below command to check if helm is installed or not
-        ```console
-        helm version
-        ```
+        
+   ```console
+   helm version
+   ```
   If helm is not setup, follow <https://helm.sh/docs/intro/install/> to install helm.
 
 ### Installation Instructions
@@ -51,7 +52,7 @@ For more information, visit https://www.opsmx.com
    helm repo update
    ```
 
-- Your Kubernetes cluster shall support persistent volumes
+- Your Kubernetes cluster should support persistent volumes
 
 - It is assumed that an nginx ingress controller is installed on the cluster, by default ingress resources are created for oes-ui, keycloak, vela and argocd services. Customize the hosts for various installations using the options in the values.yaml under oesUI, keycloak, vela, argo-cd. If any other ingress controller is installed, set createIngress flag to false and configure your ingress.
 
