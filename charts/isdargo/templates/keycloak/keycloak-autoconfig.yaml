@@ -35,13 +35,13 @@ spec:
             cd /tmp/keycloak-11.0.0/bin/
             ## Login
             ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm master --user $admuser --client admin-cli --password $admpass
-          ##Check the Realme is created
-          chkrealm=$(./kcadm.sh get realms | jq -r '.[] | select(.realm == "'$realm'") | .realm')
-          if [ "$chkrealm" == "$realm" ];
-          then
-            echo "Realm with name $realm is already configured in keycloak"
-            break
-          else
+            ##Check the Realme is created
+            chkrealm=$(./kcadm.sh get realms | jq -r '.[] | select(.realm == "'$realm'") | .realm')
+            if [ "$chkrealm" == "$realm" ];
+            then
+              echo "Realm with name $realm is already configured in keycloak"
+              break
+            else
             echo "Creating realm..."
             ## Create a Realme
             ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o
