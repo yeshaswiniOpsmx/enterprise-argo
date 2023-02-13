@@ -43,7 +43,7 @@ spec:
             else
             echo "Creating realm..."
             ## Create a Realme
-            ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o
+            ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o > /dev/null
             ## Create Group and get ID
             ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
             groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
