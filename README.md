@@ -5,14 +5,14 @@
 # OpsMx Enterprise for Argo
 
 For more information, visit https://www.opsmx.com
-
+	
 ## Setup Instructions
 
 ### Prerequisites
 
 - Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
 - Helm 3 is setup on the client system with 3.10.3 or later
-- Ensure that this URLs(ISD,KeyCloak,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.The following 3 URLs need to be exist in DNS and point to Loadbalance IP of the nginx ingress controller.
+- Ensure that this URLs(ISD,KeyCloak,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.The following 3 URLs need to be exist in DNS and point to Loadbalancer IP of the nginx ingress controller.
 
 	```console
 	Ip-address ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
@@ -32,9 +32,10 @@ For more information, visit https://www.opsmx.com
   Else please contact your certificate provider for the certificates for your URL equivalent for `"*.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM"`
 
 - Use below command to check if helm is installed or not
-        ```console
-        helm version
-        ```
+        
+   ```console
+   helm version
+   ```
   If helm is not setup, follow <https://helm.sh/docs/intro/install/> to install helm.
 
 ### Installation Instructions
@@ -51,7 +52,7 @@ For more information, visit https://www.opsmx.com
    helm repo update
    ```
 
-- Your Kubernetes cluster shall support persistent volumes
+- Your Kubernetes cluster should support persistent volumes
 
 - It is assumed that an nginx ingress controller is installed on the cluster, by default ingress resources are created for oes-ui, keycloak, vela and argocd services. Customize the hosts for various installations using the options in the values.yaml under oesUI, keycloak, vela, argo-cd. If any other ingress controller is installed, set createIngress flag to false and configure your ingress.
 
@@ -83,7 +84,7 @@ For more information, visit https://www.opsmx.com
 - Use below command to install ISD using the helm chart:
 
   ```console
-  helm install isdargo isdargo/isdargo -f isd-minimal-values.yaml -n opsmx-argo --timeout 15m
+  helm install isd isdargo/isdargo -f isd-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
 
 #### Install ISD-ARGO
@@ -102,9 +103,16 @@ For more information, visit https://www.opsmx.com
 
 > **Tip**: List all releases using `helm list`
 
-### Uninstalling the Chart
+### Uninstall
 
-To uninstall/delete the deployment:
+To uninstall/delete the deployment
+
+#### Uninstalling the ISD Chart
+
+  ```console
+  helm uninstall isd -n opsmx-argo
+  ```
+#### Uninstalling the ISD-ARGO Chart
 
   ```console
   helm uninstall isdargo -n opsmx-argo
