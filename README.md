@@ -12,27 +12,23 @@ For more information, visit https://www.opsmx.com
 
 - Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
 - Helm 3 is setup on the client system with 3.10.3 or later
-- Ensure that this URLs(ISD,KeyCloak,Argo CD,Argo Rollouts,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.
-- Please use below steps:
-
-  	The IP address is the “ingress-nginx-controller” service external IP map them to the hostnames you defined for URLs
+- Ensure that this URLs(ISD,KeyCloak,Argo CD,Argo Rollouts,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.The following 3 URLs need to be exist in DNS and point to Loadbalance IP of the nginx ingress controller.
 
 	```console
 	Ip-address ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
 	Ip-address KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
+	
+	Ip-address *.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
-	Ip-address ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
-	Ip-address ROLLOUTS.REPLACE.THIS.WITH.YOURCOMPANY.COM
 	```
 	`E.g.: isd.isd-argo.opsmx.com`
 
 - Vela Service requires the “Wild-card ingress” and “Wild-card TLS certificates to be provided to the ingress”
 
-  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress 
+  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress, if you are using the cert-manager. 
   
-  https://www.linkedin.com/pulse/wildcard-certificates-using-lets-encrypt-certbot-pallavi-udhane/
+  Else please contact your certificate provider for the certificates for your URL equivalent for `"*.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM"`
 
 
 Use below command to check if helm is installed or not
