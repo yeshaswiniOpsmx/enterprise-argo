@@ -107,12 +107,12 @@ For more information, visit https://www.opsmx.com
 
 To uninstall/delete the deployment
 
-#### Uninstalling the ISD Chart
+#### Uninstalling the ISD
 
   ```console
   helm uninstall isd -n opsmx-argo
   ```
-#### Uninstalling the ISD-ARGO Chart
+#### Uninstalling the ISD-ARGO
 
   ```console
   helm uninstall isdargo -n opsmx-argo
