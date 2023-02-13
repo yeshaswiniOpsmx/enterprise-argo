@@ -12,8 +12,7 @@ For more information, visit https://www.opsmx.com
 
 - Kubernetes cluster 1.20 or later with at least 4 cores and 16 GB memory
 - Helm 3 is setup on the client system with 3.10.3 or later
-- Ensure that this URLs(ISD,KeyCloak,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.
-  The following 3 URLs need to be exist in DNS and point to Loadbalancer IP of the nginx ingress controller.
+- Ensure that this URLs(ISD,KeyCloak,Vela) is reachable from your browser. Either DNS name server record must exist or "hosts" file must be updated.The following 3 URLs need to be exist in DNS and point to Loadbalancer IP of the nginx ingress controller.
 
 	```console
 	Ip-address ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
@@ -21,24 +20,24 @@ For more information, visit https://www.opsmx.com
 	Ip-address KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
 	
 	Ip-address *.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
 	```
 	`E.g.: isd.isd-argo.opsmx.com`
 
 - Vela Service requires the “Wild-card ingress” and “Wild-card TLS certificates to be provided to the ingress”
 
-  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress, if you are using the cert-manager. 
+  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress, if you are using the cert-manager.
+
+  https://www.linkedin.com/pulse/wildcard-certificates-using-lets-encrypt-certbot-pallavi-udhane/
   
   Else please contact your certificate provider for the certificates for your URL equivalent for `"*.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM"`
 
-
-Use below command to check if helm is installed or not
-  ```console
-  helm version
-  ```
+- Use below command to check if helm is installed or not
+        ```console
+        helm version
+        ```
   If helm is not setup, follow <https://helm.sh/docs/intro/install/> to install helm.
 
-### Installing the ISD-ARGO
+### Installation Instructions
 
 - Add opsmx helm repo to your local machine
 
@@ -54,7 +53,7 @@ Use below command to check if helm is installed or not
 
 - Your Kubernetes cluster shall support persistent volumes
 
-- It is assumed that an nginx ingress controller is installed on the cluster, by default ingress resources are created for oes-ui, argocd and argo-rollouts services. Customize the hosts for ISD-ARGO using the options in the values.yaml under oesUI, argocd, argorollouts . If any other ingress controller is installed, set createIngress flag to false and configure your ingress.
+- It is assumed that an nginx ingress controller is installed on the cluster, by default ingress resources are created for oes-ui, keycloak, vela and argocd services. Customize the hosts for various installations using the options in the values.yaml under oesUI, keycloak, vela, argo-cd. If any other ingress controller is installed, set createIngress flag to false and configure your ingress.
 
   Instructions to install nginx ingress
   https://kubernetes.github.io/ingress-nginx/deploy/
@@ -67,31 +66,52 @@ Use below command to check if helm is installed or not
   ```console
   kubectl create namespace opsmx-argo
   ```
-- There are different flavours for Installing ISD-ARGO
+- There are different flavours of Installations
 
     Values yamls    | Description 
   --------------| ----------- 
-  isd-argo-minimal-values.yaml | This file is used for Installing ISD,Argo CD and Argo Rollouts 
-  isd-minimal-values.yaml | This file is used for Installing ISD without Argo CD and Argo Rollouts 
+  isd-minimal-values.yaml | This file is used for Installing only ISD without Argo CD and Argo Rollouts
+  isd-argo-minimal-values.yaml | This file is used for Installing ISD,Argo CD and Argo Rollouts
   isd-rollouts-values.yaml | This file is used for Installing ISD and Argo Rollouts without Argo CD
   onlyargorollouts-values.yaml | This file is used for Installing only Argo Rollouts without Argo CD and ISD
   argocd-rollouts-values.yaml | This file is used for Installing Argo CD and Argo Rollouts without ISD
 
 **NOTE**: In all the values.yaml please read inline comments and update it accordingly.
 
-- Use below command to install the helm chart:
+#### Install ISD
+
+- Use below command to install ISD using the helm chart:
+
+  ```console
+  helm install isd isdargo/isdargo -f isd-minimal-values.yaml -n opsmx-argo --timeout 15m
+  ```
+
+#### Install ISD-ARGO
+
+- Apart of above 3 urls update the Argo CD Url in the DNS name server record must exist or "hosts" file must be updated.
+
+	```console
+	Ip-address ARGO.REPLACE.THIS.WITH.YOURCOMPANY.COM
+	```
+
+- Use below command to install ISD-ARGO using the helm chart:
 
   ```console
   helm install isdargo isdargo/isdargo -f isd-argo-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
 
-The command deploys ISD-ARGO on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
-
 > **Tip**: List all releases using `helm list`
 
-### Uninstalling the Chart
+### Uninstall
 
-To uninstall/delete the deployment:
+To uninstall/delete the deployment
+
+#### Uninstalling the ISD Chart
+
+  ```console
+  helm uninstall isd -n opsmx-argo
+  ```
+#### Uninstalling the ISD-ARGO Chart
 
   ```console
   helm uninstall isdargo -n opsmx-argo
