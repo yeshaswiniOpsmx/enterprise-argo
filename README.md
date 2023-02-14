@@ -119,7 +119,7 @@ NOTE: The OPTIONAL steps above can be done after the installation at a later poi
 
 2. Clicking on an application in Home-screen takes me to a blank page or a page with an error
 - Vela service needs wild-card DNS and wild-card TLS certificates for this work due to restrictions in ArgoCD.
-- We can test it by putting going to "isd.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM", it should load and say "Failed to load".
+- We can test it by opening another tab in the browser and putting going to "isd.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM", it should load and say "Failed to load".
 
 ### Uninstall
 
