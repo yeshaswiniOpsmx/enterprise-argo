@@ -108,7 +108,14 @@ For more information, visit https://www.opsmx.com
   ```
 - OPTIONAL: Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
 
+NOTE: The OPTIONAL steps above can be done after the installation at a later point, if required by following all the steps in the document.
+
 > **Tip**: List all releases using `helm list`
+
+### Troubleshooting
+Everything installed but I don't see any applications.
+- If "full" installed is used (i.e. isd-argo-minimal-values.yaml), it automatically installs sample applications, including a working rollouts sample.
+- If connecting to an existing argo or adding a new argo, please ensure that the user-token generated has admin RBAC permissions.
 
 ### Uninstall
 
