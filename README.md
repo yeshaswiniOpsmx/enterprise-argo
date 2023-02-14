@@ -85,7 +85,7 @@ For more information, visit https://www.opsmx.com
 
 #### Install ISD
 
-- Update forwarder.externalName URL. The actual DNS needs to be created after installation 
+- Update forwarder.externalName URL in isd-minimal-values.yaml. The actual DNS needs to be created/updated after installation 
 - Use below command to install ISD using the helm chart:
 
   ```console
@@ -94,7 +94,7 @@ For more information, visit https://www.opsmx.com
 - Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
 #### Install ISD-ARGO
 
-- OPTIONAL: Update forwarder.externalName URL. The actual DNS needs to be created after installation 
+- OPTIONAL: Update forwarder.externalName URL in isd-argo-minimal-values.yaml. The actual DNS needs to be created after installation 
 - Apart of above 3 urls update the Argo CD Url in the DNS name server record must exist or "hosts" file must be updated.
 
 	```console
