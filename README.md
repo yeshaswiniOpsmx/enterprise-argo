@@ -81,6 +81,7 @@ For more information, visit https://www.opsmx.com
 
 #### Install ISD
 
+- update URL for reaching the controller
 - Use below command to install ISD using the helm chart:
 
   ```console
