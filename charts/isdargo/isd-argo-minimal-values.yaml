@@ -1,4 +1,10 @@
 ##### This file can be used for Installing ISD,Argo CD and Argo Rollouts ###############################
+# Update the controller URL which needs to be reachable from other clusters where ArgoCD is running
+# After installation, the DNS must be updated to point this to EXTERNAL-IP of the agent-grpc service
+# kubectl get svc -n opsmx-isd agent-grpc
+forwarder:
+  externalName: controller.REPLACE.THIS.WITH.YOURCOMPANY.COM  ## OPTIONAL, can be updated later, just leave it if trying for the 1st time
+
 global:
   argocd:
     # Update the below string for all occurences in this file with proper dns entry to access the Argo CD UI eg: argocd.example.ops.com
