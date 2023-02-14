@@ -31,6 +31,10 @@ For more information, visit https://www.opsmx.com
   
   Else please contact your certificate provider for the certificates for your URL equivalent for `"*.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM"`
 
+- An additional host URL may be required depending on your requirements. See below for instructions
+	- controller host url and/or
+	- ArgoCD host url
+
 - Use below command to check if helm is installed or not
         
    ```console
@@ -81,15 +85,16 @@ For more information, visit https://www.opsmx.com
 
 #### Install ISD
 
-- update URL for reaching the controller
+- Update forwarder.externalName URL. The actual DNS needs to be created after installation 
 - Use below command to install ISD using the helm chart:
 
   ```console
   helm install isd isdargo/isdargo -f isd-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
-
+- Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
 #### Install ISD-ARGO
 
+- OPTIONAL: Update forwarder.externalName URL. The actual DNS needs to be created after installation 
 - Apart of above 3 urls update the Argo CD Url in the DNS name server record must exist or "hosts" file must be updated.
 
 	```console
@@ -101,6 +106,7 @@ For more information, visit https://www.opsmx.com
   ```console
   helm install isdargo isdargo/isdargo -f isd-argo-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
+- OPTIONAL: Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
 
 > **Tip**: List all releases using `helm list`
 
