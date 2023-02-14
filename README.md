@@ -113,9 +113,13 @@ NOTE: The OPTIONAL steps above can be done after the installation at a later poi
 > **Tip**: List all releases using `helm list`
 
 ### Troubleshooting
-Everything installed but I don't see any applications.
+1. Everything installed but I don't see any applications.
 - If "full" installed is used (i.e. isd-argo-minimal-values.yaml), it automatically installs sample applications, including a working rollouts sample.
 - If connecting to an existing argo or adding a new argo, please ensure that the user-token generated has admin RBAC permissions.
+
+2. Clicking on an application in Home-screen takes me to a blank page or a page with an error
+- Vela service needs wild-card DNS and wild-card TLS certificates for this work due to restrictions in ArgoCD.
+- We can test it by putting going to "isd.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM", it should load and say "Failed to load".
 
 ### Uninstall
 
