@@ -92,6 +92,9 @@ For more information, visit https://www.opsmx.com
   helm install isd isdargo/isdargo -f isd-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
 - Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
+- Create vela-ingress tls secret using the wild-card certificate and key
+ e.g. kubectl create secret tls vela-ingress --cert cert1.pem --key privkey1.pem
+
 #### Install ISD-ARGO
 
 - OPTIONAL: Update forwarder.externalName URL in isd-argo-minimal-values.yaml. The actual DNS needs to be created after installation 
@@ -107,6 +110,8 @@ For more information, visit https://www.opsmx.com
   helm install isdargo isdargo/isdargo -f isd-argo-minimal-values.yaml -n opsmx-argo --timeout 15m
   ```
 - OPTIONAL: Please create/update the DNS based on the loadbalancer created using instructions here: https://docs.google.com/document/d/1cahEx4NihwRyqZtFijTJ79Zxe8_PixuKrosAocxSIrk/edit#
+- Create vela-ingress tls secret using the wild-card certificate and key
+ e.g. kubectl create secret tls vela-ingress --cert cert1.pem --key privkey1.pem
 
 NOTE: The OPTIONAL steps above can be done after the installation at a later point, if required by following all the steps in the document.
 
