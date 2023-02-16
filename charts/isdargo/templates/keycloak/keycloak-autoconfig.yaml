@@ -4,7 +4,7 @@ kind: Job
 metadata:
   annotations:
     "helm.sh/hook": "post-install,post-upgrade"
-    "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
   name: keycloack-configure
 spec:
   template:
@@ -37,8 +37,16 @@ spec:
             cd /tmp/keycloak-11.0.0/bin/
             ## Login
             ./kcadm.sh config credentials --server http://keycloack-http:80/auth --realm master --user $admuser --client admin-cli --password $admpass
+            ##Check the Realme is created
+            chkrealm=$(./kcadm.sh get realms | jq -r '.[] | select(.realm == "'$realm'") | .realm')
+            if [ "$chkrealm" == "$realm" ];
+            then
+              echo "Realm with name $realm is already configured in keycloak"
+              break
+            else
+            echo "Creating realm..."
             ## Create a Realme
-            ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o
+            ./kcadm.sh create realms -s realm="$realm" -s displayName="$realm" -s enabled=true -o > /dev/null
             ## Create Group and get ID
             ./kcadm.sh create groups -r $realm -b '{ "name": "'$group'" }'
             groupid=$(./kcadm.sh get groups -r $realm | jq -r '.[] | select(.name=="'$group'") | .id' )
@@ -75,6 +83,7 @@ spec:
             kubectl create secret generic oes-gate-config --from-file=/tmp/gate.yml -n {{ .Release.Namespace }}
             kubectl delete po -l component=gate -n {{ .Release.Namespace }}
             break
+            fi
             else
             if [ $wait_period -gt 2000 ];
             then
