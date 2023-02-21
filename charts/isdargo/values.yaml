@@ -289,6 +289,8 @@ global:
 argo-cd:
   crds:
     install: true
+    # -- Set to true if CRDs need to delete as part of chart uninstall
+    keep: false
 
   configs:
     cm:
@@ -829,7 +831,7 @@ argo-rollouts:
   # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
   installCRDs: true
   #Set to false if crds to be deleted as part of helm uninstall
-  keepCRDs: true
+  keepCRDs: false
   controller:
     replicas: 1
   notifications:

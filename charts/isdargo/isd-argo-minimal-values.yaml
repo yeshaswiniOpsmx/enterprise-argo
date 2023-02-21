@@ -31,7 +31,10 @@ global:
 #######################
 argo-cd:
   crds:
+    # -- Set to true if CRDs need to be installed as part of Install if not set to false
     install: true
+    # -- Set to true if CRDs need to delete as part of chart uninstall
+    keep: false
   configs:
     cm:
       # Argo CD's externally facing base URL. Required when configuring SSO
@@ -101,5 +104,7 @@ argo-cd:
 # argo-rollouts configuration
 #######################
 argo-rollouts:
-  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  # Default set to true . Set to false if crds already exists in the cluster
   installCRDs: true
+  # Set to true if crds need to be deleted as part of helm uninstall
+  keepCRDs: false
