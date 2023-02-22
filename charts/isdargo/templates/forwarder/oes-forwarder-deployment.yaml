@@ -59,8 +59,6 @@ spec:
           requests:
             memory: "64Mi"
             cpu: "100m"
-          limits:
-            cpu: "250m"
       {{- if .Values.global.affinity }}
       affinity:
 {{ toYaml .Values.global.affinity | indent 8 }}
