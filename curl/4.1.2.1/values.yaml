@@ -1,0 +1,1873 @@
+####################################################
+# installArgoCD enable true will install argo-cd,argo-rollouts,argo-workflows,argo-events,argocd-image-updater
+installArgoCD: true
+
+# install ingress-nginx if not installed in the cluster
+ingressnginx: false
+
+# installArgoRollouts enable true will install argo-rollouts
+installArgoRollouts: true
+
+# installArgoWorkflows enable true will install argo-workflows
+installArgoWorkflows: false
+
+# installArgoEvents enable true will install argo-events
+installArgoEvents: false
+
+# installArgoImageupdater enable true will install argocd-image-updater
+installArgoImageupdater: false
+
+installkeycloak: false
+
+###########################################################################################
+#  OEA-AP Install OEA and Argo Services . Change to None if only Argo Services to be installed.
+installationMode: OEA-AP
+########################################################################################
+k8sServiceType: ClusterIP
+########################################################################################
+#  Env variables will be abblied to all ISD sevices
+extraEnvVars:
+  - name: JAVA_OPTS
+    value: -Xmx512m
+########################################################################################
+## Info related to registry where OEA images are stored
+imageCredentials:
+  repoUrl: https://quay.io/
+  # Update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  registry: quay.io/opsmxpublic
+
+#######################################################################################
+# If installed ArgoCD set to true it will installdemoapps
+# Set to false if no applications to be displayed in ArgoCD as part of default installation
+installdemoapps: true
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using agent service
+autoconfigureagent: true
+#######################################################################################
+# Set to true if ISD needs to connect to ArgoCD using carina service
+autoconfigurecarina: false
+#######################################################################################
+# The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
+cdagentname: argocd
+#######################################################################################
+# Global Configuration
+######################
+
+global:
+  # Custom Images registry where all the OSS and customized images used in the helm chart are stored
+  # Only update this is using a private repo such as ACR, ECR, GCR, JFrog, etc.
+  customImages:
+    registry: quay.io/opsmxpublic
+  # when this flag is set to false; UI will be accessible over http instead of https
+  ssl:
+    enabled: true
+
+  # If cert-manager is installed, TLS secrets will created automatically, as an 'Issuer' will be created
+  # Else, the TLS secrets will need to created manually
+  certManager:
+    installed: true
+
+  createIngress: true
+
+  customCerts:
+    enabled: false
+
+  commonGate:
+    enabled: false
+
+  oesUI:
+    protocol: https
+    host: oes.example.ops.com
+    # Use below port when hostname above is an external IP instead of a hostname
+    #port: 31466
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: oes-ui-ingress
+
+  oesGate:
+    protocol: http
+    host: oes-gate.example.ops.com
+    # Use below port when hostname above is an external IP instead of a hostname
+    #port: 31467
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: oes-gate-ingress
+
+  spinDeck:
+    protocol: http
+    host: spin.example.ops.com
+    #port: 31464
+
+    serviceAnnotations: {}
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: spin-deck-ingress
+
+  vela:
+    protocol: https
+    host: vela.example.ops.com
+    #port: 31464
+
+    serviceAnnotations: {}
+
+    ingress:
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: vela-ingress
+
+  #### If ingress required for elasticsearch and kibana enable enableCentralLogging: "ture" and define URL's
+  elasticsearch:
+    enabled: false
+    protocol: https
+    host: elslttt.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: elasticsearch-ingress
+
+  kibana:
+    enabled: false
+    protocol: https
+    host: kibbb.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: kibana-ingress
+  ## If ingress is required for prometheus enable enableCentralMonitoring: "ture" and define URL
+  prometheus:
+    enabled: false
+    protocol: https
+    host: prometheus.argo.ninja-test.opsmx.org
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: prometheus-ingress
+
+  keycloak:
+    enabled: false
+    host: keycloak.example.ops.com
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: keycloak-ingress
+
+
+  autoConfiguration:
+    # Set it to false if OES is being installed on restricted evnironment;
+    # Autoconfiguration assumes Load Balancer is available for oes-gate, oes-ui
+    # and spind-deck and configures accordingly
+    enabled: false
+
+    initContainer:
+      # Image for init container to automatically configure oes components
+      # during startup
+      image: quay.io/opsmxpublic/oes-init:v4
+      pullPolicy: IfNotPresent
+
+      # Max time(in secs) that an init container of oes-ui should wait
+      # to fetch External Load Balancer IP of oes-gate and vice versa
+      externalIpCheckDelay: 180
+  minio:
+    enabled: true
+    image:
+      repository: quay.io/opsmxpublic/minio
+      tag: RELEASE.2020-01-03T19-12-21Z
+    mcImage:
+      repository: quay.io/opsmxpublic/minio-mc
+      tag: RELEASE.2020-11-25T23-04-07Z
+    service:
+      type: ClusterIP
+    accessKey: spinnakeradmin
+    secretKey: spinnakeradmin
+    region: us-east-1
+    #Below is the securityContext block for only for K8S
+    securityContext:
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    buckets:
+    - name: "spinnaker"
+      policy: none
+      purge: false
+    - name: "autopilot"
+      policy: none
+      purge: false
+    defaultBucket:
+      enabled: true
+      name: "spinnaker"
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    persistence:
+      enabled: true
+      size: 10Gi
+
+  ## Valid admin details for ISD authorization
+  saporgate:
+    config:
+      username: admin       #Name of the valid user in your service provider
+      adminGroups: admin    #Name of the valid admin group in your service provider
+      password: saporadmin  #password for the saporgate
+
+  argocd:
+    host: "cd.ryzon7-argo22.opsmx.org"
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argocd-tls-certificate
+
+  argoworkflows:
+    #specify the argoworkflows url like argoworkflows.ninja-test.opsmx.net
+    host: "workflow.ryzon7-argo22.opsmx.org"
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argoworkflow-tls-certificate
+
+  argorollouts:
+    #specify the argorollouts url like argorollouts.ninja-test.opsmx.net
+    host: "rollouts.ryzon7-argo22.opsmx.org"
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: argorollouts-tls-certificate
+
+  ## Node Selection rules for all the OEA components (db, Autopilot, Sapor, Dashboard, Visibility, Audit, Datascience, Platform, Ui, Forwarder, Gate...)
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  enableCentralMonitoring: false
+
+  ###############################################################################
+  # Set it to false if own LDAP is to be configured
+  installOpenLdap: true
+
+  ## ldap configuration used for authentication and authorization
+  ldap:
+    enabled: true
+    url: ldap://openldap:389
+    managerDn: cn=admin,dc=example,dc=org
+    managerPassword: opsmxadmin123
+    groupSearchBase: ou=groups,dc=example,dc=org
+    groupSearchFilter: member={0}
+    groupRoleAttributes: cn
+    userDnPattern: cn={0},dc=example,dc=org
+
+  secretmanagement:
+    vault: false
+    roleid: a301e-XXX-XXX-5327
+    secretid: 13XXXX-25aedb1648a2
+    vaultaddress: https://vault.argo.opsmx.net
+
+###################################################
+# argo-cd configuration
+#######################
+
+argo-cd:
+  crds:
+    install: true
+  configs:
+    cm:
+      # Argo CD's externally facing base URL. Required when configuring SSO
+      url: "https://cd.ryzon7-argo22.opsmx.org" ## Provide ArgoCD url like https://argocd.ninja-test.opsmx.net"
+      # admin.enabled indicates whether the admin user is enabled. It is enabled by default.
+      admin.enabled: "true"
+      accounts.admin: apiKey
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin
+          generate:
+            command: ["argocd-vault-plugin"]
+            args: ["generate", "-s", "{{ .Release.Namespace }}:argocd-vault-plugin-credentials", "./"]
+      dex.config: |-
+        staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback ##Need to update url manually ArgoWorkflowurl Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        connectors:
+        - type: ldap
+          name: opsmx-openldap
+          id: ldap
+          config:
+            host: "openldap:389"
+            insecureNoSSL: true
+            insecureSkipVerify: true
+             # Variable name stores ldap bindDN in argocd-secret
+            bindDN: "cn=admin,dc=example,dc=org"
+            # Variable name stores ldap bind password in argocd-secret
+            bindPW: "opsmxadmin123"
+            usernamePrompt: Username
+            # Ldap user serch attributes
+            userSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              username: cn
+              idAttr: cn
+              emailAttr: cn
+              nameAttr: cn
+            # Ldap group serch attributes
+            groupSearch:
+              baseDN: "dc=example,dc=org"
+              filter: "(objectClass=simpleSecurityObject)"
+              userAttr: cn
+              groupAttr: cn
+              nameAttr: cn
+        #########Below is the Okta Configuration ########################
+        #- type: saml
+        #  name: okta
+        #  id: okta
+        #  config:
+        #    ssoURL: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+        #    redirectURI: https://dev-80355908.okta.com/app/dev-80355908_argo22_1/exk65lw6suc3YgstT5d7/sso/saml
+        #    usernameAttr: email
+        #    emailAttr: email
+        #    groupsAttr: group
+        #    caData: |
+        #      LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURxRENDQXBDZ0F3SUJBZ0lHQVlLVThYcWJN
+        #      QTBHQ1NxR1NJYjNEUUVCQ3dVQU1JR1VNUXN3Q1FZRFZRUUdFd0pWVXpFVE1CRUcNCkExVUVDQXdL
+        #      UTJGc2FXWnZjbTVwWVRFV01CUUdBMVVFQnd3TlUyRnVJRVp5WVc1amFYTmpiekVOTUFzR0ExVUVD
+        #      Z3dFVDJ0MFlURVUNCk1CSUdBMVVFQ3d3TFUxTlBVSEp2ZG1sa1pYSXhGVEFUQmdOVkJBTU1ER1Js
+        #      ZGkwNE1ETTFOVGt3T0RFY01Cb0dDU3FHU0liM0RRRUoNCkFSWU5hVzVtYjBCdmEzUmhMbU52YlRB
+        #      ZUZ3MHlNakE0TVRNd01qQXlORGxhRncwek1qQTRNVE13TWpBek5EbGFNSUdVTVFzd0NRWUQNClZR
+        #      UUdFd0pWVXpFVE1CRUdBMVVFQ0F3S1EyRnNhV1p2Y201cFlURVdNQlFHQTFVRUJ3d05VMkZ1SUVa
+        #      eVlXNWphWE5qYnpFTk1Bc0cNCkExVUVDZ3dFVDJ0MFlURVVNQklHQTFVRUN3d0xVMU5QVUhKdmRt
+        #      bGtaWEl4RlRBVEJnTlZCQU1NREdSbGRpMDRNRE0xTlRrd09ERWMNCk1Cb0dDU3FHU0liM0RRRUpB
+        #      UllOYVc1bWIwQnZhM1JoTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FR
+        #      b0MNCmdnRUJBTytsOEIxdXIzd1ZBbHBiZGhJYmg4Nk1XMk5wQ3gyb0VhZ1g4UkxxeTc3bVYxdHdk
+        #      aTQxMldYNVpTaU9BQ2toVG9XaUlIZW0NCjRwZ3VMK3drUk9lcnZlRVJ0cXdudU5OL2ROUnlkdXVD
+        #      UDlqcGNEYVd5NHdaeWxiQmF2TDF3blFJaHgrc3J1akh1M2lmUUdSUUtxUG4NCjI1S3Nway9OaEUv
+        #      VTBpTlFSNWRFZzI5aHBCakpESjNaayt2eXNDLzNZdmFJM2lmWXBDMGtaTVBLSEt6bC9yYXRYaSt6
+        #      aVZuNlBCSmkNCnh2T2pnOUd2cVE3YkRSbTAyRyt2bmh1T1RxdjEwQ0g3WC9hNEc1WVhPTWhucW9O
+        #      M2MvclRJdjlSQjFncXVUZnFHWE1FSGtWbW1jS3ANCmxpYTZURUQ4bWFGUWRwajBRWXFDWXRYK2hw
+        #      R05GK0k0aHhxNGw4SDN4ZTBDQXdFQUFUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUENCkx4WWg1
+        #      RlZmWThSY2FoQzJkQXlOMi8zb3pCV2ZhVjF3aXdMQW9qaHVDWVpKREVDdUpVekZPK2hZYm9sakRS
+        #      bmtFb2tpYThwWXJSUEwNCjdSU0tlYkIwcTVTdEcrV1RPcTg2SmlPQk1wVlR5V1dYSEFHN0ppY2tT
+        #      T1N2QXkwdncyeVkzT0IwdEE0ZUpWSXVpZFVTUnpTckdNNW0NCllma2hjaFBhNnNZTU9GSGtLOUxG
+        #      TzNsbjFEZE9JbkJST2hrL1QyL0locXBJL3hwWTlEdCsxNTcxRWExY2ROUjFRd1k2VFRVL013N2oN
+        #      ClpEZ21LaWhSNDNJenhwaVRLT09hVU1LYlN5RHFjcWpjdTEwaUJ3cmpVUmtzTzFmc3JqNEtXZFJ4
+        #      aVRpODFOZjFINytUcmJRMldVeG8NCjFncGVBWE9Rd2M2RHp0TlN2b1lQaFpHQmdNeTVjcWQ0TWwr
+        #      WWNnPT0NCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+
+    ################# groups and user permission in argcd-rbac-cm configmap configuration ################
+    # -- Argo CD rbac config ([Argo CD RBAC policy])
+    rbac:
+      create: true
+      # -- The name of the default role which Argo CD will falls back to, when authorizing API requests (optional).
+      # If omitted or empty, users may be still be able to login, but will see no apps, projects, etc...
+      #policy.csv |
+      #  p, role:org-admin, applications, *, */*, allow
+      #  p, role:org-admin, clusters, get, *, allow
+      #  p, role:org-admin, repositories, *, *, allow
+      #  p, role:org-admin, logs, get, *, allow
+      #  p, role:org-admin, exec, create, */*, allow
+      #  g, your-github-org:your-team, role:org-admin
+      # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
+      # The scope value can be a string, or a list of strings.
+      scopes: "[groups]"
+
+    repositories: {}
+      #private-repo:
+      #  url: https://github.com/OpsMx/argo-sample-apps.git
+      #  name: git-private-repo
+      #  type: git
+      #  # if the repo is private and pass credentials
+      #  password: gituser   # Git Username
+      #  username: randamtoken   # Git Token
+      #private-helm-repo:
+      #  url: https://my-private-chart-repo.internal
+      #  name: private-repo
+      #  type: helm
+      #  password: my-password
+      #  username: my-username
+    #### -- Provide one or multiple [external cluster credentials]
+    clusterCredentials: []
+      #- name: myexternalcluster
+      #  server: https://xx.xx.xx.xx
+      #  labels: {}
+      #  annotations: {}
+      #  config:
+      #    bearerToken: "<Provide Plain authentication token>"
+      #    tlsClientConfig:
+      #      insecure: false
+      #      caData: "<Provide Plain certificate>"
+    params:
+      server.content.security.policy: default-src * 'unsafe-inline'
+      server.x.frame.options: ' '
+
+  repoServer:
+    volumeMounts:
+    - mountPath: /usr/local/bin/argocd-vault-plugin
+      name: custom-tools
+      subPath: argocd-vault-plugin
+    volumes:
+    - emptyDir: {}
+      name: custom-tools
+    clusterAdminAccess:
+      # -- Enable RBAC for local cluster deployments
+      enabled: true
+    initContainers:
+    - args:
+      - |-
+        wget -O argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v1.12.0/argocd-vault-plugin_1.12.0_linux_amd64
+        chmod +x argocd-vault-plugin && mv argocd-vault-plugin /custom-tools/
+      command: [sh, -c]
+      image: alpine:3.8
+      name: download-tools
+      volumeMounts:
+      - mountPath: /custom-tools
+        name: custom-tools
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8084"
+      prometheus.io/scrape: "true"
+  dex:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "5558"
+      prometheus.io/scrape: "true"
+    env:
+      - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argo-workflows-sso
+            key: client-secret
+  applicationSet:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8080"
+      prometheus.io/scrape: "true"
+    serviceAccount:
+      automountServiceAccountToken: true
+  controller:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8082"
+      prometheus.io/scrape: "true"
+  server:
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8083"
+      prometheus.io/scrape: "true"
+    extensions:
+      enabled: true
+    extraArgs:  # Ensure that the server is http by default. The TLS termination can happen anywhere
+      - --insecure
+    ########   ldap argc-cm configmap configuration     #######
+  notifications:
+    enabled: true
+    serviceAccount:
+      automountServiceAccountToken: true
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "9001"
+      prometheus.io/scrape: "true"
+
+    argocdUrl: "cd.ryzon7-argo22.opsmx.org"  # Provide ArgoCd Url like argocd.ninja-test.opsmx.net
+    secret:
+      items:
+       email-username: bogus   ## Provide plain email email.example.com
+       email-password: nopass    ## Provide Plain password emailpassword
+       #jenkins-password:
+       #jenkins-username:
+       #jira-password:
+       #jira-username:
+       #slack-token:
+    context: {}
+    notifiers:
+      #service.slack: |
+        #apiURL: <url>                 # optional URL, e.g. https://example.com/api
+        #token: $slack-token
+        #username: <override-username> # optional username
+        #icon: <override-icon> # optional icon for the message (supports both emoij and url notation)
+      service.email.gmail: |
+        username: $email-username
+        password: $email-password
+        host: smtp.gmail.com
+        port: 465
+        from: $email-username
+    subscriptions: []
+    triggers:
+      trigger.on-deployed: |
+        - description: Application is synced and healthy. Triggered once per commit.
+          oncePer: app.status.sync.revision
+          send:
+          - app-deployed
+          when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+      trigger.on-health-degraded: |
+        - description: Application has degraded
+          send:
+          - app-health-degraded
+          when: app.status.health.status == 'Degraded'
+      trigger.on-sync-failed: |
+        - description: Application syncing has failed
+          send:
+          - app-sync-failed
+          when: app.status.operationState.phase in ['Error', 'Failed']
+      trigger.on-sync-running: |
+        - description: Application is being synced
+          send:
+          - app-sync-running
+          when: app.status.operationState.phase in ['Running']
+      trigger.on-sync-status-unknown: |
+        - description: Application status is 'Unknown'
+          send:
+          - app-sync-status-unknown
+          when: app.status.sync.status == 'Unknown'
+      trigger.on-sync-succeeded: |
+        - description: Application syncing has succeeded
+          send:
+          - app-sync-succeeded
+          when: app.status.operationState.phase in ['Succeeded']
+
+      defaultTriggers: |
+        - on-sync-status-unknown
+    templates:
+      template.app-deployed: |
+        email:
+          subject: New version of an application {{.app.metadata.name}} is up and running.
+        message: |
+          {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} is now running new version of deployments manifests.
+        slack:
+          attachments: |
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#18be52",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              },
+              {
+                "title": "Revision",
+                "value": "{{.app.status.sync.revision}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-health-degraded: |
+        email:
+          subject: Application {{.app.metadata.name}} has degraded.
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} has degraded.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#f4c030",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-failed: |
+        email:
+          subject: Failed to sync application {{.app.metadata.name}}.
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}}  The sync operation of application {{.app.metadata.name}} has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#E96D76",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-running: |
+        email:
+          subject: Start syncing application {{.app.metadata.name}}.
+        message: |
+          The sync operation of application {{.app.metadata.name}} has started at {{.app.status.operationState.startedAt}}.
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#0DADEA",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-status-unknown: |
+        email:
+          subject: Application {{.app.metadata.name}} sync status is 'Unknown'
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} sync is 'Unknown'.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+          {{if ne .serviceType "slack"}}
+          {{range $c := .app.status.conditions}}
+              * {{$c.message}}
+          {{end}}
+          {{end}}
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#E96D76",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-succeeded: |
+        email:
+          subject: Application {{.app.metadata.name}} has been successfully synced.
+        message: |
+          {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} has been successfully synced at {{.app.status.operationState.finishedAt}}.
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#18be52",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-status: |
+        message: |
+          Application {{.app.metadata.name}} sync is {{.app.status.sync.status}}.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+        slack:
+          attachments: |
+            [{
+              "title": "{{.app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#18be52",
+              "fields": [{
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              }, {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }]
+            }]
+
+###################################################
+# argo-workflows configuration
+#######################
+
+argo-workflows:
+  server:
+    extraArgs:
+      - --auth-mode=sso
+    sso:
+     #issuerAlias: http://cd.ryzon7-argo22.opsmx.org/api/dex   # Update if only saml ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      issuer: https://cd.ryzon7-argo22.opsmx.org/api/dex   # ArgoCd url Example: https://argocd.ninja-test.opsmx.net/api/dex
+      # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+      sessionExpiry: 240h
+      clientId:
+        name: argo-workflows-sso
+        key: client-id
+      clientSecret:
+        name: argo-workflows-sso
+        key: client-secret
+      redirectUrl: https://workflow.ryzon7-argo22.opsmx.org/oauth2/callback  ##Argoworkflows url Example: https://argoworkflow.ninja-test.opsmx.net/oauth2/callback
+      scopes:
+        - groups
+        - email
+      rbac:
+        enabled: false
+###################################################
+# argo-events configuration
+#######################
+
+argo-events:
+  crds:
+    # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+    install: true
+    # -- Keep CRDs on chart uninstall
+    keep: false
+
+###################################################
+# argo-rollouts configuration
+#######################
+
+argo-rollouts:
+  podAnnotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8090"
+    prometheus.io/scrape: "true"
+  # Default set to true . Set to false if crds already exists in the cluster instead of deleting the CRDs
+  installCRDs: true
+  #Set to false if crds to be deleted as part of helm uninstall
+  keepCRDs: true
+  controller:
+    replicas: 1
+  notifications:
+    secret:
+      # -- Whether to create notifications secret
+      create: true
+      # -- Generic key:value pairs to be inserted into the notifications secret
+      items: {}
+        # slack-token:
+
+    # -- Configures notification services
+    notifiers:
+      log.level: trace
+      service.slack: |
+        token: $slack-token
+
+    # -- Notification templates
+    templates:
+      template.analysis-run-error: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run is in error state.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run is in error state.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#ECB22E",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.analysis-run-failed: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run failed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run failed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#E01E5A",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Failed Due to",
+                  "value": "{{.rollout.status.message}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.analysis-run-running: |
+        message: Rollout {{.rollout.metadata.name}}'s analysis run is running.
+        email:
+          subject: Rollout {{.rollout.metadata.name}}'s analysis run is running.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-aborted: |
+        message: Rollout {{.rollout.metadata.name}} has been aborted.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been aborted.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#E01E5A",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-completed: |
+        message: Rollout {{.rollout.metadata.name}} has been completed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been completed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-paused: |
+        message: Rollout {{.rollout.metadata.name}} has been paused.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been paused.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-step-completed: |
+        message: Rollout {{.rollout.metadata.name}} step number {{ add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}} has been completed.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} step number {{ add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}} has been completed.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Step completed",
+                  "value": "{{add .rollout.status.currentStepIndex 1}}/{{len .rollout.spec.strategy.canary.steps}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.rollout-updated: |
+        message: Rollout {{.rollout.metadata.name}} has been updated.
+        email:
+          subject: Rollout {{.rollout.metadata.name}} has been updated.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+      template.scaling-replicaset: |
+        message: Scaling Rollout {{.rollout.metadata.name}}'s replicaset to {{.rollout.spec.replicas}}.
+        email:
+          subject: Scaling Rollout {{.rollout.metadata.name}}'s replcaset to {{.rollout.spec.replicas}}.
+        slack:
+          attachments: |
+              [{
+                "title": "{{ .rollout.metadata.name}}",
+                "color": "#18be52",
+                "fields": [
+                {
+                  "title": "Strategy",
+                  "value": "{{if .rollout.spec.strategy.blueGreen}}BlueGreen{{end}}{{if .rollout.spec.strategy.canary}}Canary{{end}}",
+                  "short": true
+                },
+                {
+                  "title": "Desired replica",
+                  "value": "{{.rollout.spec.replicas}}",
+                  "short": true
+                },
+                {
+                  "title": "Updated replicas",
+                  "value": "{{.rollout.status.updatedReplicas}}",
+                  "short": true
+                }
+                {{range $index, $c := .rollout.spec.template.spec.containers}}
+                  {{if not $index}},{{end}}
+                  {{if $index}},{{end}}
+                  {
+                    "title": "{{$c.name}}",
+                    "value": "{{$c.image}}",
+                    "short": true
+                  }
+                {{end}}
+                ]
+              }]
+
+    # -- The trigger defines the condition when the notification should be sent
+    triggers:
+      trigger.on-analysis-run-error: |
+        - send: [analysis-run-error]
+      trigger.on-analysis-run-failed: |
+        - send: [analysis-run-failed]
+      trigger.on-analysis-run-running: |
+        - send: [analysis-run-running]
+      trigger.on-rollout-aborted: |
+        - send: [rollout-aborted]
+      trigger.on-rollout-completed: |
+        - send: [rollout-completed]
+
+  dashboard:
+    # -- Deploy dashboard server
+    enabled: true
+    # -- Value of label `app.kubernetes.io/component`
+    component: rollouts-dashboard
+
+#####################################################################
+argocd-image-updater:
+  config:
+    # -- API kind that is used to manage Argo CD applications (`kubernetes` or `argocd`)
+    applicationsAPIKind: ""
+
+    # Described in detail here https://argocd-image-updater.readthedocs.io/en/stable/install/running/#flags
+    argocd:
+      # -- Use the gRPC-web protocol to connect to the Argo CD API
+      grpcWeb: true
+      # -- Connect to the Argo CD API server at server address
+      serverAddress: ""
+      # -- If specified, the certificate of the Argo CD API server is not verified.
+      insecure: false
+      # -- If specified, use an unencrypted HTTP connection to the ArgoCD API instead of TLS.
+      plaintext: false
+      # -- If specified, the secret with ArgoCD API key will be created.
+      token: ""
+
+    # -- Disable kubernetes events
+    disableKubeEvents: false
+
+    # -- Username to use for Git commits
+    gitCommitUser: ""
+
+    # -- E-Mail address to use for Git commits
+    gitCommitMail: ""
+
+    # -- Changing the Git commit message
+    gitCommitTemplate: ""
+
+    # -- ArgoCD Image Update log level
+    logLevel: "info"
+
+
+######################################################################
+opa:
+  enabled: false
+  image:
+    repository: openpolicyagent/opa
+    tag: latest
+    pullPolicy: IfNotPresent
+
+###############################################################
+## Name of the secret for pulling images from container registry.
+## Use it when the images are stored under private registry.
+## Create this secret before installing the chart
+imagePullSecret: ""
+
+####################################################
+# AP installs a trial LDAP for POCs and testing purposes
+# OpenLDAP custom configuration; will override default configuration of openldap helm chart
+openldap:
+  # Password for the admin user; by default it is set to admin
+  adminPassword: opsmxadmin123
+  configPassword: opsmxconfig123
+  omitClusterIP: true
+  affinity: {}
+  tolerations: []
+
+  persistence:
+    enabled: true
+    size: 5Gi
+  env:
+    LDAP_REMOVE_CONFIG_AFTER_SETUP: "false"
+
+  customLdifFiles:
+    01-memberof.ldif: |-
+      dn: cn=module,cn=config
+      cn: module
+      objectClass: olcModuleList
+      olcModuleLoad: memberof.la
+      olcModulePath: /usr/lib/ldap
+
+      dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
+      objectClass: olcConfig
+      objectClass: olcMemberOf
+      objectClass: olcOverlayConfig
+      objectClass: top
+      olcOverlay: memberof
+      olcMemberOfDangling: ignore
+      olcMemberOfRefInt: TRUE
+      olcMemberOfGroupOC: groupOfNames
+      olcMemberOfMemberAD: member
+      olcMemberOfMemberOfAD: memberOf
+    02-refint1.ldif: |-
+      dn: cn=module{1},cn=config
+      changetype: modify
+      add: olcmoduleload
+      olcmoduleload: refint.la
+    03-refint2.ldif: |-
+      dn: olcOverlay={1}refint,olcDatabase={1}hdb,cn=config
+      objectClass: olcConfig
+      objectClass: olcOverlayConfig
+      objectClass: olcRefintConfig
+      objectClass: top
+      olcOverlay: {1}refint
+      olcRefintAttribute: memberof member manager owner
+    04-add_ou.ldif: |-
+      dn: ou=groups,dc=example,dc=org
+      objectClass: organizationalUnit
+      ou: Groups
+    05-admin.ldif: |-
+      dn: cn=admin,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: admin
+      description: read write and execute group
+      member: cn=admin,dc=example,dc=org
+    06-developer.ldif: |-
+      dn: cn=developers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: developers
+      description: read only users
+      member: cn=admin,dc=example,dc=org
+      member: cn=developer,dc=example,dc=org
+    07-qa.ldif: |-
+      dn: cn=QA,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: QA
+      description: read only users
+      member: cn=admin,dc=example,dc=org
+      member: cn=qa,dc=example,dc=org
+    08-manager.ldif: |-
+      dn: cn=managers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: managers
+      description: read and execute group
+      member: cn=admin,dc=example,dc=org
+      member: cn=manager,dc=example,dc=org
+    09-IT-manager.ldif: |-
+      dn: cn=ITManagers,ou=groups,dc=example,dc=org
+      objectClass: groupofnames
+      cn: ITManagers
+      description: read and execute group
+      member: cn=admin,dc=example,dc=org
+      member: cn=ITManager,dc=example,dc=org
+    10-users.ldif: |-
+      dn: cn=user1,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user1
+      userpassword: {SSHA}Y9L4AsYL16WLK10qDZ62pTScFnaWb0nz
+
+      dn: cn=user2,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user2
+      userpassword: {SSHA}DasTBI0eut1F83Bh1F1HXmDT8juJj3pY
+
+      dn: cn=user3,dc=example,dc=org
+      objectClass: simpleSecurityObject
+      objectClass: organizationalRole
+      cn: user3
+      userpassword: {SSHA}Qu1FW7BdLMndwM/Gf+zc3a8VIMAymbuv
+
+      dn: cn=developers,ou=groups,dc=example,dc=org
+      changetype: modify
+      add: member
+      member: cn=user1,dc=example,dc=org
+      member: cn=user3,dc=example,dc=org
+
+      dn: cn=QA,ou=groups,dc=example,dc=org
+      changetype: modify
+      add: member
+      member: cn=user2,dc=example,dc=org
+      member: cn=user3,dc=example,dc=org
+
+#####################################################
+# Centralized Logging Configuration
+####################################################
+# Set to true to install Elastic and Kibana
+enableCentralLogging: false
+
+elasticsearch:
+  replicas: 2
+  minimumMasterNodes: 1
+  antiAffinity: "soft"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "500Mi"
+
+kibana:
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "250Mi"
+  lifecycle:
+    postStart:
+      exec:
+        command:
+          - bash
+          - -c
+          - >
+            until curl localhost:5601; do echo "Waiting for Kibana to be available..."; sleep 5; done;
+            until curl elasticsearch-master:9200; do echo "Waiting for Elasticsearch to be available..."; sleep 5; done;
+            sleep 60;
+            curl https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/scripts/kibana/kibana_objects.ndjson > /tmp/kibana_objects.ndjson;
+            curl -X POST "localhost:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" --form file=@/tmp/kibana_objects.ndjson 2>&1 1> /tmp/postStart.out;
+
+##################################################################################################################
+# Values of Carina Manager
+carinamanager:
+  ## Image specific details
+  ##
+  image:
+    repository: carina-manager
+    tag: v1.9.6
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+  config: {}
+
+#######################################################################################################################
+# Values of Carina Instance
+carinainstance:
+  image:
+    repository: carina-instance
+    tag: v1.9.6
+    pullPolicy: IfNotPresent
+  
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+
+#######################################################################################################################
+# Values of Carina Instance
+vela:
+  image:
+    repository: vela-api
+    tag: v1.1.3
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations: {}
+
+  resources: {}
+
+#######################################################################################################################
+# Values of OES Database
+db:
+  ## Set it to false if any external database is to be used
+  enabled: true
+
+  ## Change the default configuration when above option is set to false
+  ## Below url and credentials are used by Autopilot & Sapor
+  url: jdbc:postgresql://oes-db:5432
+  username: postgres
+  password: networks123
+
+  ## Image specific details
+  image:
+    repository: ubi8-oes-db
+    tag: v3.0.0
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  ## Strategy to rollout statefulset pods
+  podManagementPolicy: OrderedReady
+
+  ## Default group to which the default user of a pod belongs
+  securityContext:
+    fsGroup: 1000
+
+  ## storageMountSize is the size with which a PVC is to be created
+  storageMountSize: 8Gi
+
+  ## storageClass for DB persistent volume claim (PVC)
+  #storageClassName: default
+###############################################################################################################################
+## Values of OEA UI
+ui:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-ui
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  config:
+    ## Interval, in millsecs, at which UI refreshes application dashboard
+    setApplicationRefreshInterval: 300000
+#############################################################################################################################
+##
+## Values of OEA Autopilot
+##
+autopilot:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-autopilot
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8090"
+    prometheus.io/scrape: "true"
+
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 2Gi
+  #    cpu: 1
+  #  limits:
+  #    memory: 8Gi
+  #    cpu: 2
+
+  config:
+    ## Build Analysis
+    ##
+    buildAnalysis:
+      enabled: false
+
+###############################################################################
+##
+## Values of OEA auditservice
+##
+audit:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-audit-service
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8097"
+    prometheus.io/scrape: "false"
+  resources: {}
+  config: {}
+
+###############################################################################
+##
+## Values of OEA auditclient
+##
+auditClient:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-audit-client
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8098"
+    prometheus.io/scrape: "true"
+  resources: {}
+  config: {}
+
+###############################################################################
+##
+## Values of OEA datascience
+##
+datascience:
+  ## Image specific details
+  ##
+  image:
+    repository: ubi8-oes-datascience
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "5005"
+    prometheus.io/scrape: "false"
+  resources: {}
+  config: {}
+
+###############################################################################
+## Values of OEA Dashboard
+dashboard:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-dashboard
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8094"
+    prometheus.io/scrape: "true"
+
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1000Mi
+  #    cpu: 1500m
+
+  config:
+    app:
+      sync:
+        enabled: true
+    ## By default spinnakerLink is {{ .Values.global.spinDeck.protocol }}://{{ .Values.global.spinDeck.host }}
+    ## If spinnaker is exposed on Load balancer instead of ingress, set this value to external IP of spinnaker UI
+    #spinnakerLink: http://spinnaker.domain.com
+
+###############################################################################
+##
+## Values of OEA Gate
+##
+gate:
+  ## Image specific details
+  image:
+    repository: ubi8-gate
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8084"
+    prometheus.io/scrape: "false"
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  config:
+    ## Set it to true to disable LDAP authentication and enable file based authentication
+    ## Reach out over support@opsmx.com for pre-configured user credentials
+    fileBasedAuthentication:
+      enabled: false
+    server:
+      session:
+        timeoutInSeconds: 7200
+    agentAPI: false
+    webhooks: true
+
+    #####################################################
+    # SAML AUthentication
+    #####################################################
+    # keytool -genkey -v -keystore oessaml.jks -alias saml -keyalg RSA -keysize 2048 -validity 10000
+    # oessaml.jks and oesmetadata.xml are mounted as secrets, create them as follows
+    # kubectl create secret generic oesmetadataxml --from-file=oesmetadata.xml -n <namespace>
+    # kubectl create secret generic oessamljks --from-file=oessaml.jks -n <namespace>
+    # kubectl create secret generic samljks-password --from-literal password=changeit -n <namespace>
+    saml:
+      enabled: false
+      userSource: gate  # Groups will be obtained from SAML
+      keyStore: /opt/spinnaker/saml/oessaml.jks  # The key in this secret must be oessaml.jks
+      keyStorePassword: changeit
+      keyStoreAliasName: saml
+      metadataUrl: /opt/spinnaker/saml/oesmetadata.xml # The key in this secret must be oesmetadata.xml
+      redirectProtocol: https
+      redirectHostname: oes-gate.ryzon7-gitops.opsmx.org  # OEA gate host name
+      redirectBasePath: /
+      issuerId: ryzonoesgate
+      jksSecretName: oessamljks
+      metadataSecretName: oesmetadataxml
+
+    #####################################################
+    #OAUTH2 Authentication for GitHub
+    #####################################################
+    oauth2:
+      enabled: false
+      client:
+        clientId: #CLIENT_ID
+        clientSecret: #CLIENT_SECRET_ID
+        accessTokenUri: https://github.com/login/oauth/access_token
+        userAuthorizationUri: https://github.com/login/oauth/authorize
+        scope: user-email
+      resource:
+        userInfoUri: https://api.github.com/user
+      userInfoMapping:
+        email: email
+        firstName: firstname
+        lastName: name
+        username: login
+      provider: GITHUB
+
+###############################################################################
+## Values of OEA Platform
+platform:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-platform
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8095"
+    prometheus.io/scrape: "true"
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  config:
+    ##  groups defined here will have superAdmin priviledges in AP
+    #adminGroups: admin
+
+    ## Source of groups for authorization
+    ## Supported sources:- ldap, file, gate. In general, use "gate" for SAML
+    userSource: ldap
+
+    ## List of features to be supported by OEA, please do not change
+    supportedFeatures:
+      - deployment_verification
+      - sapor
+      - visibility
+
+    app:
+      dashboard:
+        adminuser: admin # mandatory to provide admin user name to run admin jobs that compute dashboard counts
+
+###############################################################################
+## Values of OEA Sapor (Security Audit Policy Onboarding & Release)
+sapor:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-sapor
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8085"
+    prometheus.io/scrape: "true"
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 100Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 2000Mi
+  #    cpu: 1500m
+
+  config:
+    ## Use OSS if sapor needs to be connected to Open Source Spinnaker
+    ## If sapor needs to be connected to ubi8 based Spinnaker Images, use OPSMX
+    spinnakerImages: OPSMX
+    spinnaker:
+      ## Spinnaker configuration
+      ## Necessary details needed by Sapor tointegrate with Spinnaker
+      ## Set it to true if authentication is enabled in Spinnaker
+      authnEnabled: true  # This mandatory, un-authenicated Spinnaker is not supported
+
+      ## LDAP
+      #ldap:
+      #  ldapEnabled: true
+      #  ldapUsername: admin
+      #  ldapPassword: opsmxadmin123
+      #  ldapAdminLoginEnabled: false
+      #  ldapAdminUsername: admin
+      #  ldapAdminPassword: admin
+
+      ## X509
+      x509:
+        enabled: false
+        client:
+          password: changeit
+
+    #encryption key needed for sapor to startup from 3.9
+    encrypt:
+      enabled: false
+      # This key should match the encryption key specified in .hal/default/profiles/spinnakerConfig.yaml
+      # encryption key needed for sapor to startup from 3.9
+      key: Q7udUkHPuA3VnNlOtksSgQ
+    # Set the below field to true if datasource configurations from platform, please don't change
+    datasources:
+      platform: true
+    sync:
+      permission:
+        enabled: true
+
+###############################################################################
+## Values of OEA Visibility
+visibility:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-visibility
+    tag: v4.1.2
+    pullPolicy: IfNotPresent
+
+  annotations:
+    prometheus_io_path: /mgmt/prometheus
+    prometheus_io_port: "8096"
+    prometheus.io/scrape: "true"
+
+  serviceAnnotations: {}
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1000Mi
+  #    cpu: 1500m
+
+  config:
+    ## Autopilot integration options
+    configuredConnectors: JIRA,GIT,AUTOPILOT,SONARQUBE,JENKINS,AQUAWAVE
+
+    ## Logger level
+    logLevel: ERROR
+###################################################################################
+## Use this SAPOR GATE Configuration to Enable Basic Authentication for OES SAPOR to communitcate
+## with spinnaker instead of x509
+## Values of SAPOR OEA Gate
+##
+saporgate:
+  ## Image specific details
+  ##
+  enabled: false
+  image:
+    repository: ubi8-oes-spin-gate
+    tag: v3.12.0-saporgate
+    pullPolicy: IfNotPresent
+
+  serviceAnnotations: {}
+
+  resources: {}
+  #  requests:
+  #    memory: 500Mi
+  #    cpu: 500m
+  #  limits:
+  #    memory: 1500Mi
+  #    cpu: 1500m
+
+  #config:
+  #  username: admin      # User name with admin permissions and belonging to admin groups defined in platform service
+  #  password: saporadmin # Any generic String, need not be the real password
+  #  roles: admin # a valid admin group in the ldap
+###############################################################################################################
+rabbitmq:
+  ## rabbitmq  endpoint that is used by oes-gate and oes-platform for caching;
+  ## Change this to custom URL if installRedis is set to false
+  ## url: rabbitmq-service
+  ## url: default port 5672
+  url: rabbitmq-service
+  port: 5672
+  username: rabbitmq
+  password: Networks123
+  image:
+    registry: quay.io/opsmxpublic/rabbitmq
+    repository: 3.11.4-management
+
+  serviceAnnotations: {}
+
+  #Blow block is for only for K8S
+  securityContext:
+    fsGroup: 1000
+##################################################################################################################
+vault:
+  enterpriseEdition: false
+  ## Namespace is mandatory when enterpriseEdition flag is set to true
+  namespace: admin/isd-platform
+  address: https://server.vaultint.opsmx.net # Vault Address URL
+  token: 123132 # Vault Root token
+#####################
+secretStore: db
+###################################
+forwarder:
+  # Update the externalName if only ISD and Argo running in different cluster with DNS if not leave as it is
+  externalName:
+  enabled: true
+  agent:
+    image: quay.io/opsmxpublic/forwarder-agent:v3.5.9
+    serviceType: LoadBalancer
+    # Value is also used in sapor configuration for kubernetes.agent.serverHostName
+    host: opsmx-controller-controller1
+  image:
+    repository: quay.io/opsmxpublic/forwarder-controller
+    tag: v3.5.9
+    pullPolicy: IfNotPresent
+  serverNames:
+    - agent-grpc
+
+  serviceAnnotations: {}
+
+################################################################################################
+## Redis configuration
+## Set it to false only if OES needs to be configured with external redis
+installRedis: true
+##########################################################################
+
+
+## Details of redis-master image for OES
+redis:
+  ## Redis endpoint that is used by oes-gate and oes-platform for caching;
+  ## Change this to custom URL if installRedis is set to false
+  ## url: redis://{{ .Release.Name }}-redis-master:6379
+  url: redis://:password@{{ .Release.Name }}-redis-master
+  port: 6379
+  image:
+    registry: quay.io/opsmxpublic
+    repository: bitnami-redis
+  password: password
+  cluster:
+    enabled: false
+ #The flag is set to true by default.Mandatory change to false only if global.openshift is true and change fsGroups and runAsUser if required
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+
+  # External Redis option will be enabled if in-cluster redis is disabled
+  external:
+    host: "<EXTERNAL-REDIS-HOST-NAME>"
+    port: 6379
+    # password: ""
+  nodeSelector: {}
+  master:
+    affinity: {}
+    tolerations: []
+    podAnnotations:
+      moniker.spinnaker.io/application: spin
+
+  ## Redis config file
+  ## ref: https://redis.io/topics/config
+  ##
+  configmap: |-
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly no
+    # Disable RDB persistence, AOF persistence already enabled.
+    save 60 1000
+  # Uncomment if you don't want to create a PVC for redis
+  #  master:
+  #    persistence:
+  #      enabled: false
