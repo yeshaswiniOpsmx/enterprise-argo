@@ -201,8 +201,8 @@ do
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
          mkdir /tmp/yamls/agent
          # Download Agent CM file
-         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2/opsmx-services-agent.yaml > /dev/null 2>&1
-         curl -o /tmp/yamls/agent/opsmx-profile.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2/opsmx-profile.yaml
+         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2.1/opsmx-services-agent.yaml > /dev/null 2>&1
+         curl -o /tmp/yamls/agent/opsmx-profile.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2.1/opsmx-profile.yaml
 
          if [[ $OSTYPE == 'darwin'* ]]; then
            ## Replace the namespace in the manifest

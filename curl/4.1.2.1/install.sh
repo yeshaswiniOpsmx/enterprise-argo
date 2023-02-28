@@ -4,7 +4,7 @@
 
 isdlogo(){
 ## Chart Version 
-version=4.1.2
+version=4.1.2.1
 echo ""
 echo ""
 echo "             ██    ███████    ██████               █████     ██████      ██████      ██████           "
@@ -155,8 +155,9 @@ fi
 
 getvalues(){
 rm -rf values.yaml
+echo "Getting values ..."
 ## Get the values.yaml
-curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2/values.yaml 2> /dev/null
+curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2.1/values.yaml 2> /dev/null
 }
 
 
