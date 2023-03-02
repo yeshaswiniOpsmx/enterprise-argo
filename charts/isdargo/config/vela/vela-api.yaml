@@ -1,4 +1,3 @@
 httpListenPort: 8092
 carinaHost: http://oes-carina:8091/
 rbacHost: http://oes-carina:8092/
-jwtSecret: argo_navis
