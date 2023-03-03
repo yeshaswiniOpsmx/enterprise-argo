@@ -42,6 +42,14 @@ spec:
             if [ "$chkrealm" == "$realm" ];
             then
               echo "Realm with name $realm is already configured in keycloak"
+              clsid=$(./kcadm.sh get clients -r $realm --fields 'id,clientId' | jq -r '.[] | select(.clientId=="'$clientid'") | .id')
+              clientsecret=$(./kcadm.sh get -r $realm clients/"$clsid"/client-secret | jq '.value' -r)
+              kubectl get secret oes-gate-config -o jsonpath='{.data.*}' -n {{ .Release.Namespace }} | base64 -d > /tmp/gate1.yml
+              yq e '.security.oauth2.client.clientSecret = "'$clientsecret'"' /tmp/gate1.yml > /tmp/gate2.yml
+              mv /tmp/gate2.yml /tmp/gate.yml
+              kubectl delete secret oes-gate-config -n {{ .Release.Namespace }}
+              kubectl create secret generic oes-gate-config --from-file=/tmp/gate.yml -n {{ .Release.Namespace }}
+              kubectl delete po -l component=gate -n {{ .Release.Namespace }}
               break
             else
             echo "Creating realm..."
