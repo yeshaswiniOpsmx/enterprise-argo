@@ -23,14 +23,13 @@ userGroup:
 dashboard:
   scheduler:
     enable: false
-fixedDelay:
-  in:
-    milliseconds: 120000
-initialDelay:
-  in:
-    milliseconds: 300000
-scheduler:
-  workerThreads: 50
+    fixedDelay:
+      in:
+        milliseconds: 120000
+    initialDelay:
+      in:
+        milliseconds: 300000
+    workerThreads: 50
 user:
   {{- if .Values.gate.config.saml.enabled }}
   source: {{ .Values.gate.config.saml.userSource }}
