@@ -39,6 +39,10 @@ spec:
             - key: vela-api.yaml
               path: vela-api.yaml
           defaultMode: 420
+      - name: gate-volume
+        secret:
+          secretName: oes-gate-config
+          defaultMode: 420
       containers:
       - image: {{ template "vela.image" . }}
         imagePullPolicy: IfNotPresent
@@ -50,6 +54,9 @@ spec:
           - name: vela-volume
             mountPath: /app/config/vela-api.yaml
             subPath: vela-api.yaml
+          - name: gate-volume
+            mountPath: /opt/spinnaker/config/gate.yml
+            subPath: gate.yml
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
