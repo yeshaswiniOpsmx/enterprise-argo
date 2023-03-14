@@ -20,6 +20,9 @@ supportedFeatures:
 {{ toYaml .Values.platform.config.supportedFeatures | indent 2 }}
 userGroup:
   superAdminGroups: {{ .Values.global.saporgate.config.adminGroups }}
+dashboard:
+  scheduler:
+    enable: false
 fixedDelay:
   in:
     milliseconds: 120000
