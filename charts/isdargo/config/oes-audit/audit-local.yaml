@@ -9,7 +9,7 @@ logging:
     level:
       com.opsmx.auditservice: INFO
 message-broker:
-  enabled: true
+  enabled: false
   username: '{{ .Values.rabbitmq.username }}'
   password: '{{ .Values.rabbitmq.password }}'
   host: rabbitmq-service
