@@ -194,7 +194,7 @@ auditClient:
 gate:
   image:
     repository: ubi8-gate
-    tag: vMaster-rc2 
+    tag: vMaster-rc2
 ##################################################
 sapor:
   image:
