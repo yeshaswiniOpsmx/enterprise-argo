@@ -189,7 +189,7 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.2.1-rc2
+    tag: vMaster-rc2
 ###################################################
 gate:
   image:
@@ -199,42 +199,42 @@ gate:
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.2.1-rc3
+    tag: vMaster-rc2
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.2.1-rc3
+    tag: vMaster-rc2
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.2.1-rc3
+    tag: vMaster-rc2
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.2.1-rc3
+    tag: vMaster-rc2
 ###################################################
 dashboard:
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.2
+    tag: vMaster-rc2
 #####################################################
 datascience:
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.2
+    tag: vMaster-rc2
 #####################################################
 audit:
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.2
+    tag: vMaster-rc2
 ######################################################
 visibility:
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.2
+    tag: vMaster-rc2
 #####################################################
 carinamanager:
   image:
