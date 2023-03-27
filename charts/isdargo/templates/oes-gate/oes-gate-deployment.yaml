@@ -46,8 +46,9 @@ spec:
       containers:
       - image: {{ template "gate.image" . }}
         name: oes-gate
-      - name: spring_profiles_active
-        value: vault,local
+        env:
+        - name: spring_profiles_active
+          value: vault,local
        {{- if .Values.extraEnvVars }}
        {{- include "tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 8 }}
        {{- end }}
