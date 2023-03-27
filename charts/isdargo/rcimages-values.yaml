@@ -189,32 +189,32 @@ argo-rollouts:
 auditClient:
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.2.1-rc2
+    tag: v4.1.3.b1
 ###################################################
 gate:
   image:
     repository: ubi8-gate
-    tag: v4.1.2.1-rc2
+    tag: v4.1.3.b1
 ##################################################
 sapor:
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.2.1-rc3
+    tag: v4.1.3.b1
 ###################################################
 platform:
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.2.1-rc3
+    tag: v4.1.3.b1
 ###################################################
 autopilot:
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.2.1-rc3
+    tag: v4.1.3.b1
 ###################################################
 ui:
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.2.1-rc3
+    tag: v4.1.3.b1
 ###################################################
 dashboard:
   image:
@@ -238,12 +238,12 @@ visibility:
 #####################################################
 carinamanager:
   image:
-    tag: v1.11.0
+    tag: v1.12.7
 #####################################################
 carinainstance:
   image:
-    tag: v1.11.0
+    tag: v1.12.7
 #####################################################
 vela:
   image:
-    tag: v1.3.1
+    tag: v1.4.1

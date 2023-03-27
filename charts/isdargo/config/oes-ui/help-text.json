@@ -42,7 +42,7 @@
   },
   "ANALYSIS_TEMPLATE_LISTING": {
     "HEADER": "No Templates found!",
-    "BODY": ""
+    "BODY": "<div>This page allows you to manage log and metric templates used in ISD automated analysis. <br>A template is a blueprint of all information needed to run analysis, such as monitoring provider accounts, algorithms, log topics, metrics and any other custom business logic. <br> <br>ISD supports two modes of templates <br> - Gitops mode templates. Define templates as ConfigMaps and refer them in the provider section of your Argo Rollouts Analysis Template.  <br> - Template creation in ISD UI. Create templates here and refer them in the provider section of your Argo Rollouts Analysis Template. <br> For more information refer <a href='https://docs.opsmx.com/opsmx-intelligent-software-delivery-isd-platform-argo/user-guide/delivery-verification/templates' target='_blank'>Templates - OpsMx</a></div>"
   },
   "CLOUDPROVIDER_LISTING": {
     "HEADER": "No Cloud Targets found!",
@@ -2966,16 +2966,16 @@
       "TOOLTIP": "Pipelines with manual judgement having slowest execution times"
     },
     "DEPLOYMENT_FREQUENCY": {
-    "TOOLTIP": "Deployment Frequency"
+    "TOOLTIP": "Number of Application Deployments in a day"
     },
     "MOST_ACTIVE_APPLICATIONS": {
-      "TOOLTIP": "Most Active Applications"
+      "TOOLTIP": "Applications with maximum number of App deployments"
     },
     "FASTEST_DEPLOYMENTS": {
-      "TOOLTIP": "Fastest Deployments"
+      "TOOLTIP": "Applications with shortest deployment time"
     },
     "SLOWEST_DEPLOYMENTS": {
-      "TOOLTIP": "Slowest Deployments"
+      "TOOLTIP": "Applications with longest deployment time"
     }
   },
   "ACCESS_MANAGEMENT": {
@@ -3431,4 +3431,3 @@
     }
   }
 }
-
