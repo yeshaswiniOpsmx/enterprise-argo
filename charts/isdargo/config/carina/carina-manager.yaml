@@ -20,6 +20,7 @@ controller:
   caPath: /app/secrets/controller-ca.crt
   certificatePath: /app/secrets/controller-control/tls.crt
   keyPath: /app/secrets/controller-control/tls.key
+  platformServiceUrl: http://oes-platform:8095
   updateFrequencySeconds: 30
 databases:
   audit:

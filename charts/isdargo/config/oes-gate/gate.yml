@@ -551,7 +551,7 @@ keycloak:
         display: SAML
         type: label
         helpText: "This page allows you to configure SAML Authentication providers such as Okta and Azure. Once this is enabled, the 'Sign in with SAML' option will be available on the ISD login screen. All users configured in your SAML authentication provider will be able to access ISD. Super admin users will continue to be able to log in using their current user id and password.
-        Follow the below steps to enable SAML Provider. 
+        Follow the below steps to enable SAML Provider.
         - Copy and Use the redirect URI as the ACS URL of the ISD application and Service Provider (Entity ID) while configuring your Identity Provider
         - Download the metadata XML from your Identity Provider and import it to ISD
         - Single Sign-On service URL will get auto-populated from the metadata XML

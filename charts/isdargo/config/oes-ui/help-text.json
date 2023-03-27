@@ -42,7 +42,7 @@
   },
   "ANALYSIS_TEMPLATE_LISTING": {
     "HEADER": "No Templates found!",
-    "BODY": ""
+    "BODY": "<div>This page allows you to manage log and metric templates used in ISD automated analysis. <br>A template is a blueprint of all information needed to run analysis, such as monitoring provider accounts, algorithms, log topics, metrics and any other custom business logic. <br> <br>ISD supports two modes of templates <br> - Gitops mode templates. Define templates as ConfigMaps and refer them in the provider section of your Argo Rollouts Analysis Template.  <br> - Template creation in ISD UI. Create templates here and refer them in the provider section of your Argo Rollouts Analysis Template. <br> For more information refer <a href='https://docs.opsmx.com/opsmx-intelligent-software-delivery-isd-platform-argo/user-guide/delivery-verification/templates' target='_blank'>Templates - OpsMx</a></div>"
   },
   "CLOUDPROVIDER_LISTING": {
     "HEADER": "No Cloud Targets found!",
@@ -226,7 +226,7 @@
     }
   },
   "SPINNAKER_LISTING": {
-   "HEADER": "No CD Integration found!",
+    "HEADER": "No CD Integration found!",
     "BODY": "<div><p>Use this page to connect ISD to an existing Argo CD or to install new OpsMx Enterprise for Argo - a security validated release of Argo from OpsMx</p><strong>Existing Argo CD</strong><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance, providing this is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest in the same namespace where Argo CD Is installed</p><ul><li>Download the Agent Manifest.</li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Apply the agent manifest in the same namespace where Argo CD Is installed</li></ul><p><strong>Create New Argo CD</strong></p><p>This installs OpsMx Enterprise for Argo (OEA - a security validated release of Argo from OpsMx) in the given namespace and automatically connects it with ISD.</p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. You should create this namespace in your cluster.</li><li><strong> Argo CD URL</strong>: URL for your new Argo CD Instance. We will be creating an ngnix ingress with the provided url. This field is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest</p></div>",
     "CDTOOL_ERROR": "Unable to connect to CD Tool"
   },
@@ -397,12 +397,12 @@
     },
     "VALIDATION_MESSAGE": {
       "STAGE_DURATION": "No Data available to view Stage Duration",
-      "PIPELINE_NOT_EXISTS" : "Execution details not found."
+      "PIPELINE_NOT_EXISTS": "Execution details not found."
     }
   },
-"DEPLOYMENT_AUDIT_LISTING": {
-  "HEADER": "Deployment history not found!",
-  "BODY": "<div>This page shows deployment history of all applications in a list view. It also contains a summary view at the top with applications and the deployments count.</p></div>"
+  "DEPLOYMENT_AUDIT_LISTING": {
+    "HEADER": "Deployment history not found!",
+    "BODY": "<div>This page shows deployment history of all applications in a list view. It also contains a summary view at the top with applications and the deployments count.</p></div>"
   },
   "PIPELINE_AUDIT_LISTING": {
     "HEADER": "Pipeline updates not found!",
@@ -477,21 +477,21 @@
         "TOOLTIP": "Metric template for the verification run",
         "VALIDATION_MESSAGE": {}
       },
-      "LOG_BASELINE" :{
+      "LOG_BASELINE": {
         "TOOLTIP": "Filter keys values to collect log data for Baseline",
-        "VALIDATION_MESSAGE" :{}
+        "VALIDATION_MESSAGE": {}
       },
-      "METRIC_BASELINE" :{
+      "METRIC_BASELINE": {
         "TOOLTIP": "Filter keys values to collect metric data for Baseline ",
-        "VALIDATION_MESSAGE" :{}
+        "VALIDATION_MESSAGE": {}
       },
-      "LOG_NEW_RELEASE" :{
+      "LOG_NEW_RELEASE": {
         "TOOLTIP": "Filter keys values to collect log data for New Release",
-        "VALIDATION_MESSAGE" :{}
+        "VALIDATION_MESSAGE": {}
       },
-      "METRIC_NEW_RELEASE" :{
+      "METRIC_NEW_RELEASE": {
         "TOOLTIP": "Filter keys values to collect metric data for New Release",
-        "VALIDATION_MESSAGE" :{}
+        "VALIDATION_MESSAGE": {}
       },
       "LOG_BASELINE_START_TIME": {
         "TOOLTIP": "Start time of the canary analysis for Baseline",
@@ -1053,1702 +1053,1684 @@
       "TOOLTIP": "When the cluster deployment matches with the latest pipeline execution it is 'In Sync'; if not, it is 'Out of Sync'"
     }
   },
-"INTEGRATION": {
-"AMAZONS3":{
-  "HEADER": "Amazon S3",
-  "BODY":"<span><p>Spinnaker can be configured to use AWS S3 bucket as Spinnaker's persistent storage or Artifact source</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your AWS S3 access. The account name appears in Spinnaker as an input source for artifact selection.<span class='noBr'></span></li><li><strong>Access Key Id</strong>: AWS IAM user access key who has access to the identified S3 bucket. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.</li><li><strong>Secret Access Key</strong>: AWS IAM user Secret Key. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.</li><li><strong>Region</strong>: AWS region where the AWS S3 bucket is located</li><li><strong>API Region</strong>: AWS S3 API region, only required when using an S3 clone such as Minio</li><li><strong>API Endpoint</strong>: AWS S3 API endpoint, only required when using an S3 clone such as Minio</li><li><strong>Connect to CD</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Amazon S3 account in Autopilot to specific user groups</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your AWS S3 access. The account name appears in Spinnaker as an input source for artifact selection.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "ACCESS_ID":{
-    "TOOLTIP":"AWS IAM user's access key who has access to the identified S3 bucket. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.",
-    "VALIDATION_MESSAGE":{
-      "required":"Access Key Id cannot be empty"
-    }
-  },
-    "SECRET_KEY":{
-      "TOOLTIP":"AWS IAM user Secret Key. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.",
-    "VALIDATION_MESSAGE":{
-      "required":"Secret Access Key cannot be empty"
-    }
-  },
-  "REGION":{
-    "TOOLTIP":"AWS region where the AWS S3 bucket is located",
-    "VALIDATION_MESSAGE":{
-      "required":"S3 region cannot be empty"
-    }
-  },
-  "APIENDPOINT":{
-    "TOOLTIP":"AWS S3 API endpoint, only required when using an S3 clone such as Minio",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "APIREGION":{
-    "TOOLTIP":"AWS S3 API region, only required when using an S3 clone such as Minio",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"ARTIFACTORY":{
-  "HEADER": "Artifactory",
-  "BODY":"<span><p>JFrog Artifactory integration can be used as an Artifact source in Spinnaker and also a Data source for Approval-Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Jfrog Artifactory access. The account name appears in Spinnaker as an Artifactory trigger type input.</li><li><strong>Endpoint</strong>: The base URL of your Artifactory search is reachable at. <span class='noBr'>(Example: https://xyz.my-jfrog.com)</span></li><li><strong>Repo</strong>: The Artifactory repo which needs to be searched</li><li><strong>Repo Type</strong>: The package type of repo in your Artifactory is to be searched. Default is Maven.</li><li><strong>Group Id</strong>: The group id in your Artifactory is to be searched</li><li><strong>Username</strong>: The Artifactory user's username for authentication</li><li><strong>Password</strong>: The Artifactory user's password for authentication</li><li><strong>Token</strong>: Artifactory personal access token. You can find <a href='https://www.jfrog.com/confluence/display/JFROG/Access+Tokens' target='_blank'>here</a> how to generate personal access tokens. <span class='autolinebreak'>(Example: ZlQDAwMFwvdXNlcnNcL21hZGh1a2FyIiwic2NwIjoiYXBwbGllZC1wZXJtaXNzaW9uc1wvYWRtaW4gYXBpOioiLCJhdWQiOlsiamZydEAqIiwiamZhY0AqIiwiamZldnmbWRAKiJdLCJpc3MiOiJqZmZlQDAAzNzY3MiwiaWF0IjoxNjI5ODY0ODcyLCJqdGkiOiI1ZWFiNjlhYi1hZDY0LTRjOGItOTMyZC0wMDAxMWZiZWU5YWIifQ.tzBgL3fQgZ1dwlLLS2UAT7G)</span></li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable or disable specific user groups' access to the Artifactory account in ISD.</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your Jfrog Artifactory access. The account name appears in Spinnaker as an Artifactory trigger type input.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "ENDPOINT":{
-    "TOOLTIP":"The base URL of your Artifactory search is reachable at",
-    "VALIDATION_MESSAGE":{
-      "required":"Endpoint cannot be empty",
-      "invalidUrl": "Endpoint URL is invalid"
-    }
-  },
-  "REPO":{
-    "TOOLTIP":"The repo in your artifactory to be searched",
-    "VALIDATION_MESSAGE":{
-      "required":"Repo cannot be empty"
-    }
-  },
-  "REPOTYPE":{
-    "TOOLTIP":"The package type of repo in your Artifactory is to be searched. Default is Maven.",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "GROUPID":{
-    "TOOLTIP":"The group id in your Artifactory is to be searched.",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select how the external resource confirms the user credentials",
-    "VALIDATION_MESSAGE":{
-      "required":"Authentication cannot be empty"
-    }
-  },
-  "TOKEN":{
-    "TOOLTIP":"The Token of the artifactory user to authenticate as",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"The Artifactory user's username for authentication",
-    "VALIDATION_MESSAGE":{
-      "required":"Username cannot be empty"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"The Artifactory user's password for authentication",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"BITBUCKET":{
-  "HEADER": "Bitbucket Cloud",
-  "BODY":"<span><p>BitBucket Cloud integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for BitBucket Cloud.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your BitBucket Cloud access. <span class='noBr'>(Example: opsmx-bitbucket)</span></li><li><strong>Host URL</strong>: BitBucket Cloud (SaaS) Web URL. <span class='noBr'>It is usually https://bitbucket.org </span></li><li><strong>API URL</strong>: This is needed by Autopilot to access Bitbucket Cloud resources such as accounts & repositories through API calls <span class='noBr'>(Example: https://api.bitbucket.org/2.0/repositories)</span></li><li><strong>Authentication Type</strong>: Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.</li><li><strong>Anonymous</strong>: No username or password is used. Access identity is anonymous.</li><li><strong>User Name</strong>: The BitBucket Cloud Service username </li><li><strong>Token</strong>: The user's username and access token This token is obtained from the Bitbucket user profile page here. <span class='noBr'>(Example: xCPkVZfxaE9iULmfYYkK)</span></li> <li><strong>Password</strong>: The BitBucket Cloud Service password</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Bitbucket Account in Autopilot to specific user groups</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your BitBucket Cloud access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "HOSTURL":{
-    "TOOLTIP":"BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  },
-  "APIURL":{
-    "TOOLTIP":"Bitbucket API base URL. Eg. https://api.github.com",
-    "VALIDATION_MESSAGE":{
-      "required":"API URL cannot be empty",
-      "invalidUrl": "API URL is invalid"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"The user's access token. This token is obtained from the Bitbucket user profile page.",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"The BitBucket Cloud Service username",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"The BitBucket Cloud Service password",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"BITBUCKET_SERVER":{
-  "HEADER": "Bitbucket Server",
-  "BODY":"<span><p>BitBucket Server integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for BitBucket Server.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your BitBucket Cloud access. <span class='noBr'>(Example: opsmx-bitbucket)</span></li><li><strong>Host URL</strong>: BitBucket Cloud (SaaS) Web URL. <span class='noBr'> It is usually https://bitbucket.org</span></li><li><strong>Authentication Type</strong>: Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.</li><li><strong>Anonymous</strong>: No username or password is used. Access identity is anonymous.</li><li><strong>Token</strong>: The user's username and access token This token is obtained from the Bitbucket user profile page. You can find <a href='https://confluence.atlassian.com/bitbucketserver/personal-access-tokens-939515499.html' target='_blank'>here</a> how to generate personal access tokens. <span class='noBr'>(Example: DjpMgHmwqUnIvvmljFgqGQ)</span></li><li><strong>Username & Password </strong>: Accepts the user's username and password to connect to Bitbucket. Deprecated and not recommended.</li><li><strong>User Name</strong>: Bitbucket Server User Name</li><li><strong>Password</strong>: Bitbucket Server Password</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Bitbucket Server account in Autopilot to specific user groups</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your BitBucket Cloud access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "HOSTURL":{
-    "TOOLTIP":"BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"The user's access token. This token is obtained from the Bitbucket user profile page.",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"The BitBucket Server username",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"The BitBucket server password",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"DOCKERHUB":{
-  "HEADER": "Docker Registry",
-  "BODY":"<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> DockerHub example: https://hub.docker.com</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Group Membership</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your Docker registry access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "URL":{
-    "TOOLTIP":"The registry URL from which you want to pull and deploy images. DockerHub example: https://hub.docker.com",
-    "VALIDATION_MESSAGE": {
-  "required": "Registry URL cannot be empty"
-}
-  },
-"EMAIL":{
-  "TOOLTIP":"Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used."
-},
-"REPOSITORIES":{
-"TOOLTIP":"An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)"
-},
-"GROUPMEMBERSHIP":{
-  "TOOLTIP":""
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"The token of the Docker Registry user to authenticate as",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"The username of the Docker Registry user to authenticate as",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"The password of the Docker Registry user to authenticate as",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "HOSTURL":{
-    "TOOLTIP":"Docker Registry Host URL",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"OCR":{
-  "HEADER": "Generic Docker Registries (ACR, Quay, JFrog)",
-  "BODY":"<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GCR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example: https://quay.io - RedHat quay.io</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your GCR Docker registry access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "REPOSITORIES":{
-    "TOOLTIP":"An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space",
-      "startingFromNumber": "Repository cannot start with numbers"
-    }
-  },
-  "REGISTRYURL":{
-    "TOOLTIP":"The registry URL from which you want to pull and deploy images. For example: https://quay.io - RedHat quay.io",
-    "VALIDATION_MESSAGE":{
-      "required":"Registry URL cannot be empty"
-    }
-  },
-  "EMAIL":{
-    "TOOLTIP":"Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used."
-  },
-  "GROUPMEMBERSHIP":{
-    "TOOLTIP":"A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"Container Registry Personal Access Token",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"Your docker registry password",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"Container Registry User Name",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "HOSTURL":{
-    "TOOLTIP":"Container Registry Host URL",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  }
-},
-"GITHUB":{
-  "HEADER": "GitHub",
-  "BODY":"<span><p>GITHUB integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for GitHub.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GitHub access.<span class='noBr'>(Example: opsmx-github)</span></li><li><strong>URL</strong>: Github's host address, such as https://github.com</li><li><strong>API URL</strong>: Github's API endpoint host address, <span class='noBr'>such as https://api.github.com</span></li><li><strong>Token</strong>: GitHub personal access token. You can find <a href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token' target='_blank'>here</a> how to generate personal access tokens. <span class='noBr'>(Example: ghp_ln1eJK4yuomnY6JREp72IDJC4Hq6Sm)</span></li><li><strong>User Name</strong>: The GitHub username</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for GitHub</li><li><strong>Permissions</strong>: Enable/disable access to the GITHUB account in Autopilot to specific user groups</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your GitHub access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "HOSTURL":{
-    "TOOLTIP":"Github's host address, such as https://github.com",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  },
-  "URL":{
-    "TOOLTIP":"Github's API endpoint host address, such as https://api.github.com",
-    "VALIDATION_MESSAGE":{
-      "required":"API URL cannot be empty",
-      "invalidUrl": "API URL is invalid"
-    }
-  },
-  "TOKEN":{
-    "TOOLTIP":"The user's token",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"The GitHub username",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"GITLAB":{
-  "HEADER": "GitLab",
-  "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your GitLab access.</li><li><strong>Host URL</strong>: GitLab's host address, such as https://gitlab.com</li><li><strong>Username</strong>: The GitLab server username </li><li><strong>Token</strong>: The user's personal access token. Please refer <a href='https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html' target='_blank'>this document</a> for generating tokens.</li></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your GitLab access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "HOSTURL":{
-    "TOOLTIP":"GitLab's host address, such as https://gitlab.com",
-    "VALIDATION_MESSAGE":{
-      "required":"Host URL cannot be empty",
-      "invalidUrl": "Host URL is invalid"
-    }
-  },
-  "APIBASEURL":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"API URL cannot be empty",
-      "invalidUrl": "API URL is invalid"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select how the external resource confirms the user credentials",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"GitLab token",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"GITREPO":{
-  "HEADER": "Git Repo",
-  "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Git Repo access.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. Recommended using the user token method.</li></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your Git Repo access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "DEPLOYMENT":{
-    "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
-    "VALIDATION_MESSAGE":{
-      "required":"Deployment URL cannot be empty",
-      "invalidUrl": "Deployment URL is invalid"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter. Recommended using the user token method.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "URL":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"API URL cannot be empty",
-      "invalidUrl": "API URL is invalid"
-    }
-  },
-  "TOKEN":{
-    "TOOLTIP":"Git token",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "PASSWORD":{
-    "TOOLTIP":"Git password",
-    "VALIDATION_MESSAGE":{
-      "required":"Password cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"Git username",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"HELM":{
-  "HEADER": "Helm",
-  "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for target Helm repository access.</li><li><strong>Repository</strong>: Helm Chart Repository’s HTTP endpoint.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle ON to propagate the change to Spinnaker Toggle on to propagate the change into the CD Tool.</li></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for target Helm repository access",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "REPOSITORY":{
-    "TOOLTIP":"Helm Chart Repository’s HTTP endpoint",
-    "VALIDATION_MESSAGE":{
-      "required":"Repository cannot be empty",
-      "invalidUrl": "Repository URL is invalid"
-    }
-  },
-  "DEPLOYMENT":{
-    "TOOLTIP":"This Halyard deployment will be used for Account creation / update",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"User Name",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD": {
-    "TOOLTIP": "Password",
-    "VALIDATION_MESSAGE":{
-      "required" : "Password cannot be empty"
-    }
-  },
-  "PASSWORDCOMMAND": {
-    "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "FILE": {
-    "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"HTTP":{
-  "HEADER": "Http",
-  "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for HTTP protocol-based artifacts</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for HTTP protocol-based artifacts",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"HTTP basic auth User Name",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD": {
-    "TOOLTIP": "Password",
-    "VALIDATION_MESSAGE":{
-      "required" : "Password cannot be empty"
-    }
-  },
-  "PASSWORDCOMMAND": {
-    "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "FILE": {
-    "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"GCS":{
-  "HEADER": "GCS",
-  "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'></ul><li><strong>Account Name</strong>: User-defined account name for your Google Cloud Storage access.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. </li><li><strong>Json-Key file</strong>: Configures Google service account’s json file </li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool. </li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your Google Cloud Storage access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "FILE": {
-    "TOOLTIP": "Configures Google service account’s json file",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"ECR":{
-  "HEADER": "ECR",
-  "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your ECR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example:https://aws_account_id.dkr.ecr.region.amazonaws.com</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your ECR Docker registry access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "REPOSITORIES":{
-    "TOOLTIP":"Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space",
-      "startingFromNumber": "Repository cannot start with numbers"
-    }
-  },
-  "REGISTRYURL":{
-    "TOOLTIP":"The registry URL from which you want to pull and deploy images. For example:https://aws_account_id.dkr.ecr.region.amazonaws.com",
-    "VALIDATION_MESSAGE":{
-      "required" : "Registry URL cannot be empty"
-    }
-  },
-  "GROUPMEMBERSHIP":{
-    "TOOLTIP":"A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space"
-    }
-  },
-  "REGION": {
-    "TOOLTIP": "AWS region"
-  },
-  "EMAIL":{
-    "TOOLTIP":"An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
-    "VALIDATION_MESSAGE":{
-      "email":"Email Id is invalid",
-      "required":"Email Id cannot be empty"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "TOKEN":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"Your docker registry username",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD": {
-    "TOOLTIP": "Your docker registry password",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "PASSWORDCOMMAND": {
-    "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
-    "VALIDATION_MESSAGE":{
-      "required" : "Password-command cannot be empty"
-    }
-  },
-  "FILE": {
-    "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"PUBSUB":{
-  "HEADER": "PUBSUB",
-  "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Google Cloud Pub/Sub access.</li></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your Google Cloud Pub/Sub access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "PROJECTNAME": {
-    "TOOLTIP": "The name of the GCP project your subscription lives in",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Project Name cannot contain space",
-      "required":"Project Name cannot be empty"
-    }
-  },
-  "SUBSCRIPTIONNAME": {
-    "TOOLTIP": "The name of the subscription to listen to. This identifier does not include the name of the project, and must already be configured for Spinnaker to work.",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Subscription Name cannot contain space",
-      "required":"Subscription Name cannot be empty"
-    }
-  },
-  "MESSAGEFORMAT": {
-    "TOOLTIP":"Supporting Message Formats: GCB,GCS,GCR,CUSTOM",
-    "VALIDATION_MESSAGE": {}
-  },
-  "TEMPLATEFILE": {
-    "TOOLTIP":"Applicable only for CUSTOM message format",
-    "VALIDATION_MESSAGE": {}
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select how the external resource confirms the user credentials",
-    "VALIDATION_MESSAGE":{}
-  },
-  "FILE": {
-    "TOOLTIP": "JSON service account that Spinnaker will use as credentials",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"GCB":{
-  "HEADER": "GCB",
-  "BODY": "",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"The name of the account to operate on",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "PROJECTNAME": {
-    "TOOLTIP": "The name of the GCP project in which to trigger and monitor builds",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Project Name cannot contain space",
-      "required":"Project Name cannot be empty"
-    }
-  },
-  "SUBSCRIPTIONNAME": {
-    "TOOLTIP": "The name of the PubSub subscription on which to listen for build changes",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Subscription Name cannot contain space",
-      "required":"Subscription Name cannot be empty"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select how the external resource confirms the user credentials",
-    "VALIDATION_MESSAGE":{}
-  },
-  "FILE": {
-    "TOOLTIP": "JSON service account that Spinnaker will use as credentials",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"GCB User Name",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD": {
-    "TOOLTIP": "Password",
-    "VALIDATION_MESSAGE":{
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"GCR":{
-  "HEADER": "GCR",
-  "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GCR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example: https://gcr.io - Global GCR, https://[us|eu|asia].gcr.io - Regional GCR</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
-  "ACCOUNTNAME":{
-    "TOOLTIP":"User-defined account name for your GCR Docker registry access.",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-  },
-  "AUTHENTICATIONTYPE":{
-    "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter.",
-    "VALIDATION_MESSAGE":{}
-  },
-  "REPOSITORIES":{
-    "TOOLTIP":"An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space",
-      "startingFromNumber": "Repository cannot start with numbers"
-    }
-  },
-  "REGISTRYURL":{
-    "TOOLTIP":"The registry URL from which you want to pull and deploy images. For example: https://gcr.io - Global GCR, https://[us|eu|asia].gcr.io - Regional GCR",
-    "VALIDATION_MESSAGE":{
-      "required" : "Registry URL cannot be empty"
-    }
-  },
-  "REQUIREDGROUPMEMBERSHIP":{
-    "TOOLTIP":"A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
-    "VALIDATION_MESSAGE":{
-      "cannotContainSpace":"Repository cannot contain space"
-    }
-  },
-  "EMAIL":{
-    "TOOLTIP":"Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.",
-    "VALIDATION_MESSAGE":{
-      "email":"Email Id is invalid",
-      "required":"Email Id cannot be empty"
-    }
-  },
-  "URL":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"API URL cannot be empty",
-      "invalidUrl": "API URL is invalid"
-    }
-  },
-  "TOKEN":{
-    "TOOLTIP":"",
-    "VALIDATION_MESSAGE":{
-      "required":"Token cannot be empty"
-    }
-  },
-  "USERNAME":{
-    "TOOLTIP":"GCR User Name",
-    "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-      "cannotContainSpace":"User Name cannot contain space",
-      "required":"User Name cannot be empty",
-      "startingFromNumber": "User Name cannot start with numbers"
-    }
-  },
-  "PASSWORD": {
-    "TOOLTIP": "Your docker registry password",
-    "VALIDATION_MESSAGE":{
-      "required" : "Password cannot be empty"
-    }
-  },
-  "PASSWORDCOMMAND": {
-    "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
-    "VALIDATION_MESSAGE":{
-      "required" : "Password-command cannot be empty"
-    }
-  },
-  "FILE": {
-    "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
-    "VALIDATION_MESSAGE": {
-    }
-  },
-  "SPINNAKERTOGGLE":{
-    "TOOLTIP":"Toggle on to propagate the change into the CD Tool.",
-    "VALIDATION_MESSAGE":{}
-  }
-},
-"BAMBOO":{
-    "HEADER": "Bamboo CI",
-    "BODY":" <span><p>Bamboo CI integration can be used as a datasource for Approval Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'> <li><strong>Name</strong>: User defined name for the Bamboo CI Account <span class='noBr'>(Example: opsmx-bamboo)</span></li><li><strong>Endpoint</strong>: Bamboo CI URL <span class='noBr'>(Example: https://xyz.mybamboo.com)</span></li><li><strong>Token</strong>: Bamboo CI personal access token. You can find <a href='https://confluence.atlassian.com/bamboo/personal-access-tokens-976779873.html' target='_blank'>here</a> how to generate personal access tokens. <span>(Example: YmFrwqw0w9r90skfsOk9wcdd014p98kklw==)</span></li><li><strong>User Name</strong>: Bamboo CI User Name</li><li><strong>Password</strong>: Bamboo CI Password</li><li><strong>Permissions</strong>: Enable/disable access to the Bamboo CI account in Autopilot to specific usergroups</li></ul></span>",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"The name of the account to operate on",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "ENDPOINT":{
-      "TOOLTIP":"Bamboo URL",
-      "VALIDATION_MESSAGE":{
-        "required":"Bamboo End Point cannot be empty",
-        "invalidUrl": "Bamboo End Point URL is invalid"
-      }
-    },
-    "AUTHENTICATIONTYPE":{
-      "TOOLTIP":"Select how the external resource confirms the user credentials",
-      "VALIDATION_MESSAGE":{}
-    },
-    "TOKEN":{
-      "TOOLTIP":"Your Bamboo token",
-      "VALIDATION_MESSAGE":{
-        "required":"Token cannot be empty"
-      }
-    },
-    "USERNAME":{
-      "TOOLTIP":"Your Bamboo username",
-      "VALIDATION_MESSAGE":{
-        "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-        "cannotContainSpace":"User Name cannot contain space",
-        "required":"User Name cannot be empty",
-        "startingFromNumber": "User Name cannot start with numbers"
-      }
-    },
-    "PASSWORD":{
-      "TOOLTIP":"Your Bamboo password",
-      "VALIDATION_MESSAGE":{
-        "required":"Password cannot be empty"
-      }
-    }
-  },
-  "JENKINS":{
-    "HEADER":"Jenkins",
-    "BODY":"<span><p>Jenkins integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for Jenkins.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Jenkins access. <span class='noBr'>(Example: opsmx-jenkins)</span></li><li><strong>Host URL</strong>: Jenkins host address, <span class='noBr'>such as https://jenkins.opsmx.net</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. It is preferable to use token authentication with username and token. </li><li><strong>Token</strong>: Jenkins personal access token. You can find <a href='https://www.jenkins.io/doc/book/using/using-credentials/' target='_blank'>here</a> how to generate personal access tokens. <span>(Example: 77d67609a841b1811a114b7fbfa109b3c2)</span></li><li><strong>CSRF</strong>: Recommended to toggle on the CSRF (Cross-Site Request Forgery) flag</li><li><strong>User Name</strong>: Jenkins User Name</li><li><strong>Password</strong>: Jenkins Password</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for Jenkins</li><li><strong>Permissions</strong>: Enable/disable access to the Jenkins account in Autopilot to specific user groups</li></ul></span>",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User-defined account name for your Jenkins access.",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "HOSTURL":{
-      "TOOLTIP":"Jenkins host address, such as https://jenkins.opsmx.net",
-      "VALIDATION_MESSAGE":{
-        "required":"Host URL cannot be empty",
-        "invalidUrl": "Host URL is invalid"
-      }
-    },
-    "CSRFFLAG":{
-      "TOOLTIP":"Recommended to toggle on the CSRF (Cross-Site Request Forgery) flag."
-    },
-    "AUTHENTICATIONTYPE":{
-      "TOOLTIP":"Select an authentication type that corresponds to the connection credential parameter. It is preferable to use token authentication with username and token.",
-      "VALIDATION_MESSAGE":{}
-    },
-    "TOKEN":{
-      "TOOLTIP":"Your Jenkins token",
-      "VALIDATION_MESSAGE":{
-        "required":"Token cannot be empty"
-      }
-    },
-    "USERNAME":{
-      "TOOLTIP":"Your Jenkins username",
-      "VALIDATION_MESSAGE":{
-        "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-        "cannotContainSpace":"User Name cannot contain space",
-        "required":"User Name cannot be empty",
-        "startingFromNumber": "User Name cannot start with numbers"
-      }
-    },
-    "PASSWORD":{
-      "TOOLTIP":"Your Jenkins password",
-      "VALIDATION_MESSAGE":{
-        "required":"Password cannot be empty"
-      }
-    },
-    "SPINNAKERTOGGLE":{
-      "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-      "VALIDATION_MESSAGE":{}
-    }
-  },
-  "JIRA":{
-    "HEADER": "Jira",
-    "BODY":"",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the Jira account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "EMAIL":{
-      "TOOLTIP":"Jira Email Id",
-      "VALIDATION_MESSAGE":{
-        "email":"Email Id is invalid",
-        "required":"Email Id cannot be empty"
-      }
-    },
-    "TOKEN":{
-      "TOOLTIP":"Jira Personal Access Token",
-      "VALIDATION_MESSAGE":{
-        "required":"Token cannot be empty"
-      }
-    },
-    "HOSTURL":{
-      "TOOLTIP":"Jira Host URL",
-      "VALIDATION_MESSAGE":{
-        "required":"Host URL cannot be empty",
-        "invalidUrl": "Host URL is invalid"
-      }
-    },
-    "SPINNAKERTOGGLE":{
-      "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-      "VALIDATION_MESSAGE":{}
-    }
-  },
-  "SERVICENOW":{
-    "HEADER": "Service Now",
-    "BODY":"<span><p>Service integration can be used to configure ServiceNow Custom stages in Spinnaker. In addition, it can also be used as a datasource for Approval Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User defined name for the Service Account <span class='noBr'>(Example: myservicenow)</span></li><li><strong>Host URL</strong>: ServiceNow URL <span class='noBr'>(Example: https://servicenow.opsmx.com)</span></li><li><strong>User Name</strong>: ServiceNow User Name, for authentication</li><li><strong>Password</strong>: ServiceNow Password for the User who is authenticated</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for ServiceNow</li><li><strong>Permissions</strong>: Enable/disable access to the ServiceNow account in Autopilot to specific usergroups</li></ul></span>",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the Service Now account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "USERNAME":{
-      "TOOLTIP":"Service Now User Name",
-      "VALIDATION_MESSAGE":{
-        "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-        "cannotContainSpace":"User Name cannot contain space",
-        "required":"User Name cannot be empty",
-        "startingFromNumber": "User Name cannot start with numbers"
-      }
-    },
-    "PASSWORD":{
-      "TOOLTIP":"Service Now Password",
-      "VALIDATION_MESSAGE":{
-        "required":"Password cannot be empty"
-      }
-    },
-    "HOSTURL":{
-      "TOOLTIP":"Service Now Host URL",
-      "VALIDATION_MESSAGE":{
-        "required":"Host URL cannot be empty",
-        "invalidUrl": "Host URL is invalid"
-      }
-    }
-  }
-  ,
-  "APPDYNAMICS":{
-    "HEADER": "APPDYNAMICS",
-    "BODY":"",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the APPDYNAMICS account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "CONTROLLERHOST":{
-      "TOOLTIP":"APPDYNAMICS Controller Host",
-      "VALIDATION_MESSAGE":{
-        "required":"Controller Host  cannot be empty",
-        "invalidUrl": "Controller Host URL is invalid"
-      }
-    },
-    "TEMPORARYACCESSTOKEN":{
-      "TOOLTIP":"APPDYNAMICS Personal Temporary Access Token",
-      "VALIDATION_MESSAGE":{
-        "required":"Temporary Access Token cannot be empty"
-      }
-    }
-  },
-  "CLOUDWATCH":{
-    "HEADER": "AWS-CLOUDWATCH",
-    "BODY":"",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the AWS-CLOUDWATCH account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "ACCESS_ID":{
-      "TOOLTIP":"AWS-CLOUDWATCH Access Key Id",
-      "VALIDATION_MESSAGE":{
-        "required":"Access Key Id cannot be empty"
-      }
-    },
-    "SECRET_KEY":{
-      "TOOLTIP":"AWS-CLOUDWATCH Secret Access Key",
-      "VALIDATION_MESSAGE":{
-        "required":"Secret Access Key cannot be empty"
-      }
-    }
-  },
-  "DATADOG":{
-    "HEADER": "DATADOG",
-    "BODY":"",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the DATADOG account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "API_KEY":{
-      "TOOLTIP":"DATADOG Api Key",
-      "VALIDATION_MESSAGE":{
-        "required":"API key cannot be empty"
-      }
-    },
-    "APPLICATION_KEY":{
-      "TOOLTIP":"DATADOG Application Key",
-      "VALIDATION_MESSAGE":{
-        "required":"Application Key cannot be empty"
-      }
-    }
-  },
-  "DYNATRACE":{
-    "HEADER": "Dynatrace",
-    "BODY":"",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User defined name for the Dynatrace account",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "END_POINT":{
-      "TOOLTIP":"Dynatrace URL",
-      "VALIDATION_MESSAGE":{
-        "required":"Endpoint Url cannot be empty",
-        "invalidUrl": "Endpoint URL is invalid"
-      }
-    },
-    "API_TOKEN":{
-      "TOOLTIP":"Dynatrace Personal Access Token",
-      "VALIDATION_MESSAGE":{
-        "required":"Api Token cannot be empty"
-      }
-    }
-  },
-  "ELASTICSEARCH":{
-    "HEADER": "Elasticsearch",
-    "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Elasticsearch access.</li><li><strong>Endpoint</strong>: Elasticsearch host address, from which you access the Elasticsearch</li><li><strong>Username</strong>: Elasticsearch username </li><li><strong>Password</strong>: Elasticsearch password</li><li><strong>Kibana Endpoint</strong>: Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana</li><li><strong>Kibana username</strong>: Elasticsearch Kibana username</li><li><strong>Kibana Password</strong>: Elasticsearch Kibana password</li><span>",
-    "ACCOUNTNAME":{
-      "TOOLTIP":"User-defined account name for your Elasticsearch access.",
-      "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-    },
-    "ENDPOINT":{
-      "TOOLTIP":"Elasticsearch host address, from which you access the Elasticsearch",
-      "VALIDATION_MESSAGE":{
-        "required":"Elastic End Point cannot be empty",
-        "invalidUrl": "Elastic End Poin URL is invalid"
-      }
-    },
-    "USERNAME":{
-      "TOOLTIP":"Elasticsearch username",
-      "VALIDATION_MESSAGE":{
-        "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-        "cannotContainSpace":"User Name cannot contain space",
-        "startingFromNumber": "User Name cannot start with numbers"
-      }
-    },
-    "PASSWORD":{
-      "TOOLTIP":"Elasticsearch password",
-      "VALIDATION_MESSAGE":{
-        "required":"Password cannot be empty"
-      }
-    },
-    "KIBANAENDPOINT":{
-      "TOOLTIP":"Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana",
-      "VALIDATION_MESSAGE":{
-        "required":"Kibana End Point cannot be empty",
-        "invalidUrl": "Kibana End Poin URL is invalid"
-      }
-    },
-    "KIBANAUSERNAME":{
-      "TOOLTIP":"Elasticsearch Kibana username",
-      "VALIDATION_MESSAGE":{
-        "noSpecialCharacters": "Kibana User Name cannot contain special characters other than - and _",
-        "cannotContainSpace":"Kibana User Name cannot contain space",
-        "required":"Kibana User Name cannot be empty",
-        "startingFromNumber": "Kibana User Name cannot start with numbers"
-      }
-    },
-    "KIBANAPASSWORD":{
-      "TOOLTIP":"Elasticsearch Kibana password",
-      "VALIDATION_MESSAGE":{
-        "required":"Kibana Password cannot be empty"
-      }
-    }
-  },
-    "GRAPHITE":{
-      "HEADER": "Graphite",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Graphite access.</li><li><strong>Endpoint</strong>: Graphite host address, from which you access the Graphite </li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Graphite access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "URL":{
-        "TOOLTIP":"Graphite host address, from which you access the Graphite",
-        "VALIDATION_MESSAGE":{
-          "required":"End Point cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
-        }
-      }
-    },
-    "GRAYLOG":{
-      "HEADER": "GRAYLOG",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Graylog access.</li><li><strong>Endpoint</strong>: Graylog host address, from which you access the Graylog </li><li><strong>Token</strong>: The user's token </li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Graylog access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "ENDPOINT":{
-        "TOOLTIP":"Graylog host address, from which you access the Graylog",
-        "VALIDATION_MESSAGE":{
-          "required":"End Point cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
+  "INTEGRATION": {
+    "AMAZONS3": {
+      "HEADER": "Amazon S3",
+      "BODY": "<span><p>Spinnaker can be configured to use AWS S3 bucket as Spinnaker's persistent storage or Artifact source</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your AWS S3 access. The account name appears in Spinnaker as an input source for artifact selection.<span class='noBr'></span></li><li><strong>Access Key Id</strong>: AWS IAM user access key who has access to the identified S3 bucket. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.</li><li><strong>Secret Access Key</strong>: AWS IAM user Secret Key. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.</li><li><strong>Region</strong>: AWS region where the AWS S3 bucket is located</li><li><strong>API Region</strong>: AWS S3 API region, only required when using an S3 clone such as Minio</li><li><strong>API Endpoint</strong>: AWS S3 API endpoint, only required when using an S3 clone such as Minio</li><li><strong>Connect to CD</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Amazon S3 account in Autopilot to specific user groups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your AWS S3 access. The account name appears in Spinnaker as an input source for artifact selection.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
         }
       },
-      "TOKEN":{
-        "TOOLTIP":"GrayLog Personal Access Token",
-        "VALIDATION_MESSAGE":{
-          "required":"Token cannot be empty"
+      "ACCESS_ID": {
+        "TOOLTIP": "AWS IAM user's access key who has access to the identified S3 bucket. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.",
+        "VALIDATION_MESSAGE": {
+          "required": "Access Key Id cannot be empty"
         }
+      },
+      "SECRET_KEY": {
+        "TOOLTIP": "AWS IAM user Secret Key. Not required, If Spinnaker is running in EC2 or EKS with an associated IAM role. In that case, the IAM instance role is used for S3 connectivity.",
+        "VALIDATION_MESSAGE": {
+          "required": "Secret Access Key cannot be empty"
+        }
+      },
+      "REGION": {
+        "TOOLTIP": "AWS region where the AWS S3 bucket is located",
+        "VALIDATION_MESSAGE": {
+          "required": "S3 region cannot be empty"
+        }
+      },
+      "APIENDPOINT": {
+        "TOOLTIP": "AWS S3 API endpoint, only required when using an S3 clone such as Minio",
+        "VALIDATION_MESSAGE": {}
+      },
+      "APIREGION": {
+        "TOOLTIP": "AWS S3 API region, only required when using an S3 clone such as Minio",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
       }
     },
-    "NEWRELIC":{
-      "HEADER": "New Relic",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your NewRelic access.</li><li><strong>Api Key</strong>: The user's token to authenticate with Newrelic</li><li><strong>Application Key</strong>: The application key identifies which account the incoming data belongs to.</li><li><strong>Account ID</strong>: Provide account ID to identify the account </li><li><strong>Query Key</strong>: Provide a query key to filter the data </li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your NewRelic access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "APIKEY":{
-        "TOOLTIP":"NewRelic Api Key",
-        "VALIDATION_MESSAGE":{
-          "required":"API key cannot be empty"
+    "ARTIFACTORY": {
+      "HEADER": "Artifactory",
+      "BODY": "<span><p>JFrog Artifactory integration can be used as an Artifact source in Spinnaker and also a Data source for Approval-Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Jfrog Artifactory access. The account name appears in Spinnaker as an Artifactory trigger type input.</li><li><strong>Endpoint</strong>: The base URL of your Artifactory search is reachable at. <span class='noBr'>(Example: https://xyz.my-jfrog.com)</span></li><li><strong>Repo</strong>: The Artifactory repo which needs to be searched</li><li><strong>Repo Type</strong>: The package type of repo in your Artifactory is to be searched. Default is Maven.</li><li><strong>Group Id</strong>: The group id in your Artifactory is to be searched</li><li><strong>Username</strong>: The Artifactory user's username for authentication</li><li><strong>Password</strong>: The Artifactory user's password for authentication</li><li><strong>Token</strong>: Artifactory personal access token. You can find <a href='https://www.jfrog.com/confluence/display/JFROG/Access+Tokens' target='_blank'>here</a> how to generate personal access tokens. <span class='autolinebreak'>(Example: ZlQDAwMFwvdXNlcnNcL21hZGh1a2FyIiwic2NwIjoiYXBwbGllZC1wZXJtaXNzaW9uc1wvYWRtaW4gYXBpOioiLCJhdWQiOlsiamZydEAqIiwiamZhY0AqIiwiamZldnmbWRAKiJdLCJpc3MiOiJqZmZlQDAAzNzY3MiwiaWF0IjoxNjI5ODY0ODcyLCJqdGkiOiI1ZWFiNjlhYi1hZDY0LTRjOGItOTMyZC0wMDAxMWZiZWU5YWIifQ.tzBgL3fQgZ1dwlLLS2UAT7G)</span></li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable or disable specific user groups' access to the Artifactory account in ISD.</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Jfrog Artifactory access. The account name appears in Spinnaker as an Artifactory trigger type input.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
         }
       },
-      "APPLICATIONKEY":{
-        "TOOLTIP":"The application key identifies which account the incoming data belongs to.",
-        "VALIDATION_MESSAGE":{
-          "required":"Application Key cannot be empty"
+      "ENDPOINT": {
+        "TOOLTIP": "The base URL of your Artifactory search is reachable at",
+        "VALIDATION_MESSAGE": {
+          "required": "Endpoint cannot be empty",
+          "invalidUrl": "Endpoint URL is invalid"
         }
       },
-      "ACCOUNTID":{
-        "TOOLTIP":"Provide account ID to identify the account",
-        "VALIDATION_MESSAGE":{
-          "required":"Account Id cannot be empty"
+      "REPO": {
+        "TOOLTIP": "The repo in your artifactory to be searched",
+        "VALIDATION_MESSAGE": {
+          "required": "Repo cannot be empty"
         }
       },
-      "QUERYKEY":{
-        "TOOLTIP":"Provide a query key to filter the data",
-        "VALIDATION_MESSAGE":{
-          "required":"Query Key cannot be empty"
+      "REPOTYPE": {
+        "TOOLTIP": "The package type of repo in your Artifactory is to be searched. Default is Maven.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "GROUPID": {
+        "TOOLTIP": "The group id in your Artifactory is to be searched.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select how the external resource confirms the user credentials",
+        "VALIDATION_MESSAGE": {
+          "required": "Authentication cannot be empty"
         }
+      },
+      "TOKEN": {
+        "TOOLTIP": "The Token of the artifactory user to authenticate as",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "The Artifactory user's username for authentication",
+        "VALIDATION_MESSAGE": {
+          "required": "Username cannot be empty"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "The Artifactory user's password for authentication",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
       }
     },
-    "PROMETHEUS":{
-      "HEADER": "Prometheus",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Prometheus access.</li><li><strong>Endpoint</strong>: Prometheus host address, from which you access the Prometheus</li><li><strong>Username</strong>: Prometheus username</li><li><strong>Password</strong>: Prometheus password</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Prometheus access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "ENDPOINT":{
-        "TOOLTIP":"Prometheus host address, from which you access the Prometheus",
-        "VALIDATION_MESSAGE":{
-          "required":"End Point cannot be empty",
-          "invalidUrl": "End Point URL is invalid"
+    "BITBUCKET": {
+      "HEADER": "Bitbucket Cloud",
+      "BODY": "<span><p>BitBucket Cloud integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for BitBucket Cloud.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your BitBucket Cloud access. <span class='noBr'>(Example: opsmx-bitbucket)</span></li><li><strong>Host URL</strong>: BitBucket Cloud (SaaS) Web URL. <span class='noBr'>It is usually https://bitbucket.org </span></li><li><strong>API URL</strong>: This is needed by Autopilot to access Bitbucket Cloud resources such as accounts & repositories through API calls <span class='noBr'>(Example: https://api.bitbucket.org/2.0/repositories)</span></li><li><strong>Authentication Type</strong>: Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.</li><li><strong>Anonymous</strong>: No username or password is used. Access identity is anonymous.</li><li><strong>User Name</strong>: The BitBucket Cloud Service username </li><li><strong>Token</strong>: The user's username and access token This token is obtained from the Bitbucket user profile page here. <span class='noBr'>(Example: xCPkVZfxaE9iULmfYYkK)</span></li> <li><strong>Password</strong>: The BitBucket Cloud Service password</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Bitbucket Account in Autopilot to specific user groups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your BitBucket Cloud access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
         }
       },
-      "USERNAME":{
-        "TOOLTIP":"Prometheus username",
-        "VALIDATION_MESSAGE":{
+      "HOSTURL": {
+        "TOOLTIP": "BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "APIURL": {
+        "TOOLTIP": "Bitbucket API base URL. Eg. https://api.github.com",
+        "VALIDATION_MESSAGE": {
+          "required": "API URL cannot be empty",
+          "invalidUrl": "API URL is invalid"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "The user's access token. This token is obtained from the Bitbucket user profile page.",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "The BitBucket Cloud Service username",
+        "VALIDATION_MESSAGE": {
           "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-          "cannotContainSpace":"User Name cannot contain space",
-          "required":"User Name cannot be empty",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
           "startingFromNumber": "User Name cannot start with numbers"
         }
       },
-      "PASSWORD":{
-        "TOOLTIP":"Prometheus password",
-        "VALIDATION_MESSAGE":{
-          "required":"Password cannot be empty"
+      "PASSWORD": {
+        "TOOLTIP": "The BitBucket Cloud Service password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "BITBUCKET_SERVER": {
+      "HEADER": "Bitbucket Server",
+      "BODY": "<span><p>BitBucket Server integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for BitBucket Server.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your BitBucket Cloud access. <span class='noBr'>(Example: opsmx-bitbucket)</span></li><li><strong>Host URL</strong>: BitBucket Cloud (SaaS) Web URL. <span class='noBr'> It is usually https://bitbucket.org</span></li><li><strong>Authentication Type</strong>: Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.</li><li><strong>Anonymous</strong>: No username or password is used. Access identity is anonymous.</li><li><strong>Token</strong>: The user's username and access token This token is obtained from the Bitbucket user profile page. You can find <a href='https://confluence.atlassian.com/bitbucketserver/personal-access-tokens-939515499.html' target='_blank'>here</a> how to generate personal access tokens. <span class='noBr'>(Example: DjpMgHmwqUnIvvmljFgqGQ)</span></li><li><strong>Username & Password </strong>: Accepts the user's username and password to connect to Bitbucket. Deprecated and not recommended.</li><li><strong>User Name</strong>: Bitbucket Server User Name</li><li><strong>Password</strong>: Bitbucket Server Password</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li><li><strong>Permissions</strong>: Enable/disable access to the Bitbucket Server account in Autopilot to specific user groups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your BitBucket Cloud access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "BitBucket Cloud (SaaS) Web URL. It is usually https://bitbucket.org",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select one of the available options. If you are unsure, consult your BitBucket administrator to determine which authentication mechanism is used.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "The user's access token. This token is obtained from the Bitbucket user profile page.",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "The BitBucket Server username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "The BitBucket server password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "DOCKERHUB": {
+      "HEADER": "Docker Registry",
+      "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> DockerHub example: https://hub.docker.com</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Group Membership</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Docker registry access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "URL": {
+        "TOOLTIP": "The registry URL from which you want to pull and deploy images. DockerHub example: https://hub.docker.com",
+        "VALIDATION_MESSAGE": {
+          "required": "Registry URL cannot be empty"
+        }
+      },
+      "EMAIL": {
+        "TOOLTIP": "Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used."
+      },
+      "REPOSITORIES": {
+        "TOOLTIP": "An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)"
+      },
+      "GROUPMEMBERSHIP": {
+        "TOOLTIP": ""
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "The token of the Docker Registry user to authenticate as",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "The username of the Docker Registry user to authenticate as",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "The password of the Docker Registry user to authenticate as",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "Docker Registry Host URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "OCR": {
+      "HEADER": "Generic Docker Registries (ACR, Quay, JFrog)",
+      "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GCR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example: https://quay.io - RedHat quay.io</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your GCR Docker registry access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "REPOSITORIES": {
+        "TOOLTIP": "An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space",
+          "startingFromNumber": "Repository cannot start with numbers"
+        }
+      },
+      "REGISTRYURL": {
+        "TOOLTIP": "The registry URL from which you want to pull and deploy images. For example: https://quay.io - RedHat quay.io",
+        "VALIDATION_MESSAGE": {
+          "required": "Registry URL cannot be empty"
+        }
+      },
+      "EMAIL": {
+        "TOOLTIP": "Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used."
+      },
+      "GROUPMEMBERSHIP": {
+        "TOOLTIP": "A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "Container Registry Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Your docker registry password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Container Registry User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "HOSTURL": {
+        "TOOLTIP": "Container Registry Host URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
         }
       }
     },
-    "SPLUNK":{
-      "HEADER": "Splunk",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Splunk access.</li><li><strong>Splunk Url</strong>: Splunk host address, from which you access the Splunk</li><li><strong>Username</strong>: The Splunk's username</li><li><strong>Password</strong>: Splunk's password</li><li><strong>Splunk DashBoard Url </strong>: Splunk Dashboard URL that you want to access </li><span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Splunk access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+    "GITHUB": {
+      "HEADER": "GitHub",
+      "BODY": "<span><p>GITHUB integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for GitHub.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GitHub access.<span class='noBr'>(Example: opsmx-github)</span></li><li><strong>URL</strong>: Github's host address, such as https://github.com</li><li><strong>API URL</strong>: Github's API endpoint host address, <span class='noBr'>such as https://api.github.com</span></li><li><strong>Token</strong>: GitHub personal access token. You can find <a href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token' target='_blank'>here</a> how to generate personal access tokens. <span class='noBr'>(Example: ghp_ln1eJK4yuomnY6JREp72IDJC4Hq6Sm)</span></li><li><strong>User Name</strong>: The GitHub username</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for GitHub</li><li><strong>Permissions</strong>: Enable/disable access to the GITHUB account in Autopilot to specific user groups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your GitHub access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "END_POINT":{
-        "TOOLTIP":"Splunk host address, from which you access the Splunk",
-        "VALIDATION_MESSAGE":{
-          "required":"Splunk Url  cannot be empty",
+      "HOSTURL": {
+        "TOOLTIP": "Github's host address, such as https://github.com",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "URL": {
+        "TOOLTIP": "Github's API endpoint host address, such as https://api.github.com",
+        "VALIDATION_MESSAGE": {
+          "required": "API URL cannot be empty",
+          "invalidUrl": "API URL is invalid"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "The user's token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "The GitHub username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "GITLAB": {
+      "HEADER": "GitLab",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your GitLab access.</li><li><strong>Host URL</strong>: GitLab's host address, such as https://gitlab.com</li><li><strong>Username</strong>: The GitLab server username </li><li><strong>Token</strong>: The user's personal access token. Please refer <a href='https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html' target='_blank'>this document</a> for generating tokens.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your GitLab access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "GitLab's host address, such as https://gitlab.com",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "APIBASEURL": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "API URL cannot be empty",
+          "invalidUrl": "API URL is invalid"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select how the external resource confirms the user credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "GitLab token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "GITREPO": {
+      "HEADER": "Git Repo",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Git Repo access.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. Recommended using the user token method.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Git Repo access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "DEPLOYMENT": {
+        "TOOLTIP": "This Halyard deployment will be used for Account creation / update",
+        "VALIDATION_MESSAGE": {
+          "required": "Deployment URL cannot be empty",
+          "invalidUrl": "Deployment URL is invalid"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter. Recommended using the user token method.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "URL": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "API URL cannot be empty",
+          "invalidUrl": "API URL is invalid"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "Git token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Git password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Git username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "HELM": {
+      "HEADER": "Helm",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for target Helm repository access.</li><li><strong>Repository</strong>: Helm Chart Repository’s HTTP endpoint.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle ON to propagate the change to Spinnaker Toggle on to propagate the change into the CD Tool.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for target Helm repository access",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "REPOSITORY": {
+        "TOOLTIP": "Helm Chart Repository’s HTTP endpoint",
+        "VALIDATION_MESSAGE": {
+          "required": "Repository cannot be empty",
+          "invalidUrl": "Repository URL is invalid"
+        }
+      },
+      "DEPLOYMENT": {
+        "TOOLTIP": "This Halyard deployment will be used for Account creation / update",
+        "VALIDATION_MESSAGE": {}
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "PASSWORDCOMMAND": {
+        "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
+        "VALIDATION_MESSAGE": {}
+      },
+      "FILE": {
+        "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "HTTP": {
+      "HEADER": "Http",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for HTTP protocol-based artifacts</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for HTTP protocol-based artifacts",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "HTTP basic auth User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "PASSWORDCOMMAND": {
+        "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
+        "VALIDATION_MESSAGE": {}
+      },
+      "FILE": {
+        "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "GCS": {
+      "HEADER": "GCS",
+      "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'></ul><li><strong>Account Name</strong>: User-defined account name for your Google Cloud Storage access.</li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. </li><li><strong>Json-Key file</strong>: Configures Google service account’s json file </li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool. </li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Google Cloud Storage access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "FILE": {
+        "TOOLTIP": "Configures Google service account’s json file",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "ECR": {
+      "HEADER": "ECR",
+      "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your ECR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example:https://aws_account_id.dkr.ecr.region.amazonaws.com</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your ECR Docker registry access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "REPOSITORIES": {
+        "TOOLTIP": "Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space",
+          "startingFromNumber": "Repository cannot start with numbers"
+        }
+      },
+      "REGISTRYURL": {
+        "TOOLTIP": "The registry URL from which you want to pull and deploy images. For example:https://aws_account_id.dkr.ecr.region.amazonaws.com",
+        "VALIDATION_MESSAGE": {
+          "required": "Registry URL cannot be empty"
+        }
+      },
+      "GROUPMEMBERSHIP": {
+        "TOOLTIP": "A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space"
+        }
+      },
+      "REGION": {
+        "TOOLTIP": "AWS region"
+      },
+      "EMAIL": {
+        "TOOLTIP": "An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
+        "VALIDATION_MESSAGE": {
+          "email": "Email Id is invalid",
+          "required": "Email Id cannot be empty"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Your docker registry username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Your docker registry password",
+        "VALIDATION_MESSAGE": {}
+      },
+      "PASSWORDCOMMAND": {
+        "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
+        "VALIDATION_MESSAGE": {
+          "required": "Password-command cannot be empty"
+        }
+      },
+      "FILE": {
+        "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "PUBSUB": {
+      "HEADER": "PUBSUB",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Google Cloud Pub/Sub access.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Google Cloud Pub/Sub access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "PROJECTNAME": {
+        "TOOLTIP": "The name of the GCP project your subscription lives in",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Project Name cannot contain space",
+          "required": "Project Name cannot be empty"
+        }
+      },
+      "SUBSCRIPTIONNAME": {
+        "TOOLTIP": "The name of the subscription to listen to. This identifier does not include the name of the project, and must already be configured for Spinnaker to work.",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Subscription Name cannot contain space",
+          "required": "Subscription Name cannot be empty"
+        }
+      },
+      "MESSAGEFORMAT": {
+        "TOOLTIP": "Supporting Message Formats: GCB,GCS,GCR,CUSTOM",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TEMPLATEFILE": {
+        "TOOLTIP": "Applicable only for CUSTOM message format",
+        "VALIDATION_MESSAGE": {}
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select how the external resource confirms the user credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "FILE": {
+        "TOOLTIP": "JSON service account that Spinnaker will use as credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "GCB": {
+      "HEADER": "GCB",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "The name of the account to operate on",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "PROJECTNAME": {
+        "TOOLTIP": "The name of the GCP project in which to trigger and monitor builds",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Project Name cannot contain space",
+          "required": "Project Name cannot be empty"
+        }
+      },
+      "SUBSCRIPTIONNAME": {
+        "TOOLTIP": "The name of the PubSub subscription on which to listen for build changes",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Subscription Name cannot contain space",
+          "required": "Subscription Name cannot be empty"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select how the external resource confirms the user credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "FILE": {
+        "TOOLTIP": "JSON service account that Spinnaker will use as credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "USERNAME": {
+        "TOOLTIP": "GCB User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Password",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "GCR": {
+      "HEADER": "GCR",
+      "BODY": "<span><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your GCR Docker registry access.</li><li><strong>Registry URL</strong>: The registry URL from which you want to pull and deploy images. <span class='noBr'> For example: https://gcr.io - Global GCR, https://[us|eu|asia].gcr.io - Regional GCR</span></li><li><strong>Email</strong>: Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.</li><li><strong>Repositories</strong>: An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. <span class='noBr'> Example: library/ubuntu (Public repositories are prefixed with library/)</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter.</li><li><strong>Connect to Spinnaker</strong>: Toggle on to propagate the change into the CD Tool.</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your GCR Docker registry access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "REPOSITORIES": {
+        "TOOLTIP": "An optional list of repositories to cache images from. If not provided, Spinnaker will try to read the list of accessible repositories from the registries _catalog endpoint. Example: library/ubuntu (Public repositories are prefixed with library/)",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space",
+          "startingFromNumber": "Repository cannot start with numbers"
+        }
+      },
+      "REGISTRYURL": {
+        "TOOLTIP": "The registry URL from which you want to pull and deploy images. For example: https://gcr.io - Global GCR, https://[us|eu|asia].gcr.io - Regional GCR",
+        "VALIDATION_MESSAGE": {
+          "required": "Registry URL cannot be empty"
+        }
+      },
+      "REQUIREDGROUPMEMBERSHIP": {
+        "TOOLTIP": "A user must be a member of at least one specified group in order to make changes to this account’s cloud resources",
+        "VALIDATION_MESSAGE": {
+          "cannotContainSpace": "Repository cannot contain space"
+        }
+      },
+      "EMAIL": {
+        "TOOLTIP": "Users docker registry email. If no value is specified, the default value of fake.email@spinnaker.io will be used.",
+        "VALIDATION_MESSAGE": {
+          "email": "Email Id is invalid",
+          "required": "Email Id cannot be empty"
+        }
+      },
+      "URL": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "API URL cannot be empty",
+          "invalidUrl": "API URL is invalid"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "GCR User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Your docker registry password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "PASSWORDCOMMAND": {
+        "TOOLTIP": "Command to retrieve docker token/password, commands must be available in environment",
+        "VALIDATION_MESSAGE": {
+          "required": "Password-command cannot be empty"
+        }
+      },
+      "FILE": {
+        "TOOLTIP": "The path to a file containing your docker password in plaintext (not a docker/config.json file)",
+        "VALIDATION_MESSAGE": {}
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Toggle on to propagate the change into the CD Tool.",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "BAMBOO": {
+      "HEADER": "Bamboo CI",
+      "BODY": " <span><p>Bamboo CI integration can be used as a datasource for Approval Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'> <li><strong>Name</strong>: User defined name for the Bamboo CI Account <span class='noBr'>(Example: opsmx-bamboo)</span></li><li><strong>Endpoint</strong>: Bamboo CI URL <span class='noBr'>(Example: https://xyz.mybamboo.com)</span></li><li><strong>Token</strong>: Bamboo CI personal access token. You can find <a href='https://confluence.atlassian.com/bamboo/personal-access-tokens-976779873.html' target='_blank'>here</a> how to generate personal access tokens. <span>(Example: YmFrwqw0w9r90skfsOk9wcdd014p98kklw==)</span></li><li><strong>User Name</strong>: Bamboo CI User Name</li><li><strong>Password</strong>: Bamboo CI Password</li><li><strong>Permissions</strong>: Enable/disable access to the Bamboo CI account in Autopilot to specific usergroups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "The name of the account to operate on",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "ENDPOINT": {
+        "TOOLTIP": "Bamboo URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Bamboo End Point cannot be empty",
+          "invalidUrl": "Bamboo End Point URL is invalid"
+        }
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select how the external resource confirms the user credentials",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "Your Bamboo token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Your Bamboo username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Your Bamboo password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      }
+    },
+    "JENKINS": {
+      "HEADER": "Jenkins",
+      "BODY": "<span><p>Jenkins integration can be used as a datasource for Approval Gate as well as to configure Spinnaker for Jenkins.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User-defined account name for your Jenkins access. <span class='noBr'>(Example: opsmx-jenkins)</span></li><li><strong>Host URL</strong>: Jenkins host address, <span class='noBr'>such as https://jenkins.opsmx.net</span></li><li><strong>Authentication Type</strong>: Select an authentication type that corresponds to the connection credential parameter. It is preferable to use token authentication with username and token. </li><li><strong>Token</strong>: Jenkins personal access token. You can find <a href='https://www.jenkins.io/doc/book/using/using-credentials/' target='_blank'>here</a> how to generate personal access tokens. <span>(Example: 77d67609a841b1811a114b7fbfa109b3c2)</span></li><li><strong>CSRF</strong>: Recommended to toggle on the CSRF (Cross-Site Request Forgery) flag</li><li><strong>User Name</strong>: Jenkins User Name</li><li><strong>Password</strong>: Jenkins Password</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for Jenkins</li><li><strong>Permissions</strong>: Enable/disable access to the Jenkins account in Autopilot to specific user groups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Jenkins access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "Jenkins host address, such as https://jenkins.opsmx.net",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "CSRFFLAG": {
+        "TOOLTIP": "Recommended to toggle on the CSRF (Cross-Site Request Forgery) flag."
+      },
+      "AUTHENTICATIONTYPE": {
+        "TOOLTIP": "Select an authentication type that corresponds to the connection credential parameter. It is preferable to use token authentication with username and token.",
+        "VALIDATION_MESSAGE": {}
+      },
+      "TOKEN": {
+        "TOOLTIP": "Your Jenkins token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Your Jenkins username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Your Jenkins password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "JIRA": {
+      "HEADER": "Jira",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Jira account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "EMAIL": {
+        "TOOLTIP": "Jira Email Id",
+        "VALIDATION_MESSAGE": {
+          "email": "Email Id is invalid",
+          "required": "Email Id cannot be empty"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "Jira Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "Jira Host URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "SERVICENOW": {
+      "HEADER": "Service Now",
+      "BODY": "<span><p>Service integration can be used to configure ServiceNow Custom stages in Spinnaker. In addition, it can also be used as a datasource for Approval Gate.</p><p><strong>Fields</strong>:</p><ul class='helpTextUl'><li><strong>Account Name</strong>: User defined name for the Service Account <span class='noBr'>(Example: myservicenow)</span></li><li><strong>Host URL</strong>: ServiceNow URL <span class='noBr'>(Example: https://servicenow.opsmx.com)</span></li><li><strong>User Name</strong>: ServiceNow User Name, for authentication</li><li><strong>Password</strong>: ServiceNow Password for the User who is authenticated</li><li><strong>Connect to Spinnaker</strong>: Toggle to configure Spinnaker for ServiceNow</li><li><strong>Permissions</strong>: Enable/disable access to the ServiceNow account in Autopilot to specific usergroups</li></ul></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Service Now account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Service Now User Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Service Now Password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "HOSTURL": {
+        "TOOLTIP": "Service Now Host URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
+          "invalidUrl": "Host URL is invalid"
+        }
+      }
+    },
+    "APPDYNAMICS": {
+      "HEADER": "APPDYNAMICS",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the APPDYNAMICS account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "CONTROLLERHOST": {
+        "TOOLTIP": "APPDYNAMICS Controller Host",
+        "VALIDATION_MESSAGE": {
+          "required": "Controller Host  cannot be empty",
+          "invalidUrl": "Controller Host URL is invalid"
+        }
+      },
+      "TEMPORARYACCESSTOKEN": {
+        "TOOLTIP": "APPDYNAMICS Personal Temporary Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Temporary Access Token cannot be empty"
+        }
+      }
+    },
+    "CLOUDWATCH": {
+      "HEADER": "AWS-CLOUDWATCH",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the AWS-CLOUDWATCH account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "ACCESS_ID": {
+        "TOOLTIP": "AWS-CLOUDWATCH Access Key Id",
+        "VALIDATION_MESSAGE": {
+          "required": "Access Key Id cannot be empty"
+        }
+      },
+      "SECRET_KEY": {
+        "TOOLTIP": "AWS-CLOUDWATCH Secret Access Key",
+        "VALIDATION_MESSAGE": {
+          "required": "Secret Access Key cannot be empty"
+        }
+      }
+    },
+    "DATADOG": {
+      "HEADER": "DATADOG",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the DATADOG account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "API_KEY": {
+        "TOOLTIP": "DATADOG Api Key",
+        "VALIDATION_MESSAGE": {
+          "required": "API key cannot be empty"
+        }
+      },
+      "APPLICATION_KEY": {
+        "TOOLTIP": "DATADOG Application Key",
+        "VALIDATION_MESSAGE": {
+          "required": "Application Key cannot be empty"
+        }
+      }
+    },
+    "DYNATRACE": {
+      "HEADER": "Dynatrace",
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Dynatrace account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "END_POINT": {
+        "TOOLTIP": "Dynatrace URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Endpoint Url cannot be empty",
+          "invalidUrl": "Endpoint URL is invalid"
+        }
+      },
+      "API_TOKEN": {
+        "TOOLTIP": "Dynatrace Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Api Token cannot be empty"
+        }
+      }
+    },
+    "ELASTICSEARCH": {
+      "HEADER": "Elasticsearch",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Elasticsearch access.</li><li><strong>Endpoint</strong>: Elasticsearch host address, from which you access the Elasticsearch</li><li><strong>Username</strong>: Elasticsearch username </li><li><strong>Password</strong>: Elasticsearch password</li><li><strong>Kibana Endpoint</strong>: Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana</li><li><strong>Kibana username</strong>: Elasticsearch Kibana username</li><li><strong>Kibana Password</strong>: Elasticsearch Kibana password</li><span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Elasticsearch access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "ENDPOINT": {
+        "TOOLTIP": "Elasticsearch host address, from which you access the Elasticsearch",
+        "VALIDATION_MESSAGE": {
+          "required": "Elastic End Point cannot be empty",
+          "invalidUrl": "Elastic End Poin URL is invalid"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Elasticsearch username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Elasticsearch password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      },
+      "KIBANAENDPOINT": {
+        "TOOLTIP": "Elasticsearch Kibana host address, from which you access the Elasticsearch Kibana",
+        "VALIDATION_MESSAGE": {
+          "required": "Kibana End Point cannot be empty",
+          "invalidUrl": "Kibana End Poin URL is invalid"
+        }
+      },
+      "KIBANAUSERNAME": {
+        "TOOLTIP": "Elasticsearch Kibana username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Kibana User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "Kibana User Name cannot contain space",
+          "required": "Kibana User Name cannot be empty",
+          "startingFromNumber": "Kibana User Name cannot start with numbers"
+        }
+      },
+      "KIBANAPASSWORD": {
+        "TOOLTIP": "Elasticsearch Kibana password",
+        "VALIDATION_MESSAGE": {
+          "required": "Kibana Password cannot be empty"
+        }
+      }
+    },
+    "GRAPHITE": {
+      "HEADER": "Graphite",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Graphite access.</li><li><strong>Endpoint</strong>: Graphite host address, from which you access the Graphite </li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Graphite access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "URL": {
+        "TOOLTIP": "Graphite host address, from which you access the Graphite",
+        "VALIDATION_MESSAGE": {
+          "required": "End Point cannot be empty",
+          "invalidUrl": "End Point URL is invalid"
+        }
+      }
+    },
+    "GRAYLOG": {
+      "HEADER": "GRAYLOG",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Graylog access.</li><li><strong>Endpoint</strong>: Graylog host address, from which you access the Graylog </li><li><strong>Token</strong>: The user's token </li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Graylog access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "ENDPOINT": {
+        "TOOLTIP": "Graylog host address, from which you access the Graylog",
+        "VALIDATION_MESSAGE": {
+          "required": "End Point cannot be empty",
+          "invalidUrl": "End Point URL is invalid"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "GrayLog Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      }
+    },
+    "NEWRELIC": {
+      "HEADER": "New Relic",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your NewRelic access.</li><li><strong>Api Key</strong>: The user's token to authenticate with Newrelic</li><li><strong>Application Key</strong>: The application key identifies which account the incoming data belongs to.</li><li><strong>Account ID</strong>: Provide account ID to identify the account </li><li><strong>Query Key</strong>: Provide a query key to filter the data </li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your NewRelic access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "APIKEY": {
+        "TOOLTIP": "NewRelic Api Key",
+        "VALIDATION_MESSAGE": {
+          "required": "API key cannot be empty"
+        }
+      },
+      "APPLICATIONKEY": {
+        "TOOLTIP": "The application key identifies which account the incoming data belongs to.",
+        "VALIDATION_MESSAGE": {
+          "required": "Application Key cannot be empty"
+        }
+      },
+      "ACCOUNTID": {
+        "TOOLTIP": "Provide account ID to identify the account",
+        "VALIDATION_MESSAGE": {
+          "required": "Account Id cannot be empty"
+        }
+      },
+      "QUERYKEY": {
+        "TOOLTIP": "Provide a query key to filter the data",
+        "VALIDATION_MESSAGE": {
+          "required": "Query Key cannot be empty"
+        }
+      }
+    },
+    "PROMETHEUS": {
+      "HEADER": "Prometheus",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Prometheus access.</li><li><strong>Endpoint</strong>: Prometheus host address, from which you access the Prometheus</li><li><strong>Username</strong>: Prometheus username</li><li><strong>Password</strong>: Prometheus password</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Prometheus access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "ENDPOINT": {
+        "TOOLTIP": "Prometheus host address, from which you access the Prometheus",
+        "VALIDATION_MESSAGE": {
+          "required": "End Point cannot be empty",
+          "invalidUrl": "End Point URL is invalid"
+        }
+      },
+      "USERNAME": {
+        "TOOLTIP": "Prometheus username",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
+          "startingFromNumber": "User Name cannot start with numbers"
+        }
+      },
+      "PASSWORD": {
+        "TOOLTIP": "Prometheus password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
+        }
+      }
+    },
+    "SPLUNK": {
+      "HEADER": "Splunk",
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Splunk access.</li><li><strong>Splunk Url</strong>: Splunk host address, from which you access the Splunk</li><li><strong>Username</strong>: The Splunk's username</li><li><strong>Password</strong>: Splunk's password</li><li><strong>Splunk DashBoard Url </strong>: Splunk Dashboard URL that you want to access </li><span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Splunk access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
+      },
+      "END_POINT": {
+        "TOOLTIP": "Splunk host address, from which you access the Splunk",
+        "VALIDATION_MESSAGE": {
+          "required": "Splunk Url  cannot be empty",
           "invalidUrl": "Splunk Url is invalid"
         }
       },
-      "PASSWORD":{
-        "TOOLTIP":"Splunk's password",
-        "VALIDATION_MESSAGE":{
-          "required":"Password cannot be empty"
+      "PASSWORD": {
+        "TOOLTIP": "Splunk's password",
+        "VALIDATION_MESSAGE": {
+          "required": "Password cannot be empty"
         }
       },
-      "USER_NAME":{
-        "TOOLTIP":"Splunk's user name",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "USER_NAME": {
+        "TOOLTIP": "Splunk's user name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "DASHBOARD_ENDPOINT":{
-        "TOOLTIP":"Splunk Dashboard URL that you want to access",
-        "VALIDATION_MESSAGE":{
-          "required":"Splunk DashBoard Url cannot be empty",
+      "DASHBOARD_ENDPOINT": {
+        "TOOLTIP": "Splunk Dashboard URL that you want to access",
+        "VALIDATION_MESSAGE": {
+          "required": "Splunk DashBoard Url cannot be empty",
           "invalidUrl": "Splunk DashBoard Url is invalid"
         }
       }
     },
-    "STACKDRIVER":{
+    "STACKDRIVER": {
       "HEADER": "Stackdriver",
-      "BODY":"",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User defined name for the Stackdriver account",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Stackdriver account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "KEY_FILE":{
-        "TOOLTIP":"Stackdriver Encrypted Key file",
-        "VALIDATION_MESSAGE":{
-          "required":"Encrypted Key File cannot be empty"
+      "KEY_FILE": {
+        "TOOLTIP": "Stackdriver Encrypted Key file",
+        "VALIDATION_MESSAGE": {
+          "required": "Encrypted Key File cannot be empty"
         }
       }
     },
-    "SUMOLOGIC":{
+    "SUMOLOGIC": {
       "HEADER": "Sumo Logic",
-      "BODY":"",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User defined name for the Sumologic account",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "ACCESSID":{
-        "TOOLTIP":"sumologic Access Id. You can generate Access Id (Administration > Security > Access Keys)",
-        "VALIDATION_MESSAGE":{
-          "required":"Access Id cannot be empty"
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Sumologic account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
         }
       },
-      "ACCESSKEY":{
-        "TOOLTIP":"sumologic Access Key. You can generate Access Id (Administration > Security > Access Keys)",
-        "VALIDATION_MESSAGE":{
-          "required":"Access key cannot be empty"
-    }
+      "ACCESSID": {
+        "TOOLTIP": "sumologic Access Id. You can generate Access Id (Administration > Security > Access Keys)",
+        "VALIDATION_MESSAGE": {
+          "required": "Access Id cannot be empty"
+        }
       },
-      "ZONE":{
-        "TOOLTIP":"sumologic Zone",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Zone cannot contain special characters other than -",
-      "cannotContainSpace":"Zone cannot contain space",
-      "required":"Zone cannot be empty",
-      "startingFromNumber": "Zone cannot start with numbers"
-    }
+      "ACCESSKEY": {
+        "TOOLTIP": "sumologic Access Key. You can generate Access Id (Administration > Security > Access Keys)",
+        "VALIDATION_MESSAGE": {
+          "required": "Access key cannot be empty"
+        }
+      },
+      "ZONE": {
+        "TOOLTIP": "sumologic Zone",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Zone cannot contain special characters other than -",
+          "cannotContainSpace": "Zone cannot contain space",
+          "required": "Zone cannot be empty",
+          "startingFromNumber": "Zone cannot start with numbers"
+        }
       }
     },
-    "VMWARETANZU":{
+    "VMWARETANZU": {
       "HEADER": "VMWare Tanzu Observability",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your VMWare Tanzu access</li><li><strong>Endpoint</strong>: VMWare Tanzu host address, from which you access the VMWare Tanzu</li><li><strong>Email</strong>: Provide the user's registered and authorized email</li><li><strong>API token</strong>: The user's API token </li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your VMWare Tanzu access",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your VMWare Tanzu access</li><li><strong>Endpoint</strong>: VMWare Tanzu host address, from which you access the VMWare Tanzu</li><li><strong>Email</strong>: Provide the user's registered and authorized email</li><li><strong>API token</strong>: The user's API token </li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your VMWare Tanzu access",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "END_POINT":{
-        "TOOLTIP":"VMWare Tanzu host address, from which you access the VMWare Tanzu",
-        "VALIDATION_MESSAGE":{
-          "required":"End Point cannot be empty",
+      "END_POINT": {
+        "TOOLTIP": "VMWare Tanzu host address, from which you access the VMWare Tanzu",
+        "VALIDATION_MESSAGE": {
+          "required": "End Point cannot be empty",
           "invalidUrl": "End Point is invalid"
         }
       },
-      "EMAIL":{
-        "TOOLTIP":"Provide the user's registered and authorized email",
-        "VALIDATION_MESSAGE":{
-          "email":"Email is invalid",
-          "required":"Email cannot be empty"
+      "EMAIL": {
+        "TOOLTIP": "Provide the user's registered and authorized email",
+        "VALIDATION_MESSAGE": {
+          "email": "Email is invalid",
+          "required": "Email cannot be empty"
         }
       },
-      "API_TOKEN":{
-        "TOOLTIP":"The user's API token",
-        "VALIDATION_MESSAGE":{
-          "required":"Api Token cannot be empty"
+      "API_TOKEN": {
+        "TOOLTIP": "The user's API token",
+        "VALIDATION_MESSAGE": {
+          "required": "Api Token cannot be empty"
         }
       }
     },
-    "MSTEAMS":{
+    "MSTEAMS": {
       "HEADER": "Microsoft Teams",
-      "BODY":""
+      "BODY": ""
     },
-    "SLACK":{
+    "SLACK": {
       "HEADER": "Slack",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Slack access.</li><li><strong>BotName</strong>: Provide the bot name where you want to receive notifications in slack</li><li><strong>Token</strong>: The user's token to authenticate with slack.</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User defined name for the Slack account",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
-      },
-      "BOTNAME":{
-        "TOOLTIP":"Slack Bot Name",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Bot Name cannot contain special characters other than -",
-      "cannotContainSpace":"Bot Name cannot contain space",
-      "required":"Bot Name cannot be empty",
-      "startingFromNumber": "Bot Name cannot start with numbers"
-    }
-      },
-      "TOKEN":{
-        "TOOLTIP":"Slack Personal Access Token",
-        "VALIDATION_MESSAGE":{
-          "required":"Token cannot be empty"
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Slack access.</li><li><strong>BotName</strong>: Provide the bot name where you want to receive notifications in slack</li><li><strong>Token</strong>: The user's token to authenticate with slack.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Slack account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
         }
       },
-      "SPINNAKERTOGGLE":{
-        "TOOLTIP":"Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
-        "VALIDATION_MESSAGE":{}
+      "BOTNAME": {
+        "TOOLTIP": "Slack Bot Name",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Bot Name cannot contain special characters other than -",
+          "cannotContainSpace": "Bot Name cannot contain space",
+          "required": "Bot Name cannot be empty",
+          "startingFromNumber": "Bot Name cannot start with numbers"
+        }
+      },
+      "TOKEN": {
+        "TOOLTIP": "Slack Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
+        }
+      },
+      "SPINNAKERTOGGLE": {
+        "TOOLTIP": "Switch On this toggle to configure the resource in a gitops enabled Spinnaker instance",
+        "VALIDATION_MESSAGE": {}
       }
     },
-    "OPA":{
+    "OPA": {
       "HEADER": "OPA",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your OPA server access.</li><li><strong>EndPoint</strong>: OPA server host address, <span>such as https://opa:8181</span></li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your OPA server access",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your OPA server access.</li><li><strong>EndPoint</strong>: OPA server host address, <span>such as https://opa:8181</span></li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your OPA server access",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "ENDPOINT":{
-        "TOOLTIP":"OPA server host address, such as https://opa:8181",
-        "VALIDATION_MESSAGE":{
-          "required":"End Point cannot be empty",
+      "ENDPOINT": {
+        "TOOLTIP": "OPA server host address, such as https://opa:8181",
+        "VALIDATION_MESSAGE": {
+          "required": "End Point cannot be empty",
           "invalidUrl": "End Point URL is invalid"
         }
       }
     },
-    "AQUAWAVE":{
+    "AQUAWAVE": {
       "HEADER": "Aqua Wave",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Aqua Wave access.</li><li><strong>Username</strong>: The Aquawave username</li><li><strong>Token</strong>: The user's token.</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Aqua Wave access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Aqua Wave access.</li><li><strong>Username</strong>: The Aquawave username</li><li><strong>Token</strong>: The user's token.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Aqua Wave access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "USERNAME":{
-        "TOOLTIP":"The Aquawave username",
-        "VALIDATION_MESSAGE":{
+      "USERNAME": {
+        "TOOLTIP": "The Aquawave username",
+        "VALIDATION_MESSAGE": {
           "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-          "cannotContainSpace":"User Name cannot contain space",
-          "required":"User Name cannot be empty",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
           "startingFromNumber": "User Name cannot start with numbers"
         }
       },
-      "TOKEN":{
-        "TOOLTIP":"Aqua Wave Personal Access Token",
-        "VALIDATION_MESSAGE":{
-          "required":"Bearer token cannot be empty"
+      "TOKEN": {
+        "TOOLTIP": "Aqua Wave Personal Access Token",
+        "VALIDATION_MESSAGE": {
+          "required": "Bearer token cannot be empty"
         }
       }
     },
-    "APPSCAN":{
+    "APPSCAN": {
       "HEADER": "HCL AppScan",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your HCL AppScan access.</li><li><strong>Token</strong>: The user's token</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your HCL AppScan access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your HCL AppScan access.</li><li><strong>Token</strong>: The user's token</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your HCL AppScan access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "TOKEN":{
-        "TOOLTIP":"The user's personal access token",
-        "VALIDATION_MESSAGE":{
-          "required":"Bearer token cannot be empty"
+      "TOKEN": {
+        "TOOLTIP": "The user's personal access token",
+        "VALIDATION_MESSAGE": {
+          "required": "Bearer token cannot be empty"
         }
       }
     },
-    "JFROG":{
+    "JFROG": {
       "HEADER": "JFrog XRay Scanning",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Jfrog Xray access.</li><li><strong>Endpoint</strong>: Your Jfrog Xray host address, from which you access the Jfrog Xray instance</li><li><strong>Token</strong>: The user's token.</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Jfrog Xray access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Jfrog Xray access.</li><li><strong>Endpoint</strong>: Your Jfrog Xray host address, from which you access the Jfrog Xray instance</li><li><strong>Token</strong>: The user's token.</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Jfrog Xray access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "ENDPOINT":{
-        "TOOLTIP":"Jfrog Xray host address, from which you access the Jfrog Xray instance",
-        "VALIDATION_MESSAGE":{
-          "required":"Endpoint cannot be empty",
+      "ENDPOINT": {
+        "TOOLTIP": "Jfrog Xray host address, from which you access the Jfrog Xray instance",
+        "VALIDATION_MESSAGE": {
+          "required": "Endpoint cannot be empty",
           "invalidUrl": "Endpoint URL is invalid"
         }
       },
-      "TOKEN":{
-        "TOOLTIP":"The user's token from jfrog xray to authenticate",
-        "VALIDATION_MESSAGE":{
-          "required":"Token cannot be empty"
+      "TOKEN": {
+        "TOOLTIP": "The user's token from jfrog xray to authenticate",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
         }
       }
     },
-    "PRISMACLOUD":{
+    "PRISMACLOUD": {
       "HEADER": "Prisma Cloud",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Prisma Cloud access.</li><li><strong>Host Url</strong>: Your Prisma Cloud host address, from which you access the Prisma Cloud instance</li><li><strong>Access Key ID</strong>: The user's access key who has access to the Prisma Cloud. If you are unsure, consult your Prisma Cloud administrator to get an access key.</li><li><strong>Secret key</strong>: The user's secret key</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Prisma Cloud access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Prisma Cloud access.</li><li><strong>Host Url</strong>: Your Prisma Cloud host address, from which you access the Prisma Cloud instance</li><li><strong>Access Key ID</strong>: The user's access key who has access to the Prisma Cloud. If you are unsure, consult your Prisma Cloud administrator to get an access key.</li><li><strong>Secret key</strong>: The user's secret key</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Prisma Cloud access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "HOSTURL":{
-        "TOOLTIP":"Prisma Cloud host address, from which you access the Prisma Cloud instance",
-        "VALIDATION_MESSAGE":{
-          "required":"Host URL cannot be empty",
+      "HOSTURL": {
+        "TOOLTIP": "Prisma Cloud host address, from which you access the Prisma Cloud instance",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
           "invalidUrl": "Host URL is invalid"
         }
       },
-      "APPLICATIONURL":{
-        "TOOLTIP":"Prisma Cloud Application URL",
-        "VALIDATION_MESSAGE":{
-          "required":"Application URL cannot be empty",
+      "APPLICATIONURL": {
+        "TOOLTIP": "Prisma Cloud Application URL",
+        "VALIDATION_MESSAGE": {
+          "required": "Application URL cannot be empty",
           "invalidUrl": "Application URL is invalid"
         }
       },
-      "ACCESSKEYID":{
-        "TOOLTIP":"The user's access key who has access to the Prisma Cloud. If you are unsure, consult your Prisma Cloud administrator to get an access key.",
-        "VALIDATION_MESSAGE":{
-          "required":"Access Key Id cannot be empty"
+      "ACCESSKEYID": {
+        "TOOLTIP": "The user's access key who has access to the Prisma Cloud. If you are unsure, consult your Prisma Cloud administrator to get an access key.",
+        "VALIDATION_MESSAGE": {
+          "required": "Access Key Id cannot be empty"
         }
       },
-      "SECRETKEY":{
-        "TOOLTIP":"The user's secret key",
-        "VALIDATION_MESSAGE":{
-          "required":"Secret Key cannot be empty"
+      "SECRETKEY": {
+        "TOOLTIP": "The user's secret key",
+        "VALIDATION_MESSAGE": {
+          "required": "Secret Key cannot be empty"
         }
       }
     },
-    "SONARQUBE":{
+    "SONARQUBE": {
       "HEADER": "SonarQube",
-      "BODY":"<span><li><strong>Account Name</strong>: User-defined account name for your Sonarqube access. </li><li><strong>Host Url</strong>: Sonarqube host address, from which you access the Sonaqube instance</li><li><strong>Token</strong>: The user's token (it is optional)</li></span>",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User-defined account name for your Sonarqube access.",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "<span><li><strong>Account Name</strong>: User-defined account name for your Sonarqube access. </li><li><strong>Host Url</strong>: Sonarqube host address, from which you access the Sonaqube instance</li><li><strong>Token</strong>: The user's token (it is optional)</li></span>",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User-defined account name for your Sonarqube access.",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "HOSTURL":{
-        "TOOLTIP":"Sonarqube host address, from which you access the Sonaqube instance",
-        "VALIDATION_MESSAGE":{
-          "required":"Host URL cannot be empty",
+      "HOSTURL": {
+        "TOOLTIP": "Sonarqube host address, from which you access the Sonaqube instance",
+        "VALIDATION_MESSAGE": {
+          "required": "Host URL cannot be empty",
           "invalidUrl": "Host URL is invalid"
         }
       },
-      "TOKEN":{
-        "TOOLTIP":"The user's token (it is optional)",
-        "VALIDATION_MESSAGE":{
-          "required":"Token cannot be empty"
+      "TOKEN": {
+        "TOOLTIP": "The user's token (it is optional)",
+        "VALIDATION_MESSAGE": {
+          "required": "Token cannot be empty"
         }
       }
     },
-    "AUTOPILOT":{
+    "AUTOPILOT": {
       "HEADER": "Autopilot",
-      "BODY":"",
-      "ACCOUNTNAME":{
-        "TOOLTIP":"User defined name for the Autopilot account",
-        "VALIDATION_MESSAGE":{
-      "noSpecialCharacters": "Account Name cannot contain special characters other than -",
-      "cannotContainSpace":"Account Name cannot contain space",
-      "required":"Account Name cannot be empty",
-      "startingFromNumber": "Account Name cannot start with numbers"
-    }
+      "BODY": "",
+      "ACCOUNTNAME": {
+        "TOOLTIP": "User defined name for the Autopilot account",
+        "VALIDATION_MESSAGE": {
+          "noSpecialCharacters": "Account Name cannot contain special characters other than -",
+          "cannotContainSpace": "Account Name cannot contain space",
+          "required": "Account Name cannot be empty",
+          "startingFromNumber": "Account Name cannot start with numbers"
+        }
       },
-      "USERNAME":{
-        "TOOLTIP":" Autopilot User Name",
-        "VALIDATION_MESSAGE":{
+      "USERNAME": {
+        "TOOLTIP": " Autopilot User Name",
+        "VALIDATION_MESSAGE": {
           "noSpecialCharacters": "User Name cannot contain special characters other than - and _",
-          "cannotContainSpace":"User Name cannot contain space",
-          "required":"User Name cannot be empty",
+          "cannotContainSpace": "User Name cannot contain space",
+          "required": "User Name cannot be empty",
           "startingFromNumber": "User Name cannot start with numbers"
         }
       }
     }
-},
+  },
   "UNCHANGED_FORM": "Form is unchanged. Please make modifications in the form to enable the button.",
   "INVALID_FORM": "Few fields are mandatory or invalid. Please fill the form to enable the button.",
   "NO_WRITE_ACCESS": "You have only read permission. Please check with your administrator for updating permissions.",
@@ -2883,7 +2865,7 @@
       "QUERY_NAME": {
         "TOOLTIP": "A meaningful name given to a query or a group of similar queries ",
         "VALIDATION_MESSAGE": {
-          "exist":"Query Name already exists",
+          "exist": "Query Name already exists",
           "required": "Query Name cannot be empty"
         }
       },
@@ -2966,16 +2948,16 @@
       "TOOLTIP": "Pipelines with manual judgement having slowest execution times"
     },
     "DEPLOYMENT_FREQUENCY": {
-    "TOOLTIP": "Deployment Frequency"
+      "TOOLTIP": "Number of Application Deployments in a day"
     },
     "MOST_ACTIVE_APPLICATIONS": {
-      "TOOLTIP": "Most Active Applications"
+      "TOOLTIP": "Applications with maximum number of App deployments"
     },
     "FASTEST_DEPLOYMENTS": {
-      "TOOLTIP": "Fastest Deployments"
+      "TOOLTIP": "Applications with shortest deployment time"
     },
     "SLOWEST_DEPLOYMENTS": {
-      "TOOLTIP": "Slowest Deployments"
+      "TOOLTIP": "Applications with longest deployment time"
     }
   },
   "ACCESS_MANAGEMENT": {
@@ -3035,151 +3017,151 @@
         }
       }
     },
-"AUTHPROVIDER":{
-  "LDAP":{
-    "HEADER": "LDAP Provider",
-    "BODY": "<p>This page allows you to configure LDAP Authentication providers such as Active Directory and OpenLDAP.Once this is enabled, ISD will import all users and groups from your LDAP and users will be able to login to ISD using their LDAP user id and password. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable LDAP Provider.</p>  <p>- Select your LDAP Vendor, enter your LDAP Connection URL and click on <b>Test Connection</b> to verify the connectivity between ISD and LDAP</p> <p>- Select the Bind Type, enter Bind DN, Credential (Password) and click on <b>Test Authentication</b></p> <p>- The details you enter in the User Search Settings and Group Search Settings sections will be used to search for users and groups in your LDAP</p> <p>- Most of the values are auto-populated based on the selected Provider.</p> <p> - Click on the <b>Enabled</b> toggle and click the Save button at the bottom.</p>",
-    "EDITMODE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Edit Mode cannot be empty"
-      }
-  },
-    "VENDOR":{
-      "VALIDATION_MESSAGE": {
-        "required":"Vendor cannot be empty"
-      }
-    },
-    "USERNAMELDAPATTRIBUTE":{
-      "VALIDATION_MESSAGE": {
-       "required":"Username LDAP attribute cannot be empty"
-      }
-    },
-    "RDNLDAPATTRIBUTE":{
-    "VALIDATION_MESSAGE": {
-      "required":"RDN LDAP attribute cannot be empty"
-      }
-    },
-    "UUIDLDAPATTRIBUTE":{
-      "VALIDATION_MESSAGE": {
-        "required":"UUID LDAP attribute cannot be empty"
-      }
-    },
-    "USEROBJECTCLASSES":{
-      "VALIDATION_MESSAGE": {
-        "required":"User Object Classes cannot be empty"
-      }
-    },
-    "CONNECTIONURL":{
-      "VALIDATION_MESSAGE": {
-        "required":"Connection Url cannot be empty"
-      }
-    },
-    "USERDN":{
-      "VALIDATION_MESSAGE": {
-        "required":"Users Dn cannot be empty"
-      }
-    },
-    "AUTHTYPE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Bind Type cannot be empty"
-      }
-    },
-    "BINDDN":{
-      "VALIDATION_MESSAGE": {
-        "required":"Bind Dn cannot be empty"
-      }
-    },
-    "BINDCREDENTIAL":{
-      "VALIDATION_MESSAGE": {
-        "required":"Bind Credential cannot be empty"
-      }
-    },
-    "GROUPSDN":{
-      "VALIDATION_MESSAGE": {
-        "required":"Groups DN cannot be empty"
-      }
-    },
-    "GROUPSEARCHFILTER":{
-      "VALIDATION_MESSAGE": {
-        "required":"Group Search Filter cannot be empty"
-      }
-    },
-    "GROUPROLENAMEATTRIBUTES":{
-      "VALIDATION_MESSAGE": {
-        "required":"Group Role Name Attributes cannot be empty"
-      }
-    },
-    "GROUPOBJECTCLASSES":{
-      "VALIDATION_MESSAGE": {
-        "required":"Group Object Classes cannot be empty"
-      }
-    },
-    "MEMBERSHIPUSERLDAPATTRIBUTE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Membership User Ldap Attribute cannot be empty"
-      }
-    },
-    "MEMBERSHIPATTRIBUTETYPE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Membership Attribute DN cannot be empty"
-      }
-    },
-   "MODE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Mode cannot be empty"
-      }
-    },
-    "USERGROUPSRETRIEVESTRATEGY":{
-      "VALIDATION_MESSAGE": {
-        "required":"User Groups Retrieve Strategy cannot be empty"
-      }
-    },
-    "MEMBEROFLDAPATTRIBUTE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Member of Ldap Attribute cannot be empty"
+    "AUTHPROVIDER": {
+      "LDAP": {
+        "HEADER": "LDAP Provider",
+        "BODY": "<p>This page allows you to configure LDAP Authentication providers such as Active Directory and OpenLDAP.Once this is enabled, ISD will import all users and groups from your LDAP and users will be able to login to ISD using their LDAP user id and password. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable LDAP Provider.</p>  <p>- Select your LDAP Vendor, enter your LDAP Connection URL and click on <b>Test Connection</b> to verify the connectivity between ISD and LDAP</p> <p>- Select the Bind Type, enter Bind DN, Credential (Password) and click on <b>Test Authentication</b></p> <p>- The details you enter in the User Search Settings and Group Search Settings sections will be used to search for users and groups in your LDAP</p> <p>- Most of the values are auto-populated based on the selected Provider.</p> <p> - Click on the <b>Enabled</b> toggle and click the Save button at the bottom.</p>",
+        "EDITMODE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Edit Mode cannot be empty"
+          }
+        },
+        "VENDOR": {
+          "VALIDATION_MESSAGE": {
+            "required": "Vendor cannot be empty"
+          }
+        },
+        "USERNAMELDAPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Username LDAP attribute cannot be empty"
+          }
+        },
+        "RDNLDAPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "RDN LDAP attribute cannot be empty"
+          }
+        },
+        "UUIDLDAPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "UUID LDAP attribute cannot be empty"
+          }
+        },
+        "USEROBJECTCLASSES": {
+          "VALIDATION_MESSAGE": {
+            "required": "User Object Classes cannot be empty"
+          }
+        },
+        "CONNECTIONURL": {
+          "VALIDATION_MESSAGE": {
+            "required": "Connection Url cannot be empty"
+          }
+        },
+        "USERDN": {
+          "VALIDATION_MESSAGE": {
+            "required": "Users Dn cannot be empty"
+          }
+        },
+        "AUTHTYPE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Bind Type cannot be empty"
+          }
+        },
+        "BINDDN": {
+          "VALIDATION_MESSAGE": {
+            "required": "Bind Dn cannot be empty"
+          }
+        },
+        "BINDCREDENTIAL": {
+          "VALIDATION_MESSAGE": {
+            "required": "Bind Credential cannot be empty"
+          }
+        },
+        "GROUPSDN": {
+          "VALIDATION_MESSAGE": {
+            "required": "Groups DN cannot be empty"
+          }
+        },
+        "GROUPSEARCHFILTER": {
+          "VALIDATION_MESSAGE": {
+            "required": "Group Search Filter cannot be empty"
+          }
+        },
+        "GROUPROLENAMEATTRIBUTES": {
+          "VALIDATION_MESSAGE": {
+            "required": "Group Role Name Attributes cannot be empty"
+          }
+        },
+        "GROUPOBJECTCLASSES": {
+          "VALIDATION_MESSAGE": {
+            "required": "Group Object Classes cannot be empty"
+          }
+        },
+        "MEMBERSHIPUSERLDAPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Membership User Ldap Attribute cannot be empty"
+          }
+        },
+        "MEMBERSHIPATTRIBUTETYPE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Membership Attribute DN cannot be empty"
+          }
+        },
+        "MODE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Mode cannot be empty"
+          }
+        },
+        "USERGROUPSRETRIEVESTRATEGY": {
+          "VALIDATION_MESSAGE": {
+            "required": "User Groups Retrieve Strategy cannot be empty"
+          }
+        },
+        "MEMBEROFLDAPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Member of Ldap Attribute cannot be empty"
+          }
+        }
+      },
+      "SAML": {
+        "HEADER": "SAML Provider",
+        "BODY": "<p>This page allows you to configure SAML Authentication providers such as Okta and Azure.</p> <p>Once this is enabled, the <b>Sign in with SAML</b> option will be available on the ISD login screen. All users configured in your SAML authentication provider will be able to access ISD. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable SAML Provider.</p> <p> - Copy and Use the redirect URI as the ACS URL of the ISD application and Service Provider (Entity ID) while configuring your Identity Provider</p> <p> - Download the metadata XML from your Identity Provider and import it to ISD</p> <p>-  Single Sign-On service URL will get auto-populated from the metadata XML</p><p> - The group attribute helps ISD to identify the groups the user belongs to. You can add group attribute statements to the SAML assertion shared with ISD from your Identity Provider. The value entered here should match the name of the group attribute on your IDP. By default it's memberOf.</p> <p> - Click on the <b>Enabled</b> toggle and Save button at the bottom to enable the provider.</p>",
+        "PROVIDER": {
+          "VALIDATION_MESSAGE": {
+            "required": "Provider cannot be empty"
+          }
+        },
+        "REDIRECTURI": {
+          "VALIDATION_MESSAGE": {
+            "required": "Redirect URI cannot be empty"
+          }
+        },
+        "SERVICEPROVIDERENTITYID": {
+          "VALIDATION_MESSAGE": {
+            "required": "Service Provider Entity cannot be empty"
+          }
+        },
+        "SINGLESIGNONSERVICEURL": {
+          "VALIDATION_MESSAGE": {
+            "required": "Single Sign-On Service Url cannot be empty"
+          }
+        },
+        "IMPORTFROMURL": {
+          "VALIDATION_MESSAGE": {
+            "required": "Import from URL cannot be empty"
+          }
+        },
+        "IMPORTFROMFILE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Import from File cannot be empty"
+          }
+        },
+        "GROUPATTRIBUTE": {
+          "VALIDATION_MESSAGE": {
+            "required": "Group Attribute cannot be empty"
+          }
+        }
       }
     }
-  },
- "SAML":{
-   "HEADER": "SAML Provider",
-    "BODY": "<p>This page allows you to configure SAML Authentication providers such as Okta and Azure.</p> <p>Once this is enabled, the <b>Sign in with SAML</b> option will be available on the ISD login screen. All users configured in your SAML authentication provider will be able to access ISD. Super admin users will continue to be able to log in using their current user id and password.</p><p>Follow the below steps to enable SAML Provider.</p> <p> - Copy and Use the redirect URI as the ACS URL of the ISD application and Service Provider (Entity ID) while configuring your Identity Provider</p> <p> - Download the metadata XML from your Identity Provider and import it to ISD</p> <p>-  Single Sign-On service URL will get auto-populated from the metadata XML</p><p> - The group attribute helps ISD to identify the groups the user belongs to. You can add group attribute statements to the SAML assertion shared with ISD from your Identity Provider. The value entered here should match the name of the group attribute on your IDP. By default it's memberOf.</p> <p> - Click on the <b>Enabled</b> toggle and Save button at the bottom to enable the provider.</p>",
-    "PROVIDER":{
-     "VALIDATION_MESSAGE": {
-        "required":"Provider cannot be empty"
-      }
-    },
-    "REDIRECTURI":{
-      "VALIDATION_MESSAGE": {
-        "required":"Redirect URI cannot be empty"
-      }
-    },
-    "SERVICEPROVIDERENTITYID":{
-      "VALIDATION_MESSAGE": {
-        "required":"Service Provider Entity cannot be empty"
-      }
-    },
-    "SINGLESIGNONSERVICEURL":{
-    "VALIDATION_MESSAGE": {
-      "required":"Single Sign-On Service Url cannot be empty"
-      }
-    },
-    "IMPORTFROMURL":{
-      "VALIDATION_MESSAGE": {
-        "required":"Import from URL cannot be empty"
-      }
-    },
-    "IMPORTFROMFILE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Import from File cannot be empty"
-      }
-    },
-    "GROUPATTRIBUTE":{
-      "VALIDATION_MESSAGE": {
-        "required":"Group Attribute cannot be empty"
-      }
-   }
-  }
-}
   },
   "LOG_TEMPLATE": {
     "STRING_PATTERN": {
@@ -3376,59 +3358,54 @@
       }
     }
   },
-  "CDINTEGRATION":{
-  "NEW_ARGOCD":{
-    "HEADER": "Create New Argo CD Instance",
-    "BODY": "<span><p>This installs OpsMx Enterprise for Argo (OEA - a security validated release of Argo from OpsMx) in the given namespace and automatically connects it with ISD.</p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. You should create this namespace in your cluster.</li><li><strong> Argo CD URL</strong>: URL for your new Argo CD Instance. We will be creating an ngnix ingress with the provided url. This field is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest</p></span>",
-    "ARGOCD_NAME": {
-      "TOOLTIP" :"User Defined Name for this CD integration.",
-      "VALIDATION_MESSAGE" : {
-        "required":"ArgoCd Name cannot be empty"
-      }
-    },
-    "ARGOCD_NAMESPACE": {
-      "TOOLTIP" :"Namespace where argocd needs to be installed. You should create this namespace in your target cluster.",
-        "VALIDATION_MESSAGE" : {
-          "required":"Namespace cannot be empty"
-        }
-    },
-    "ARGOCD_URL": {
-      "TOOLTIP" :"URL for your new ArgoCD instance. Providing this is optional",
-      "VALIDATION_MESSAGE" : {
-      }
-    },
-    "ARGOCD_DESCRIPTION": {
-      "TOOLTIP" :"",
-      "VALIDATION_MESSAGE" : {
-      }
-    }
-  },
-  "EXISTING_ARGOCD":{
-    "HEADER": "Connect An Existing Argo CD to ISD",
-      "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance, providing this is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest in the same namespace where Argo CD Is installed</p><ul><li>Download the Agent Manifest.</li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Apply the agent manifest in the same namespace where Argo CD Is installed</li></ul></span>",
+  "CDINTEGRATION": {
+    "NEW_ARGOCD": {
+      "HEADER": "Create New Argo CD Instance",
+      "BODY": "<span><p>This installs OpsMx Enterprise for Argo (OEA - a security validated release of Argo from OpsMx) in the given namespace and automatically connects it with ISD.</p><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. You should create this namespace in your cluster.</li><li><strong> Argo CD URL</strong>: URL for your new Argo CD Instance. We will be creating an ngnix ingress with the provided url. This field is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest</p></span>",
       "ARGOCD_NAME": {
-        "TOOLTIP" :"User Defined Name for this CD integration.",
-        "VALIDATION_MESSAGE" : {
-          "required":"ArgoCd Name cannot be empty"
+        "TOOLTIP": "User Defined Name for this CD integration.",
+        "VALIDATION_MESSAGE": {
+          "required": "ArgoCd Name cannot be empty"
         }
       },
       "ARGOCD_NAMESPACE": {
-        "TOOLTIP" :"Namespace where argocd is installed. Usually it is 'argocd'",
-        "VALIDATION_MESSAGE" : {
-          "required":"Namespace cannot be empty"
+        "TOOLTIP": "Namespace where argocd needs to be installed. You should create this namespace in your target cluster.",
+        "VALIDATION_MESSAGE": {
+          "required": "Namespace cannot be empty"
         }
       },
       "ARGOCD_URL": {
-        "TOOLTIP" :"URL of your ArgoCD instance. Providing this is optiona",
-        "VALIDATION_MESSAGE" : {
-        }
+        "TOOLTIP": "URL for your new ArgoCD instance. Providing this is optional",
+        "VALIDATION_MESSAGE": {}
       },
       "ARGOCD_DESCRIPTION": {
-        "TOOLTIP" :"",
-        "VALIDATION_MESSAGE" : {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {}
+      }
+    },
+    "EXISTING_ARGOCD": {
+      "HEADER": "Connect An Existing Argo CD to ISD",
+      "BODY": "<span><p><strong>Step 1</strong>:<span> Providing the following information to generate the manifest</span></p><ul><li><strong>Name</strong>: User Defined Name for this CD integration.</li><li><strong>Namespace</strong>: Namespace where argocd is installed. Usually it is 'argocd'</li><li><strong> Argo CD URL</strong>: URL of your ArgoCD instance, providing this is optional</li></ul><p><strong>step 2</strong>: Download and apply the manifest in the same namespace where Argo CD Is installed</p><ul><li>Download the Agent Manifest.</li><li>Generate an ArgoCD API Token, encode it in base64 format and update it in the isd-argo-agent.yml. For more information, see How to Generate Argo CD API Token</li><li>Apply the agent manifest in the same namespace where Argo CD Is installed</li></ul></span>",
+      "ARGOCD_NAME": {
+        "TOOLTIP": "User Defined Name for this CD integration.",
+        "VALIDATION_MESSAGE": {
+          "required": "ArgoCd Name cannot be empty"
         }
+      },
+      "ARGOCD_NAMESPACE": {
+        "TOOLTIP": "Namespace where argocd is installed. Usually it is 'argocd'",
+        "VALIDATION_MESSAGE": {
+          "required": "Namespace cannot be empty"
+        }
+      },
+      "ARGOCD_URL": {
+        "TOOLTIP": "URL of your ArgoCD instance. Providing this is optiona",
+        "VALIDATION_MESSAGE": {}
+      },
+      "ARGOCD_DESCRIPTION": {
+        "TOOLTIP": "",
+        "VALIDATION_MESSAGE": {}
       }
     }
   }
 }
-
