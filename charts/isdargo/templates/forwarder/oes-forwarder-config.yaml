@@ -21,6 +21,9 @@ data:
     serviceAuth:
       currentKeyName: "public.pem"
       headerMutationKeyName: "public.pem"
+    agentAuth:
+      currentKeyName: authtoken
+      secretsPath: /app/secrets/agentAuth
     services:
       outgoingServices:
         - name: front50

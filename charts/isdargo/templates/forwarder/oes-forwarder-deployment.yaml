@@ -55,6 +55,9 @@ spec:
         - name: jwt-secret
           mountPath: /app/secrets/serviceAuth
           readOnly: true
+        - name: authtoken
+          readOnly: true
+          mountPath: /app/secrets/agentAuth
         resources:
           requests:
             memory: "64Mi"
@@ -68,6 +71,10 @@ spec:
 {{ toYaml .Values.global.tolerations | indent 8 }}
       {{- end }}
       volumes:
+      - name: authtoken
+        secret:
+          secretName: opsmx-agent-controller-auth
+          defaultMode: 420
       - name: ca-secret
         secret:
           secretName: ca-secret
