@@ -4,7 +4,7 @@
 
    ### ISD-ARGO installtion
 
-        curl -o quickinstall.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.2.1/curl/4.1.2.1/quickinstall.sh && chmod 777 quickinstall.sh && ./quickinstall.sh
+        curl -o quickinstall.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.2/curl/4.1.2/quickinstall.sh && chmod 777 quickinstall.sh && ./quickinstall.sh
 
 
 ## with DNS
@@ -20,19 +20,19 @@
 
 
 
-           curl -o install.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.2.1/curl/4.1.2.1/install.sh && chmod 777 install.sh && ./install.sh
+           curl -o install.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.3/curl/4.1.3/install.sh && chmod 777 install.sh && ./install.sh
 
 
 
    ### 2. AGENT installtion
 
 
-      curl -o agent.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.2.1/curl/4.1.2.1/agent.sh && chmod 777 agent.sh && ./agent.sh
+      curl -o agent.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.3/curl/4.1.3/agent.sh && chmod 777 agent.sh && ./agent.sh
 
 
 
    ### 3. ARGO with AGENT installtion 
 
 
-      curl -o argo-agent.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.2.1/curl/4.1.2.1/argo-agent.sh && chmod 777 argo-agent.sh && ./argo-agent.sh
+      curl -o argo-agent.sh https://raw.githubusercontent.com/OpsMx/enterprise-argo/v4.1.3/curl/4.1.3/argo-agent.sh && chmod 777 argo-agent.sh && ./argo-agent.sh
 

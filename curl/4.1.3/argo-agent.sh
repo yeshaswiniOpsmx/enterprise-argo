@@ -4,7 +4,7 @@
 
 isdlogo(){
 ## Chart Version 
-version=4.1.2.1
+version=4.1.3
 echo ""
 echo ""
 echo "     _      ____     ____    ___               _       ____   _____   _   _   _____  "
@@ -175,7 +175,7 @@ fi
 getvalues(){
 rm -rf values.yaml
 ## Get the vaules.yaml
-curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2.1/values.yaml 2> /dev/null
+curl -o values.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/4.1.3/curl/4.1.3/values.yaml 2> /dev/null
 }
 
 
@@ -347,7 +347,7 @@ then
          kubectl-slice --input-file=/tmp/$agentname-manifest.yaml --output-dir=/tmp/yamls/.
 
          # Download Agent CM file
-         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/main/curl/4.1.2.1/opsmx-services-agent.yaml > /dev/null 2>&1
+         curl -o /tmp/yamls/opsmx-services-agent.yaml https://raw.githubusercontent.com/OpsMx/enterprise-argo/4.1.3/curl/4.1.3/opsmx-services-agent.yaml > /dev/null 2>&1
 
          if [[ $OSTYPE == 'darwin'* ]]; then
            ## Replace the namespace in the manifest
