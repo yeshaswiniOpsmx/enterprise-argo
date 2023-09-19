@@ -10,10 +10,6 @@ global:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: isdui.example.ops.com
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
-  keycloak:
-    # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: keycloak.example.ops.com
-    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
   vela:
     # Please below string for all occurences in this file with proper dns entry to access the ISD UI eg: keycloak.example.ops.com$
     host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
@@ -26,6 +22,14 @@ db:
   url: jdbc:postgresql://oes-db:5432
   username: postgres
   password: networks123
+###############################################################################
+## Values of OEA Sapor (Security Audit Policy Onboarding & Release)
+sapor:
+  ## Image specific details
+  image:
+    repository: ubi8-oes-sapor
+    tag: v4.1.3-tcb
+    pullPolicy: IfNotPresent
 
 #####User doesn't need to change the below flags let it be the default one######################
 installArgoCD: false
@@ -35,3 +39,5 @@ installArgoRollouts: false
 installdemoapps: false
 #######################################################################################
 autoconfigureagent: false
+#######################################################################################
+installkeycloak: false
