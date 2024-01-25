@@ -26,8 +26,8 @@ spec:
         component: gate
 {{ include "oes.standard-labels" . | indent 8 }}
     spec:
-      {{- if .Values.global.autoConfiguration.enabled }}
       initContainers:
+      {{- if .Values.global.autoConfiguration.enabled }}
       - env:
         - name: EXTERNAL_IP_CHECK_DELAY
           value: "{{ .Values.global.autoConfiguration.initContainer.externalIpCheckDelay}}"
@@ -36,13 +36,37 @@ spec:
         name: gate-autoconfig
         command: ["/home/config_endpoint.sh"]
         args: ["oes-gate"]
-        volumeMounts:
-        - mountPath: /config/gate.yml
-          name: config-temp
-          subPath: gate.yml
-        - mountPath: /opt/spinnaker/config
-          name: gate-volume
       {{- end }}
+      - name: db-check
+        image: {{ .Values.global.customImages.registry }}/pgchecker:v1
+        command:
+          - sh
+          - -c
+          - |
+            echo 'Waiting for OES-DB to become ready...'
+            until printf "." && nc -z -w 2 oes-db 5432; do
+               sleep 2;
+            done;
+            echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/gate.yml > /tmp/conf/gate.yml
+            sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/gate.yml
+            echo success        
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: OPSMX_REDIS_PASS
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: oes-redis
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       containers:
       - image: {{ template "gate.image" . }}
         name: oes-gate
@@ -58,7 +82,7 @@ spec:
         resources:
 {{ toYaml .Values.gate.resources | indent 12 }}
         volumeMounts:
-        - name: gate-volume
+        - name: empty-dir-volume
           mountPath: /opt/spinnaker/config/gate.yml
           subPath: gate.yml
         - mountPath: /opt/spinnaker/config/bootstrap.yml
@@ -145,15 +169,15 @@ spec:
           name: isd-feature-flag-config
         name: isd-feature-flag-conf
       {{- if .Values.global.autoConfiguration.enabled }}
-      - secret:
-          secretName: oes-gate-config
-        name: config-temp
+      - ConfigMap:
+          name: oes-gate-config
+        name: config-volume
       - emptyDir: {}
         name: gate-volume
       {{- else }}
-      - name: gate-volume
-        secret:
-          secretName: oes-gate-config
+      - name: config-volume
+        ConfigMap:
+          name: oes-gate-config
       {{- end }}
       - secret:
           items:
@@ -161,4 +185,7 @@ spec:
             path: bootstrap.yml
           secretName: bootstrap
         name: bootstrap-volume
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
 {{- end -}}

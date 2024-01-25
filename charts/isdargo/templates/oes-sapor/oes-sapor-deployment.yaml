@@ -39,6 +39,25 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/application.yml > /tmp/conf/application.yml
+            sed -i "s@RABBITMQPASSWORD@$RABBITMQ_DEFAULT_PASS@g" /tmp/conf/application.yml
+            echo success        
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              key: rabbitmqpassword
+              name: rabbitmq
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       {{- end }}
       containers:
       - image: {{ template "sapor.image" . }}
@@ -62,7 +81,7 @@ spec:
           name: certs-volume
           subPath: tls.key
         {{- end }}
-        - name: sapor-config-volume
+        - name: empty-dir-volume
           mountPath: /opt/opsmx/application.yml
           subPath: application.yml
         - mountPath: /opt/opsmx/bootstrap.yml
@@ -142,9 +161,9 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      - secret:
-          secretName: oes-sapor-config
-        name: sapor-config-volume
+      - ConfigMap:
+          name: oes-sapor-config
+        name: config-volume
       - secret:
           items:
           - key: bootstrap.yml
@@ -158,6 +177,9 @@ spec:
             path: standard-error-codes.csv
           name: standard-error-codes-config
         name: standard-error-conf
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
       {{- if .Values.sapor.config.spinnaker.x509.enabled }}
       - name: certs-x509-volume
         configMap:

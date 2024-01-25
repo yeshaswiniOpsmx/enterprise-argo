@@ -39,6 +39,25 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/app-config.yml > /tmp/conf/app-config.yml
+            sed -i "s@RABBITMQPASSWORD@$RABBITMQ_DEFAULT_PASS@g" /tmp/conf/app-config.yml
+            echo success        
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              key: rabbitmqpassword
+              name: rabbitmq
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       {{- end }}
       containers:
       - image: {{ template "datascience.image" . }}
@@ -62,10 +81,10 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - mountPath: /home/ubuntu/.aws/credentials
-          name: datascience-config-volume
+          name: empty-dir-volume
           subPath: minio-credentials
         - mountPath: /home/ubuntu/datascience/app_config.yaml
-          name: datascience-config-volume
+          name: empty-dir-volume
           subPath: app-config.yml
       {{- if .Values.imagePullSecret}}
       imagePullSecrets:
@@ -92,7 +111,10 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      - secret:
-          secretName: oes-datascience-config
-        name: datascience-config-volume
+      - ConfigMap:
+          name: oes-datascience-config
+        name: config-volume
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
 {{- end -}}

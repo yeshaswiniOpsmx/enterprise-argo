@@ -43,6 +43,19 @@ spec:
                sleep 2;
             done;
             echo 'OES PLATFORM is OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/carina-manager.yaml > /tmp/conf/carina-manager.yaml
+            echo success       
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       containers:
       - image: {{ template "carinamanager.image" . }}
         imagePullPolicy: IfNotPresent
@@ -63,7 +76,7 @@ spec:
           name: certs-volume
           subPath: tls.key
         - mountPath: /app/config/carina-manager.yaml
-          name: carina-volume
+          name: empty-dir-volume
           subPath: carina-manager.yaml
       dnsPolicy: ClusterFirst
       {{- if .Values.imagePullSecret }}
@@ -83,10 +96,13 @@ spec:
         secret:
           defaultMode: 420
           secretName: ca-secret
-      - secret:
+      - ConfigMap:
           items:
           - key: carina-manager.yaml
             path: carina-manager.yaml
-          secretName: oes-carina-config
-        name: carina-volume
+          name: oes-carina-config
+        name: config-volume
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
 {{- end -}}

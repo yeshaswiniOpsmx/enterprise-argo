@@ -39,6 +39,25 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/audit-local.yml > /tmp/conf/audit-local.yml
+            sed -i "s@RABBITMQPASSWORD@$RABBITMQ_DEFAULT_PASS@g" /tmp/conf/audit-local.yml
+            echo success
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              key: rabbitmqpassword
+              name: rabbitmq
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       {{- end }}
       containers:
       - image: {{ template "auditservice.image" . }}
@@ -72,7 +91,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - mountPath: /opsmx/conf/audit-service-local.yml
-          name: audit-config-volume
+          name: empty-dir-volume
           subPath: audit-local.yml
         - mountPath: /opsmx/conf/bootstrap.yml
           name: bootstrap-config-volume
@@ -119,12 +138,12 @@ spec:
             path: cacerts
       {{- end }}
       volumes:
-      - secret:
+      - ConfigMap:
           items:
           - key: audit-local.yml
             path: audit-local.yml
-          secretName: oes-audit-service-config
-        name: audit-config-volume
+          name: oes-audit-service-config
+        name: config-volume
       - name: bootstrap-config-volume
         secret:
           defaultMode: 420
@@ -136,4 +155,7 @@ spec:
             path: standard-error-codes.csv
           name: standard-error-codes-config
         name: standard-error-conf
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
 {{- end -}}

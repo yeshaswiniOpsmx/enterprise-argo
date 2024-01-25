@@ -31,6 +31,37 @@ spec:
         {{ toYaml .Values.vela.annotations | nindent 8 }}
 {{- end }}
     spec:
+      initContainers:
+      - name: db-check
+        image: {{ .Values.global.customImages.registry }}/pgchecker:v1
+        command:
+          - sh
+          - -c
+          - |
+            echo 'Waiting for OES-DB to become ready...'
+            until printf "." && nc -z -w 2 oes-db 5432; do
+               sleep 2;
+            done;
+            echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/gate.yml > /tmp/conf/gate.yml
+            sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/gate.yml
+            echo success        
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: OPSMX_REDIS_PASS
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: oes-redis
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       volumes:
       - name: vela-volume
         configMap:
@@ -39,10 +70,13 @@ spec:
             - key: vela-api.yaml
               path: vela-api.yaml
           defaultMode: 420
-      - name: gate-volume
-        secret:
-          secretName: oes-gate-config
+      - name: config-volume
+        ConfigMap:
+          name: oes-gate-config
           defaultMode: 420
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
       containers:
       - image: {{ template "vela.image" . }}
         imagePullPolicy: IfNotPresent
@@ -54,7 +88,7 @@ spec:
           - name: vela-volume
             mountPath: /app/config/vela-api.yaml
             subPath: vela-api.yaml
-          - name: gate-volume
+          - name: empty-dir-volume
             mountPath: /opt/spinnaker/config/gate.yml
             subPath: gate.yml
         terminationMessagePath: /dev/termination-log

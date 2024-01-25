@@ -35,9 +35,9 @@ spec:
           secret:
             defaultMode: 420
             secretName: ca-secret
-        - name: autopilot-config-volume
-          secret:
-            secretName: oes-autopilot-config
+        - name: config-volume
+          ConfigMap:
+            name: oes-autopilot-config
         - secret:
             items:
             - key: bootstrap.yml
@@ -51,6 +51,9 @@ spec:
               path: standard-error-codes.csv
             name: standard-error-codes-config
           name: standard-error-conf
+        - name: empty-dir-volume
+          emptyDir:
+            sizeLimit: 500Mi
         {{- if .Values.global.customCerts.enabled }}
         - name: cacerts
           secret:
@@ -101,6 +104,19 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/autopilot.properties > /tmp/conf/autopilot.properties
+            echo success   
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db        
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       {{- end }}
       containers:
       - image: {{ template "autopilot.image" . }}
@@ -129,7 +145,7 @@ spec:
         - mountPath: /opsmx/conf/controller/tls.key
           name: certs-volume
           subPath: tls.key
-        - name: autopilot-config-volume
+        - name: empty-dir-volume
           mountPath: /opsmx/conf/autopilot.properties
           subPath: autopilot.properties
         - mountPath: /opsmx/conf/bootstrap.yml

@@ -40,6 +40,26 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
+            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/platform-local.yml > /tmp/conf/platform-local.yml
+            sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/platform-local.yml
+            echo success     
+        env:
+        - name: OPSMX_POSTGRESQL_PASS
+          valueFrom:
+            secretKeyRef:
+              key: pgpassword
+              name: oes-db
+        - name: OPSMX_REDIS_PASS
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: oes-redis
+
+        volumeMounts:
+        - mountPath: /opsmx/conf/
+          name: config-volume
+        - mountPath: /tmp/conf/
+          name: empty-dir-volume
       {{- end }}
       containers:
       - image: {{ template "platform.image" . }}
@@ -66,7 +86,7 @@ spec:
           periodSeconds: 60
         volumeMounts:
         - mountPath: /opsmx/conf/platform-local.yml
-          name: platform-config-volume
+          name: empty-dir-volume
           subPath: platform-local.yml
         - mountPath: /opsmx/conf/bootstrap.yml
           name: bootstrap-config-volume
@@ -117,9 +137,9 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      - name: platform-config-volume
-        secret:
-          secretName: oes-platform-config
+      - name: config-volume
+        ConfigMap:
+          name: oes-platform-config
       - secret:
           items:
           - key: bootstrap.yml
@@ -133,4 +153,7 @@ spec:
             path: standard-error-codes.csv
           name: standard-error-codes-config
         name: standard-error-conf
+      - name: empty-dir-volume
+        emptyDir:
+          sizeLimit: 500Mi
 {{- end -}}
