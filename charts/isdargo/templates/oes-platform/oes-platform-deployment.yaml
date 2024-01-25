@@ -40,8 +40,8 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
-            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/platform-local.yml > /tmp/conf/platform-local.yml
-            sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/platform-local.yml
+            sed -e "s@OPSMX_POSTGRESQL_PASS@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/platform-local.yml > /tmp/conf/platform-local.yml
+            sed -i "s@OPSMX_REDIS_PASS@$OPSMX_REDIS_PASS@g" /tmp/conf/platform-local.yml
             {{- if .Values.global.ldap.enabled }}
             sed -i "s@LDAP_MANAGER_PASSWORD@$LDAP_MANAGER_PASSWORD@g" /tmp/conf/platform-local.yml
               {{- end }}
@@ -50,19 +50,19 @@ spec:
         - name: OPSMX_POSTGRESQL_PASS
           valueFrom:
             secretKeyRef:
-              key: pgpassword
-              name: oes-db
+              key: OPSMX_POSTGRESQL_PASS
+              name: opsmx_postgresql_pass
         - name: OPSMX_REDIS_PASS
           valueFrom:
             secretKeyRef:
-              key: redis-password
-              name: oes-redis
+              key: OPSMX_REDIS_PASS
+              name: opsmx_redis_pass
         {{- if .Values.global.ldap.enabled }}
         - name: LDAP_MANAGER_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: ldap-password
-              name: ldap-password
+              key: LDAP_MANAGER_PASSWORD
+              name: ldap_manager_password
         {{- end }}
 
         volumeMounts:
