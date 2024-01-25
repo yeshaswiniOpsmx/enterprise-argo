@@ -42,6 +42,9 @@ spec:
             echo 'OESDB OK ✓'
             sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/platform-local.yml > /tmp/conf/platform-local.yml
             sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/platform-local.yml
+            {{- if .Values.global.ldap.enabled }}
+            sed -i "s@LDAP_MANAGER_PASSWORD@$LDAP_MANAGER_PASSWORD@g" /tmp/conf/platform-local.yml
+              {{- end }}
             echo success     
         env:
         - name: OPSMX_POSTGRESQL_PASS
@@ -54,6 +57,13 @@ spec:
             secretKeyRef:
               key: redis-password
               name: oes-redis
+        {{- if .Values.global.ldap.enabled }}
+        - name: LDAP_MANAGER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: ldap-password
+              name: ldap-password
+        {{- end }}
 
         volumeMounts:
         - mountPath: /opsmx/conf/

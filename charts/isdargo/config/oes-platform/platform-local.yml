@@ -4,7 +4,7 @@ spring:
     url: {{ .Values.db.url }}/platformdb
     username: '{{ .Values.db.username }}'
     password: '{{ .Values.db.password }}'
-ldap.managerPassword: '{{ .Values.global.ldap.managerPassword }}'
+
 redis:
     connection: {{ template "oes.redisBaseURL" . }}
 #datasource.url: {{ .Values.db.url }}/visibilitydb
@@ -36,15 +36,18 @@ user:
   {{- else }}
   source: {{ .Values.platform.config.userSource }}
   {{- end }}
+
+  {{- if .Values.global.ldap.enabled }}
 ldap:
   enabled: {{ .Values.global.ldap.enabled }}
   url: {{ tpl .Values.global.ldap.url . }}
   managerDn: {{ .Values.global.ldap.managerDn }}
+  managerPassword: '{{ .Values.global.ldap.managerPassword }}'
   groupSearchBase: {{ .Values.global.ldap.groupSearchBase }}
   groupSearchFilter: {{ .Values.global.ldap.groupSearchFilter }}
   groupRoleAttributes: {{ .Values.global.ldap.groupRoleAttributes }}
   userDnPattern: {{ .Values.global.ldap.userDnPattern }}
-
+  {{- end }}
 oes:
   sapor:
     url: http://oes-sapor:8085

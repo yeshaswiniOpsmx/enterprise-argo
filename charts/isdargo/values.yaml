@@ -270,7 +270,7 @@ global:
     enabled: true
     url: ldap://openldap:389
     managerDn: cn=admin,dc=example,dc=org
-    managerPassword: opsmxadmin123
+    managerPassword: LDAP_MANAGER_PASSWORD
     groupSearchBase: ou=groups,dc=example,dc=org
     groupSearchFilter: member={0}
     groupRoleAttributes: cn
