@@ -25,7 +25,7 @@ For more information, visit https://www.opsmx.com
 
 - Vela Service requires the “Wild-card ingress” and “Wild-card TLS certificates to be provided to the ingress”
 
-  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress, if you are using the cert-manager.
+  Please use below blog to create a Wild-card TLS certificates to provide for the Ingress, if you are using the cert-manager
 
   https://www.linkedin.com/pulse/wildcard-certificates-using-lets-encrypt-certbot-pallavi-udhane/
   
