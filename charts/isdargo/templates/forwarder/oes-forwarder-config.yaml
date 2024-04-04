@@ -10,10 +10,10 @@ metadata:
 data:
   configFile: |
     serviceHostname: opsmx-controller-controller1
-    agentHostname: {{ .Values.forwarder.externalName | default (include "agent.hostname" .) }}
-    remoteCommandHostname: {{ .Values.forwarder.externalName | default (include "agent.hostname" .) }}
+    agentHostname: {{ .Values.forwarder.agent.host }}
+    remoteCommandHostname: {{ .Values.forwarder.agent.host }}
     controlHostname: opsmx-controller-controller1
-    #agentAdvertisePort: "443"
+    agentAdvertisePort: "443"
     serverNames:
     {{- range .Values.forwarder.serverNames }}
       - {{ . }}

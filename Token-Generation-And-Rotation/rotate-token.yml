@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: token-rotation
+spec:
+  template:
+    spec:
+      containers:
+      - name: rotation
+        image: quay.io/opsmxpublic/opsmx-custom-binaries:kubectl-spin-cli-git-bash-jq-yq-argocd-v2
+        imagePullPolicy: IfNotPresent
+        command: 
+          - "sh"
+          - "-c"
+          - |    
+             
+             
+             old_token=$(kubectl get secrets oes-carina-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' |  yq eval  -j  | jq -r '.controller.token')
+
+             #echo $old_token
+             
+             host=$(kubectl get secrets oes-carina-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' |  yq eval  -j  | jq -r '.controller.url')
+              
+           
+             #echo $host
+
+             new_token=$(curl -s -H "Authorization: Bearer $old_token" $host/api/v1/generateControlCredentials -H "Content-type: application/json" -X POST -d '{"name":"controller"}' | jq -r '.token')
+
+             echo "New token is: $new_token"
+
+              kubectl get secrets oes-carina-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' | yq eval ".controller.token = \"$new_token\"" -  > carina-manager.yaml
+
+              kubectl create secret generic oes-carina-config --dry-run=client  --from-file carina-manager.yaml -o yaml  | kubectl apply -f - 
+
+
+
+              kubectl get secrets oes-sapor-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' | yq eval ".controller.token = \"$new_token\"" -  > application.yml
+
+              kubectl create secret generic oes-sapor-config --dry-run=client  --from-file application.yml  -o yaml  | kubectl apply -f - 
+            
+              kubectl rollout restart deploy/oes-carina deploy/oes-sapor            
+             
+      restartPolicy: Never

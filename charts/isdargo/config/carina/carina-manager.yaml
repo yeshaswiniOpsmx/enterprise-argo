@@ -13,14 +13,12 @@ argos:
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 {{- end }}
 httpListenPort: 8091
+argoUpdateFrequencySeconds: 30 
 rbac:
   httpListenPort: 8092
 controller:
-  url: 'https://opsmx-controller-controller1:9003'
-  caPath: /app/secrets/controller-ca.crt
-  certificatePath: /app/secrets/controller-control/tls.crt
-  keyPath: /app/secrets/controller-control/tls.key
-  updateFrequencySeconds: 30
+  url: 'http://opsmx-controller-controller1:9003'
+  token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 platformServiceUrl: http://oes-platform:8095
 databases:
   audit:
