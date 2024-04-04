@@ -126,6 +126,10 @@ NOTE: The OPTIONAL steps above can be done after the installation at a later poi
 - Vela service needs wild-card DNS and wild-card TLS certificates for this work due to restrictions in ArgoCD.
 - We can test it by opening another tab in the browser and putting going to "isd.VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM", it should load and say "Failed to load".
 
+## After installation, Follow the steps in Token-Generation-And-Rotation Folder for Generating a new token
+- <https://github.com/OpsMx/enterprise-argo/blob/v4.1.7/Token-Generation-And-Rotation/README.md>
+
+
 ### Uninstall
 
 To uninstall/delete the deployment
