@@ -1814,7 +1814,7 @@ forwarder:
     image: quay.io/opsmxpublic/agent-client:v5.1.1
     serviceType: ClusterIP
     # Value is also used in sapor configuration for kubernetes.agent.serverHostName
-    host: controller.REPLACE.THIS.WITH.YOURCOMPANY.COM
+    host: REPLACE.THIS.WITH.YOURCOMPANY.COM
   image:
     repository: quay.io/opsmxpublic/agent-controller
     tag: v5.1.1

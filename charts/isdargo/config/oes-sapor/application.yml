@@ -27,6 +27,8 @@ argo:
     newArgoAgentWithoutRolloutsTemplate: newargoagentwithoutrollouts.template
     newArgoAgentWithoutRolloutsWithoutUrlTemplate: newargoagentwithoutrolloutswithouturl.template
 
+controller:
+  token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 secretManagement:
   source:
     config: {{ .Values.secretStore }}
@@ -95,7 +97,6 @@ kubernetes:
     certFile: /opt/opsmx/controller/cert/tls.crt
     keyFile: /opt/opsmx/controller/cert/tls.key
     image: {{ .Values.forwarder.agent.image }}
-    token: xxxxxxxxxxxxxxxxxxxxxxxxx
   template:
     path: /opt/opsmx/controller
     kubectlTemplateFileName: kubeconfig.template
