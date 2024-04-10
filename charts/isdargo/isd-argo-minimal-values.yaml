@@ -3,14 +3,17 @@
 # After installation, the DNS must be updated to point this to EXTERNAL-IP of the agent-grpc service
 # kubectl get svc -n opsmx-isd agent-grpc
 forwarder:
-  # Update the externalName if only ISD and Argo running in different cluster with DNS if not leave as it is
-  externalName:
   enabled: true
   agent:
     image: quay.io/opsmxpublic/agent-client:v5.1.1
     serviceType: ClusterIP
     # Value is also used in sapor configuration for kubernetes.agent.serverHostName
     host: REPLACE.THIS.WITH.YOURCOMPANY.COM
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      tls:
+        secretName: controller-ingress
   image:
     repository: quay.io/opsmxpublic/agent-controller
     tag: v5.1.1

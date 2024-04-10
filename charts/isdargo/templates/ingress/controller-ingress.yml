@@ -25,4 +25,5 @@ spec:
   tls:
   - hosts:
     - {{ .Values.forwarder.agent.host }}
+{{ toYaml .Values.forwarder.agent.ingress.tls | indent 4 }}
 {{- end }}
