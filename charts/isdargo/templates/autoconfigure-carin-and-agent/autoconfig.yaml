@@ -225,8 +225,14 @@ data:
          ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
          ## Adding the agent service configmap with added arocd token
-         #kubectl get cm opsmx-services-isd-argo-agent -o yaml > /tmp/agent-cm.yaml
          sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/agent-secret.yaml
+         ## Replace the controller host name
+         yq e '.data.configFile' /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml > /tmp/filter.yaml
+         yq -i eval 'del(.data)' /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml
+         sed --in-place "s|\"|'|g" /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml
+         yq -i e '.controllerHostname = "agent-grpc:9001"' /tmp/filter.yaml
+         configFile=$(cat /tmp/filter.yaml)
+         yq eval ".data.\"configFile\" = \"$configFile\"" --inplace /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml
          ## Agent replicaset
          yq e -i '.spec.replicas = 1' /tmp/yamls/deployment-opsmx-agent-isd-argo-agent.yaml
          ## Apply the yamls

@@ -1,4 +1,6 @@
 {{- if (eq .Values.installationMode "OEA-AP") }}
+{{- if not .Values.installArgoCD }}
+{{- if not .Values.installArgoRollouts }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -26,20 +28,20 @@ spec:
               then
               ## Controller Token Creation and Updation
               controllerhost=$(kubectl get pods | grep opsmx-controller | awk '{print $1}')
-              kubectl exec $controllerhost -- sh -c "./agent-controller -generate-control-tokens controller" > /tmp/controller.txt
+              kubectl -n {{ .Release.Namespace }} exec $controllerhost -- sh -c "./agent-controller -generate-control-tokens controller" > /tmp/controller.txt
               controllertoken=$(cat /tmp/controller.txt)
-              kubectl get secret oes-carina-config -o jsonpath='{.data.*}' | base64 -d > /tmp/carina-manager.yaml
-              kubectl get secret oes-sapor-config -o jsonpath='{.data.*}' | base64 -d > /tmp/application.yml
+              kubectl -n {{ .Release.Namespace }} get secret oes-carina-config -o jsonpath='{.data.*}' | base64 -d > /tmp/carina-manager.yaml
+              kubectl -n {{ .Release.Namespace }} get secret oes-sapor-config -o jsonpath='{.data.*}' | base64 -d > /tmp/application.yml
               yq e -i '.controller.token = "'$controllertoken'"' /tmp/carina-manager.yaml
-              kubectl delete secret oes-carina-config
-              kubectl create secret generic oes-carina-config --from-file=/tmp/carina-manager.yaml
+              kubectl -n {{ .Release.Namespace }} delete secret oes-carina-config
+              kubectl -n {{ .Release.Namespace }} create secret generic oes-carina-config --from-file=/tmp/carina-manager.yaml
               yq e -i '.controller.token = "'$controllertoken'"' /tmp/application.yml
-              kubectl delete secret oes-sapor-config
-              kubectl create secret generic oes-sapor-config --from-file=/tmp/application.yml
-              kubectl rollout restart deploy/oes-carina deploy/oes-sapor
+              kubectl -n {{ .Release.Namespace }} delete secret oes-sapor-config
+              kubectl -n {{ .Release.Namespace }} create secret generic oes-sapor-config --from-file=/tmp/application.yml
+              kubectl -n {{ .Release.Namespace }} rollout restart deploy/oes-carina deploy/oes-sapor
               sleep 1m
               break
-            else 
+            else
               if [ $wait_period -gt 2000 ];
               then
                 echo "Script is timed out as ISD Pods are not up......."
@@ -59,4 +61,6 @@ spec:
         name: isd-configure
       serviceAccountName: isd-auto-configure-{{ .Release.Namespace }}
       restartPolicy: Never
+{{- end }}
+{{- end }}
 {{- end }}
