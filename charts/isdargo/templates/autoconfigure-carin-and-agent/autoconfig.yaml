@@ -10,16 +10,16 @@ data:
   datasource-api.sh: |-
     #!/bin/bash
     #set -x
-    echo \"Waiting for all Argo Server  to come-up\"
-    cat << 'EOF' >> /tmp/agent-cm.yaml
+    echo "Waiting for all Argo Server  to come-up"
+    cat << 'EOF' >> /tmp/agent-secret.yaml
     apiVersion: v1
-    kind: ConfigMap
+    kind: Secret
     metadata:
       name: opsmx-services-isd-argo-agent
       labels:
         agent.opsmx.com/name: isd-argo-agent
         agent.opsmx.com/role: agent
-    data:
+    stringData:
       services.yaml: |
         outgoingServices:
           - name: {{ .Values.cdagentname }}
@@ -68,6 +68,7 @@ data:
     OESGATE=$(grep oes-gate /tmp/live.status | awk '{print $2}')
     OESUI=$(grep oes-ui /tmp/live.status | awk '{print $2}')
     OESPLATFORM=$(grep oes-platform /tmp/live.status | awk '{print $2}')
+    CONTROLLER=$(grep opsmx-controller /tmp/live.status | awk '{print $2}')
     {{- if and (.Values.global.enableCentralMonitoring) (.Values.enableCentralLogging) }}
     ELASTICSEARCH=$(grep elasticsearch-master-0 /tmp/live.status | awk '{print $2}')
     #KIBANA=$(grep kibana /tmp/live.status | awk '{print $2}')
@@ -86,10 +87,10 @@ data:
     {{- else if .Values.global.enableCentralMonitoring }}
       if [ "$PROMETHEUS" == "true" ] && [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
     {{- else }}
-      if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ];
+      if  [ "$OESPLATFORM" == "true" ] && [ "$OESUI" == "true" ] && [ "$OESGATE" == "true" ] && [ "$ARGOCDSERVER" == "true" ] && [ "$validate" == "200" ] && [ "$OESSAPOR" == "true" ] && [ "$CONTROLLER" == "true" ];
     {{- end }}
     then
-      echo \"ArgocdServer is  Up and Ready..\"
+      echo "ArgocdServer is  Up and Ready.."
       while true
       do
       ## install argoCLI
@@ -124,10 +125,10 @@ data:
         wait=$(($wait+10))
         if [ $wait -gt 2000 ];
         then
-          echo \"Script is timed out Admin Secret not found .......\"
+          echo "Script is timed out Admin Secret not found ......."
           break
         else
-          echo \"Waiting to get the admin token\"
+          echo "Waiting to get the admin token"
           sleep 1m
         fi
 
@@ -190,6 +191,23 @@ data:
          ##Configure the Agent to the ISD
          #Create Agent in the ISD-UI via API
          sleep 20
+         ### Controller Token Creation and Updation
+         echo "Controller Token Creation and Updation"
+         controllerhost=$(kubectl get pods | grep opsmx-controller | awk '{print $1}')
+         ### Generation of Controller Token Creation
+         kubectl -n {{ .Release.Namespace }} exec $controllerhost -- sh -c "./agent-controller -generate-control-tokens controller" > /tmp/controller.txt
+         controllertoken=$(cat /tmp/controller.txt)
+         ## Fetching the Carina and Sapor Secrets
+         kubectl -n {{ .Release.Namespace }} get secret oes-carina-config -o jsonpath='{.data.*}' | base64 -d > /tmp/carina-manager.yaml
+         kubectl -n {{ .Release.Namespace }} get secret oes-sapor-config -o jsonpath='{.data.*}' | base64 -d > /tmp/application.yml
+         yq e -i '.controller.token = "'$controllertoken'"' /tmp/carina-manager.yaml
+         kubectl -n {{ .Release.Namespace }} delete secret oes-carina-config
+         kubectl -n {{ .Release.Namespace }} create secret generic oes-carina-config --from-file=/tmp/carina-manager.yaml
+         yq e -i '.controller.token = "'$controllertoken'"' /tmp/application.yml
+         kubectl -n {{ .Release.Namespace }} delete secret oes-sapor-config
+         kubectl -n {{ .Release.Namespace }} create secret generic oes-sapor-config --from-file=/tmp/application.yml
+         kubectl rollout restart deploy/oes-carina deploy/oes-sapor
+         sleep 120
          echo "Creatng the Agent in ISD ..."
          curl -s --location --request POST 'http://oes-sapor:8085/oes/accountsConfig/v3/agents?cdType=Argo' --header 'Content-Type: application/json' --header 'x-spinnaker-user: admin'  --data-raw '{"agentName":"isd-argo-agent","description":"default isd-argo"}'
          sleep 20
@@ -207,8 +225,7 @@ data:
          ## Replace the namespace in the manifest
          yq e -i '.subjects[0].namespace = "{{ .Release.Namespace }}"' /tmp/yamls/clusterrolebinding-opsmx-agent-isd-argo-agent.yaml
          ## Adding the agent service configmap with added arocd token
-         #kubectl get cm opsmx-services-isd-argo-agent -o yaml > /tmp/agent-cm.yaml
-         sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/agent-cm.yaml
+         sed -i 's/token: .*xxx/token: '$encodedtoken'/g' /tmp/agent-secret.yaml
          ## Replace the controller host name
          yq e '.data.configFile' /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml > /tmp/filter.yaml
          yq -i eval 'del(.data)' /tmp/yamls/configmap-opsmx-agent-isd-argo-agent.yaml
@@ -220,7 +237,7 @@ data:
          yq e -i '.spec.replicas = 1' /tmp/yamls/deployment-opsmx-agent-isd-argo-agent.yaml
          ## Apply the yamls
          echo "Applying the Agent files ..."
-         kubectl replace --force -f /tmp/agent-cm.yaml
+         kubectl replace --force -f /tmp/agent-secret.yaml
          kubectl apply -f /tmp/yamls/
          echo "------------------------------"
          echo "*** SECURITY ISSUE, please delete this pod after noting down the password ***"
@@ -236,10 +253,10 @@ data:
     else
       if [ $wait_period -gt 2000 ];
       then
-       echo \"Script is timed out as the Argocd Server is not ready yet.......\"
+       echo "Script is timed out as the Argocd Server is not ready yet......."
        break
       else
-       echo \"Waiting for  Argocd Server to be ready\"
+       echo "Waiting for  Argocd Server to be ready"
        sleep 30
       fi
     fi
