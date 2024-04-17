@@ -12,30 +12,40 @@ spec:
         command: 
           - "sh"
           - "-c"
-          - |     
+          - |    
              
              host=$(kubectl get pods | grep controller | grep -v secret | awk '{print $1}')
              
-             #echo $host
+             echo $host
   
              kubectl exec $host -- sh -c "./agent-controller -generate-control-tokens controller" > /tmp/test.txt
 
              token=$(cat /tmp/test.txt | grep -v {*})
 
              echo "token is: $token"
-
-  
+             
              #Get the Carina and sapor  secrets and update the controller token and write into a file
              kubectl get secrets oes-carina-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' | yq eval ".controller.token = \"$token\"" - | yq  eval 'del(.controller.caPath)' - | yq  eval 'del(.controller.certificatePath)' - | yq  eval 'del(.controller.keyPath)' - > carina-manager.yaml
   
              kubectl get secrets oes-sapor-config -o json | jq -r '.data | with_entries(.value |= @base64d) | .[]' | yq eval ".controller.token = \"$token\"" - > application.yml
 
-                       
-             # Apply changes 
+             #Update the agentPort in the controller ConfigMap and write into a file
+             kubectl get cm opsmx-controller-controller1  -o yaml | yq eval '.data.configFile' - | yq eval ".agentAdvertisePort = 443" -  > /tmp/configFile 
+              
+ 
+
+             url=$(cat  carina-manager.yaml | yq eval '.controller.url' - |sed -E 's|https://([^:]+):([0-9]+)|http://\1:\2|g')
+            
+             echo $url
+
+             yq eval ".controller.url = \"$url\"" -i carina-manager.yaml
+
+  
+             # Apply changes           
              kubectl create secret generic oes-carina-config --dry-run=client  --from-file carina-manager.yaml -o yaml  | kubectl apply -f -
-             
-             kubectl create secret generic oes-sapor-config --dry-run=client  --from-file application.yml  -o yaml  | kubectl apply -f -
-             
-             kubectl rollout restart deploy/oes-carina deploy/oes-sapor                      	 
+
+             kubectl create secret generic oes-sapor-config --dry-run=client  --from-file application.yml  -o yaml  | kubectl apply -f - 
+
+             kubectl create cm opsmx-controller-controller1 --from-file=/tmp/configFile --dry-run -o yaml | kubectl apply -f - 
               
       restartPolicy: Never
