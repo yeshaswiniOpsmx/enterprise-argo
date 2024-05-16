@@ -72,11 +72,6 @@ spec:
           name: samlcerts
           readOnly: true
         {{- end }}
-        {{- if .Values.global.customCerts.enabled }}
-        - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
-          subPath: cacerts
-          name: cacerts
-        {{- end }}
         readinessProbe:
           tcpSocket:
             port: 8084
@@ -127,14 +122,6 @@ spec:
               path: key.pem
             - key: cert.pem
               path: cert.pem 
-      {{- end }}
-      {{- if .Values.global.customCerts.enabled }}
-      - name: cacerts
-        secret:
-          secretName: {{ .Values.global.customCerts.secretName }}
-          items:
-          - key: cacerts
-            path: cacerts
       {{- end }}
       - configMap:
           defaultMode: 420
