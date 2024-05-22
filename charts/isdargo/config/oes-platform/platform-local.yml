@@ -1,5 +1,8 @@
 {{- if (eq .Values.secretStore "db") }}
 spring:
+  main:
+    allow-circular-references: true
+    lazy-initialization: true
   datasource:
     url: {{ .Values.db.url }}/platformdb
     username: '{{ .Values.db.username }}'

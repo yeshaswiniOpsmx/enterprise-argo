@@ -47,7 +47,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.7
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
 #####User doesn't need to change the below flags let it be the default one######################
