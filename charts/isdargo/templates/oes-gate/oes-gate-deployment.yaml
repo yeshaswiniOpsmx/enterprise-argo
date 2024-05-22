@@ -67,18 +67,10 @@ spec:
         - mountPath: /opt/spinnaker/config/feature.yml
           name: isd-feature-flag-conf
           subPath: feature.yml
-        {{- if .Values.gate.config.saml.enabled }}
-        - mountPath: {{ .Values.gate.config.saml.keyStore }}
-          name: saml-jks
-          subPath: oessaml.jks
-        - mountPath: {{ .Values.gate.config.saml.metadataUrl }}
-          name: metadata-xml
-          subPath: oesmetadata.xml
-        {{- end }}
-        {{- if .Values.global.customCerts.enabled }}
-        - mountPath: /etc/pki/ca-trust/extracted/java/cacerts
-          subPath: cacerts
-          name: cacerts
+        {{- if .Values.gate.config.spring.security.saml2.enabled  }}
+        - mountPath: /opt/saml/certs
+          name: samlcerts
+          readOnly: true
         {{- end }}
         readinessProbe:
           tcpSocket:
@@ -121,21 +113,15 @@ spec:
 {{ toYaml .Values.global.tolerations | indent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.gate.config.saml.enabled }}
-      - secret:
-          secretName: {{ .Values.gate.config.saml.jksSecretName }}
-        name: saml-jks
-      - secret:
-          secretName: {{ .Values.gate.config.saml.metadataSecretName }}
-        name: metadata-xml
-      {{- end }}
-      {{- if .Values.global.customCerts.enabled }}
-      - name: cacerts
+      {{- if .Values.gate.config.spring.security.saml2.enabled  }}
+      - name: samlcerts
         secret:
-          secretName: {{ .Values.global.customCerts.secretName }}
+          secretName: samlcerts
           items:
-          - key: cacerts
-            path: cacerts
+            - key: key.pem
+              path: key.pem
+            - key: cert.pem
+              path: cert.pem 
       {{- end }}
       - configMap:
           defaultMode: 420

@@ -1,5 +1,8 @@
 {{- if (eq .Values.secretStore "db") }}
 spring:
+  main:
+    allow-circular-references: true
+    lazy-initialization: true
   datasource:
     url: {{ .Values.db.url }}/platformdb
     username: '{{ .Values.db.username }}'
@@ -31,8 +34,8 @@ dashboard:
         milliseconds: 300000
     workerThreads: 50
 user:
-  {{- if .Values.gate.config.saml.enabled }}
-  source: {{ .Values.gate.config.saml.userSource }}
+  {{- if .Values.gate.config.spring.security.saml2.enabled  }}
+  source: {{ .Values.gate.config.spring.security.saml2.userSource  }}
   {{- else }}
   source: {{ .Values.platform.config.userSource }}
   {{- end }}

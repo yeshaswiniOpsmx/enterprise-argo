@@ -1409,7 +1409,7 @@ ui:
   ## Image specific details
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.7
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1425,7 +1425,7 @@ autopilot:
   ## Image specific details
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.6
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1550,7 +1550,7 @@ gate:
   ## Image specific details
   image:
     repository: ubi8-gate
-    tag: v4.1.6
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1581,24 +1581,37 @@ gate:
     #####################################################
     # SAML AUthentication
     #####################################################
-    # keytool -genkey -v -keystore oessaml.jks -alias saml -keyalg RSA -keysize 2048 -validity 10000
-    # oessaml.jks and oesmetadata.xml are mounted as secrets, create them as follows
-    # kubectl create secret generic oesmetadataxml --from-file=oesmetadata.xml -n <namespace>
-    # kubectl create secret generic oessamljks --from-file=oessaml.jks -n <namespace>
-    # kubectl create secret generic samljks-password --from-literal password=changeit -n <namespace>
-    saml:
-      enabled: false
-      userSource: gate  # Groups will be obtained from SAML
-      keyStore: /opt/spinnaker/saml/oessaml.jks  # The key in this secret must be oessaml.jks
-      keyStorePassword: changeit
-      keyStoreAliasName: saml
-      metadataUrl: /opt/spinnaker/saml/oesmetadata.xml # The key in this secret must be oesmetadata.xml
-      redirectProtocol: https
-      redirectHostname: oes-gate.ryzon7-gitops.opsmx.org  # OEA gate host name
-      redirectBasePath: /
-      issuerId: ryzonoesgate
-      jksSecretName: oessamljks
-      metadataSecretName: oesmetadataxml
+    # openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem
+    # kubectl create secret generic samlcerts --from-file key.pem --from-file cert.pem -n namespace
+    spring:
+      security:
+        saml2:
+          enabled: false
+          registration-id: SSO #change this to the application name in OKTA
+          relyingparty:
+            registration:
+              SSO:   #change this to the application name in OKTA
+                entity-id: saml-dev #change this to the Okta SP entity id
+                acs:
+                  location: https://<isd.opsmx.net>/saml/SSO  #Update ISD URL here
+                assertingparty:
+                  metadata-uri: https://dev.okta.com/app/exkf6qovkumombT5p5d7/sso/saml/metadata  #Update metadata URL here 
+                decryption: 
+                  credentials:
+                    - private-key-location: file:/opt/saml/certs/key.pem  
+                      certificate-location: file:/opt/saml/certs/cert.pem
+                  singlesignon.sign-request: true
+          user-attribute-mapping:
+            firstName: firstName
+            lastName: lastName
+            roles:
+              attributeName: memberOf  # Update attributeName here
+              sortRoles: true
+              forceLowercaseRoles: true
+              rolesDelimiter: ","
+            email: email
+          signatureDigest: SHA256
+          userSource: gate
 
     #####################################################
     #OAUTH2 Authentication for GitHub
@@ -1626,7 +1639,7 @@ platform:
   ## Image specific details
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.7
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1666,7 +1679,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.7
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1726,7 +1739,7 @@ visibility:
   ## Image specific details
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.2
+    tag: v4.1.8
     pullPolicy: IfNotPresent
 
   annotations:
