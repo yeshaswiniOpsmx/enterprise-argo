@@ -1,0 +1,26 @@
+{{- if (eq .Values.installationMode "OEA-AP") -}}
+apiVersion: v1
+data:
+  usergroupsfromfile.yml: |+
+    userGroups:
+      - name: group1
+        users:
+          - user1
+          - user2
+      - name: group2
+        users:
+          - user2
+          - user3
+      - name: admin
+        users:
+          - user5
+          - user7
+      - name: admin1
+        users:
+          - user6
+          - user7
+
+kind: ConfigMap
+metadata:
+  name: usergroups-cm
+{{- end }}
