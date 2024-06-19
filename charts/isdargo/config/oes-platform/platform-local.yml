@@ -82,6 +82,17 @@ logging:
     com.opsmx.platformservice: INFO
     org.springframework.security: INFO
     org.springframework.web: INFO
+{{- if .Values.userGroupsFromFile.enabled }}
+groups:
+  from: file
+userGroupsFromFile:
+  enabled: true
+{{- else }}
+groups:
+  from: file
+userGroupsFromFile:
+  enabled: false
+{{- end }}
 
 standardErrorCodes:
   filePath: /opsmx/conf/standard-error-code.csv

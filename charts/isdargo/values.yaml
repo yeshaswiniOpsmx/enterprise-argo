@@ -49,6 +49,10 @@ autoconfigurecarina: false
 #######################################################################################
 # The name provided will reflect in ISD Screen of CD Integration Page and the Agent Account name
 cdagentname: argocd
+######################################################################################
+userGroupsFromFile:
+  enabled: false #Enable it to true if user wants to display groups in the ISD UI
+
 #######################################################################################
 # Global Configuration
 ######################
