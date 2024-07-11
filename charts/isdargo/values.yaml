@@ -1366,7 +1366,7 @@ carinainstance:
 vela:
   image:
     repository: vela-api
-    tag: v1.4.6
+    tag: v1.4.7
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1413,7 +1413,7 @@ ui:
   ## Image specific details
   image:
     repository: ubi8-oes-ui
-    tag: v4.1.8
+    tag: v4.1.9
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1429,7 +1429,7 @@ autopilot:
   ## Image specific details
   image:
     repository: ubi8-oes-autopilot
-    tag: v4.1.8
+    tag: v4.1.9-202406241020
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1461,7 +1461,7 @@ audit:
   ##
   image:
     repository: ubi8-oes-audit-service
-    tag: v4.1.7
+    tag: v4.1.9-202406241039
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1482,7 +1482,7 @@ auditClient:
   ##
   image:
     repository: ubi8-oes-audit-client
-    tag: v4.1.7
+    tag: v4.1.9-202406241020
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1503,7 +1503,7 @@ datascience:
   ##
   image:
     repository: ubi8-oes-datascience
-    tag: v4.1.2
+    tag: v4.1.9-202406250729
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1521,7 +1521,7 @@ dashboard:
   ## Image specific details
   image:
     repository: ubi8-oes-dashboard
-    tag: v4.1.7
+    tag: v4.1.9-202406241021
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1554,7 +1554,7 @@ gate:
   ## Image specific details
   image:
     repository: ubi8-gate
-    tag: v4.1.8
+    tag: v4.1.9
     pullPolicy: IfNotPresent
 
   serviceAnnotations: {}
@@ -1643,7 +1643,7 @@ platform:
   ## Image specific details
   image:
     repository: ubi8-oes-platform
-    tag: v4.1.8
+    tag: v4.1.9-202406241023
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1683,7 +1683,7 @@ sapor:
   ## Image specific details
   image:
     repository: ubi8-oes-sapor
-    tag: v4.1.8
+    tag: v4.1.9-202406241023
     pullPolicy: IfNotPresent
 
   annotations:
@@ -1743,7 +1743,7 @@ visibility:
   ## Image specific details
   image:
     repository: ubi8-oes-visibility
-    tag: v4.1.8
+    tag: v4.1.9-202406241023
     pullPolicy: IfNotPresent
 
   annotations:
