@@ -50,7 +50,7 @@ spec:
             echo 'OESDB OK ✓'
             sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/gate.yml > /tmp/conf/gate.yml
             sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/gate.yml
-            sed -i "s@MANAGER_PASSWORD@$MANAGER_PASSWORD@g" /tmp/conf/gate.yml
+            sed -i "s@LDAP_MANAGER_PASSWORD@$LDAP_MANAGER_PASSWORD@g" /tmp/conf/gate.yml
             echo success        
         env:
         - name: OPSMX_POSTGRESQL_PASS
