@@ -6,7 +6,7 @@ spring:
     password: '{{ .Values.db.password }}'
 
 redis:
-    connection: {{ template "oes.redisBaseURL" . }}
+  connection: {{ template "oes.redisBaseURL" . }}
 #datasource.url: {{ .Values.db.url }}/visibilitydb
 #postgres.password: '{{ .Values.db.password }}'
 #postgres.username: '{{ .Values.db.username }}'

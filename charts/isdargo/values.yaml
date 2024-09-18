@@ -322,7 +322,7 @@ argo-cd:
              # Variable name stores ldap bindDN in argocd-secret
             bindDN: "cn=admin,dc=example,dc=org"
             # Variable name stores ldap bind password in argocd-secret
-            bindPW: "opsmxadmin123"
+            bindPW: "LDAP_MANAGER_PASSWORD"
             usernamePrompt: Username
             # Ldap user serch attributes
             userSearch:
@@ -1178,7 +1178,7 @@ imagePullSecret: ""
 # OpenLDAP custom configuration; will override default configuration of openldap helm chart
 openldap:
   # Password for the admin user; by default it is set to admin
-  adminPassword: opsmxadmin123
+  adminPassword: LDAP_MANAGER_PASSWORD
   configPassword: opsmxconfig123
   omitClusterIP: true
   affinity: {}
@@ -1696,7 +1696,7 @@ sapor:
       #ldap:
       #  ldapEnabled: true
       #  ldapUsername: admin
-      #  ldapPassword: opsmxadmin123
+      #  ldapPassword: LDAP_MANAGER_PASSWORD
       #  ldapAdminLoginEnabled: false
       #  ldapAdminUsername: admin
       #  ldapAdminPassword: admin
@@ -1836,7 +1836,7 @@ redis:
   ## Redis endpoint that is used by oes-gate and oes-platform for caching;
   ## Change this to custom URL if installRedis is set to false
   ## url: redis://{{ .Release.Name }}-redis-master:6379
-  url: redis://:OPSMX_REDIS_PASS@{{ .Release.Name }}-redis-master
+  url: redis://:password@{{ .Release.Name }}-redis-master
   port: 6379
   image:
     registry: quay.io/opsmxpublic

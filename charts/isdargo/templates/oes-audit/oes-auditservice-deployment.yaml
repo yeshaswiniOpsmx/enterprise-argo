@@ -26,7 +26,6 @@ spec:
         component: auditservice
 {{ include "oes.standard-labels" . | indent 8 }}
     spec:
-      {{- if (eq .Values.db.enabled true) }}
       initContainers:
       - name: db-check
         image: {{ .Values.global.customImages.registry }}/pgchecker:v1
@@ -34,31 +33,38 @@ spec:
           - sh
           - -c
           - |
+            RABBITMQ_DEFAULT_PASS=`echo $RABBITMQ_DEFAULT_PASS | sed 's/ *$//g'`
+          {{- if (eq .Values.db.enabled true) }}
             echo 'Waiting for OES-DB to become ready...'
             until printf "." && nc -z -w 2 oes-db 5432; do
                sleep 2;
             done;
             echo 'OESDB OK ✓'
-            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/audit-local.yml > /tmp/conf/audit-local.yml
-            sed -i "s@RABBITMQPASSWORD@$RABBITMQ_DEFAULT_PASS@g" /tmp/conf/audit-local.yml
+            OPSMX_POSTGRESQL_PASS=`echo $OPSMX_POSTGRESQL_PASS | sed 's/ *$//g'`            
+            sed -e s/OPSMX_POSTGRESQL_PASS/${OPSMX_POSTGRESQL_PASS}/g /tmp/audit-local.yml > /tmp/config/audit-service-local.yml            
+          {{- else }}
+            cp /tmp/audit-local.yml > /tmp/config/audit-service-local.yml
+          {{- end }}
+            sed -i s/RABBITMQ_DEFAULT_PASS/${RABBITMQ_DEFAULT_PASS}/g /tmp/config/audit-service-local.yml
             echo success
         env:
+        {{- if .Values.db.enabled }}  
         - name: OPSMX_POSTGRESQL_PASS
           valueFrom:
             secretKeyRef:
               key: pgpassword
               name: oes-db
+        {{- end }}  
         - name: RABBITMQ_DEFAULT_PASS
           valueFrom:
             secretKeyRef:
               key: rabbitmqpassword
               name: rabbitmq
         volumeMounts:
-        - mountPath: /opsmx/conf/
-          name: config-volume
-        - mountPath: /tmp/conf/
-          name: empty-dir-volume
-      {{- end }}
+        - mountPath: /tmp
+          name: audit-config-volume
+        - mountPath: /tmp/config
+          name: audit-service-config
       containers:
       - image: {{ template "auditservice.image" . }}
         imagePullPolicy: IfNotPresent
@@ -90,9 +96,9 @@ spec:
             port: 8097
           timeoutSeconds: 1
         volumeMounts:
-        - mountPath: /opsmx/conf/audit-service-local.yml
-          name: empty-dir-volume
-          subPath: audit-local.yml
+        - mountPath: /opsmx/conf/audit-service-local.yml     
+          name: audit-service-config
+          subPath: audit-service-local.yml
         - mountPath: /opsmx/conf/bootstrap.yml
           name: bootstrap-config-volume
           subPath: bootstrap.yml
@@ -137,17 +143,16 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      volumes:
-      - ConfigMap:
-          items:
-          - key: audit-local.yml
-            path: audit-local.yml
-          name: oes-audit-service-config
-        name: config-volume
+      volumes: 
       - name: bootstrap-config-volume
         secret:
           defaultMode: 420
           secretName: bootstrap
+      - emptyDir: {}
+        name: audit-service-config
+      - configMap:
+          name: oes-audit-service-config
+        name: audit-config-volume
       - configMap:
           defaultMode: 420
           items:
@@ -155,7 +160,4 @@ spec:
             path: standard-error-codes.csv
           name: standard-error-codes-config
         name: standard-error-conf
-      - name: empty-dir-volume
-        emptyDir:
-          sizeLimit: 500Mi
 {{- end -}}

@@ -48,9 +48,14 @@ spec:
                sleep 2;
             done;
             echo 'OESDB OK ✓'
-            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/gate.yml > /tmp/conf/gate.yml
-            sed -i "s@REDISPASSWORD@$OPSMX_REDIS_PASS@g" /tmp/conf/gate.yml
-            sed -i "s@LDAP_MANAGER_PASSWORD@$LDAP_MANAGER_PASSWORD@g" /tmp/conf/gate.yml
+            RABBITMQ_DEFAULT_PASS=`echo $RABBITMQ_DEFAULT_PASS | sed 's/ *$//g'`
+            OPSMX_REDIS_PASS=`echo $OPSMX_REDIS_PASS | sed 's/ *$//g'`
+            sed -e s/RABBITMQ_DEFAULT_PASS/${RABBITMQ_DEFAULT_PASS}/g /tmp/gate.yml > /tmp/config/gate.yml
+            sed -i s/OPSMX_REDIS_PASS/${OPSMX_REDIS_PASS}/g /tmp/config/gate.yml
+            {{- if .Values.global.ldap.enabled }}
+            LDAP_MANAGER_PASSWORD=`echo $LDAP_MANAGER_PASSWORD | sed 's/ *$//g'`
+            sed -i s/LDAP_MANAGER_PASSWORD/${LDAP_MANAGER_PASSWORD}/g /tmp/config/gate.yml
+            {{- end }} 
             echo success        
         env:
         - name: OPSMX_POSTGRESQL_PASS
@@ -61,18 +66,23 @@ spec:
         - name: OPSMX_REDIS_PASS
           valueFrom:
             secretKeyRef:
-              key: redis-password
+              key: redispassword
               name: oes-redis
-        - name: MANAGER_PASSWORD
+        - name: LDAP_MANAGER_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: manager-password
-              name: oes-ldap     
+              key: LDAP_ADMIN_PASSWORD
+              name: oes-ldap
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              key: rabbitmqpassword
+              name: rabbitmq   
         volumeMounts:
-        - mountPath: /opsmx/conf/
-          name: config-volume
-        - mountPath: /tmp/conf/
-          name: empty-dir-volume
+        - mountPath: /tmp
+          name: gate-config-volume
+        - mountPath: /tmp/config
+          name: gate-config
       containers:
       - image: {{ template "gate.image" . }}
         name: oes-gate
@@ -88,8 +98,8 @@ spec:
         resources:
 {{ toYaml .Values.gate.resources | indent 12 }}
         volumeMounts:
-        - name: empty-dir-volume
-          mountPath: /opt/spinnaker/config/gate.yml
+        - mountPath: /opt/spinnaker/config/gate.yml
+          name: gate-config
           subPath: gate.yml
         - mountPath: /opt/spinnaker/config/bootstrap.yml
           name: bootstrap-volume
@@ -175,23 +185,22 @@ spec:
           name: isd-feature-flag-config
         name: isd-feature-flag-conf
       {{- if .Values.global.autoConfiguration.enabled }}
-      - ConfigMap:
+      - configMap:
           name: oes-gate-config
-        name: config-volume
+        name: config-temp
       - emptyDir: {}
-        name: gate-volume
+        name: gate-config-volume
       {{- else }}
-      - name: config-volume
-        ConfigMap:
+      - configMap:
           name: oes-gate-config
+        name: gate-config-volume
       {{- end }}
+      - emptyDir: {}
+        name: gate-config
       - secret:
           items:
           - key: bootstrap.yml
             path: bootstrap.yml
           secretName: bootstrap
         name: bootstrap-volume
-      - name: empty-dir-volume
-        emptyDir:
-          sizeLimit: 500Mi
 {{- end -}}

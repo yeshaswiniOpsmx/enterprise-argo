@@ -55,7 +55,7 @@ spec:
         - name: OPSMX_REDIS_PASS
           valueFrom:
             secretKeyRef:
-              key: redis-password
+              key: redispassword
               name: oes-redis
         volumeMounts:
         - mountPath: /opsmx/conf/

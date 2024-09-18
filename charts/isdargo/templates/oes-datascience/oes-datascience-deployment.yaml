@@ -26,7 +26,6 @@ spec:
         component: datascience
 {{ include "oes.standard-labels" . | indent 8 }}
     spec:
-      {{- if (eq .Values.db.enabled true) }}
       initContainers:
       - name: db-check
         image: {{ .Values.global.customImages.registry }}/pgchecker:v1
@@ -34,31 +33,38 @@ spec:
           - sh
           - -c
           - |
+            RABBITMQ_DEFAULT_PASS=`echo $RABBITMQ_DEFAULT_PASS | sed 's/ *$//g'`
+          {{- if (eq .Values.db.enabled true) }}
             echo 'Waiting for OES-DB to become ready...'
             until printf "." && nc -z -w 2 oes-db 5432; do
                sleep 2;
             done;
             echo 'OESDB OK ✓'
-            sed -e "s@PGPASSWORD@$OPSMX_POSTGRESQL_PASS@g" /opsmx/conf/app-config.yml > /tmp/conf/app-config.yml
-            sed -i "s@RABBITMQPASSWORD@$RABBITMQ_DEFAULT_PASS@g" /tmp/conf/app-config.yml
+            OPSMX_POSTGRESQL_PASS=`echo $OPSMX_POSTGRESQL_PASS | sed 's/ *$//g'`
+            sed -e s/OPSMX_POSTGRESQL_PASS/${OPSMX_POSTGRESQL_PASS}/g /tmp/app-config.yml > /tmp/config/app-config.yml
+          {{- else}}
+            cp /tmp/app-config.yml > /tmp/config/app-config.yml
+          {{- end }}
+            sed -i s/RABBITMQ_DEFAULT_PASS/${RABBITMQ_DEFAULT_PASS}/g  /tmp/config/app-config.yml
             echo success        
         env:
+        {{- if .Values.db.enabled }} 
         - name: OPSMX_POSTGRESQL_PASS
           valueFrom:
             secretKeyRef:
               key: pgpassword
               name: oes-db
+        {{- end }} 
         - name: RABBITMQ_DEFAULT_PASS
           valueFrom:
             secretKeyRef:
               key: rabbitmqpassword
               name: rabbitmq
         volumeMounts:
-        - mountPath: /opsmx/conf/
-          name: config-volume
-        - mountPath: /tmp/conf/
-          name: empty-dir-volume
-      {{- end }}
+        - mountPath: /tmp
+          name: datascience-config-volume
+        - mountPath: /tmp/config
+          name: datascience-config
       containers:
       - image: {{ template "datascience.image" . }}
         imagePullPolicy: IfNotPresent
@@ -81,10 +87,10 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - mountPath: /home/ubuntu/.aws/credentials
-          name: empty-dir-volume
+          name: datascience-config-volume
           subPath: minio-credentials
         - mountPath: /home/ubuntu/datascience/app_config.yaml
-          name: empty-dir-volume
+          name: datascience-config
           subPath: app-config.yml
       {{- if .Values.imagePullSecret}}
       imagePullSecrets:
@@ -111,10 +117,9 @@ spec:
           - key: cacerts
             path: cacerts
       {{- end }}
-      - ConfigMap:
+      - emptyDir: {}
+        name: datascience-config
+      - configMap:
           name: oes-datascience-config
-        name: config-volume
-      - name: empty-dir-volume
-        emptyDir:
-          sizeLimit: 500Mi
+        name: datascience-config-volume
 {{- end -}}
