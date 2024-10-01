@@ -36,10 +36,6 @@ global:
     # Update the below string with proper dns entry to access the ISD UI eg: isdui.example.ops.com
     host: ISD.REPLACE.THIS.WITH.YOURCOMPANY.COM
 
-  keycloak:
-    # Update the below string with proper dns entry to access the keycloak UI eg: keycloak.example.ops.com
-    host: KEYCLOAK.REPLACE.THIS.WITH.YOURCOMPANY.COM
-
   vela:
     # Update the below entry for establishing communication for ISD and Argo CD
     host: VELA.REPLACE.THIS.WITH.YOURCOMPANY.COM
